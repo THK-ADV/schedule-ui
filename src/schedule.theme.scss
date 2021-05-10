@@ -1,0 +1,86 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+@import 'schedule.theme.config';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+
+@function schedule-ui-light-theme($primary, $accent, $warn, $foreground: (), $background: ()) {
+    @return (
+            primary: mat-palette(palette-from($primary)),
+            accent: mat-palette(palette-from($accent)),
+            warn: mat-palette(palette-from($warn)),
+            is-dark: false,
+            foreground: map-merge($mat-light-theme-foreground, $foreground),
+            background: map-merge($mat-light-theme-background, $background)
+    );
+  }
+
+@function schedule-ui-typography-config(
+  $font-family: '"Helvetica Neue", "Ostrich Sans", sans-serif',
+  $display-4: mat-typography-level(112px, 112px, 300),
+  $display-3: mat-typography-level(56px, 56px, 400),
+  $display-2: mat-typography-level(45px, 48px, 400),
+  $display-1: mat-typography-level(34px, 40px, 400),
+  $headline: mat-typography-level(24px, 32px, 400),
+  $title: mat-typography-level(20px, 32px, 500),
+  $subheading-2: mat-typography-level(16px, 28px, 400),
+  $subheading-1: mat-typography-level(15px, 24px, 400),
+  $body-2: mat-typography-level(14px, 24px, 500),
+  $body-1: mat-typography-level(14px, 20px, 400),
+  $caption: mat-typography-level(12px, 20px, 400),
+  $button: mat-typography-level(14px, 14px, 500),
+  $input: mat-typography-level(inherit, 1.125, 400)
+) {
+  @return mat-typography-config(
+                  $font-family,
+                  $display-4,
+                  $display-3,
+                  $display-2,
+                  $display-1,
+                  $headline,
+                  $title,
+                  $subheading-2,
+                  $subheading-1,
+                  $body-2,
+                  $body-1,
+                  $caption,
+                  $button,
+                  $input
+  );
+}
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@mixin schedule-ui-theme(
+  $main-theme,
+  $overlay-theme,
+  $app-bg-1: #303030,
+  $app-bg-2: #303030,
+  $typography: schedule-ui-typography-config()
+) {
+  $theme: (
+          main: $main-theme,
+          overlay: $overlay-theme,
+          app-bg-1: $app-bg-1,
+          app-bg-2: $app-bg-2,
+  );
+  @include mat-core($typography);
+
+}
+
+//.lwm-base-theme {
+@include schedule-ui-theme(
+                schedule-ui-light-theme($primary: $th-magenta, $accent: $th-orange, $warn: $th-red),
+                schedule-ui-light-theme($primary: $th-magenta, $accent: $th-orange, $warn: $th-red),
+                $th-white,
+                $th-white,
+                schedule-ui-typography-config()
+);

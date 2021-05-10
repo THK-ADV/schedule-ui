@@ -1,0 +1,35 @@
+@import "../../../schedule.vars.scss";
+
+$linethickness: 8px; 
+
+.header-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+
+    .header-item {
+        width: 33%; /* or whatever width you want. */
+        height: $linethickness;
+        display: inline-block;
+    }
+    .header-item:last-of-type {
+        width: 34%; /* or whatever width you want. */
+        height: $linethickness;
+        display: inline-block;
+    }
+
+    .red {
+        background-color: $th-red;
+    }
+
+    .orange {
+        background-color: $th-orange;
+    }
+
+    .magenta {
+        background-color: $th-magenta;
+    }
+}
