@@ -1,1 +1,23 @@
+
+
 /* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import "schedule.theme.scss";
+@import '~bootstrap/scss/bootstrap';
+@import "schedule.vars.scss";
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+}
+
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: "$scheule-font-family"; }
+a { cursor: pointer;}
