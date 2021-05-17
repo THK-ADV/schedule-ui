@@ -1,2 +1,20 @@
 @import "../schedule.vars.scss";
 
+.main-content-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+
+    .main-container {
+        width: 90%;
+        padding: 40px;
+    }
+
+    .space-between {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+}

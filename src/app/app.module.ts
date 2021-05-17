@@ -9,13 +9,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ScheduleMaterialModule } from './app.material.module';
 import { HeaderComponent } from './structure/header/header.component';
 import { NavComponent } from './structure/nav/nav.component';
+import { FilterComponent } from './structure/filter/filter.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    NavComponent
+    NavComponent,
+    FilterComponent
   ],
   imports: [
     BrowserModule,
