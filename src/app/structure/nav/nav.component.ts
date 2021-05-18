@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-nav',
+  selector: 'schd-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss']
 })

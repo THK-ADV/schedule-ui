@@ -70,7 +70,7 @@
     ],
     "semicolon": {
       "options": [
-        "always"
+        "never"
       ]
     },
     "space-before-function-paren": {
@@ -145,7 +145,7 @@
     "component-selector": [
       true,
       "element",
-      "app",
+      "schd",
       "kebab-case"
     ]
   }
