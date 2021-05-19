@@ -60,4 +60,7 @@ export class FilterComponent<T> implements OnInit {
     }
     this.hasSelection = false
   }
+
+  reset = () =>
+    this.formControl.reset(undefined, {emitEvent: false})
 }

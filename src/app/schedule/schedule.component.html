@@ -12,3 +12,8 @@
     <schd-filter [title]="'Dozent'" [display]="displayL" [values]="currentLecturer"
                  (onSelect)="selectedL($event)"></schd-filter>
 </form>
+
+<div class="example-button-row">
+    <button mat-button color="primary" (click)="search()">Suchen</button>
+    <button mat-button color="warn" (click)="reset()">Zurücksetzen</button>
+</div>

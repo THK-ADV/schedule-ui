@@ -1,4 +1,4 @@
-import {Component} from '@angular/core'
+import {Component, QueryList, ViewChildren} from '@angular/core'
 import {
   Course,
   fakeCourse,
@@ -11,6 +11,8 @@ import {
   StudyProgram,
   TeachingUnit
 } from '../mocks'
+import {FilterComponent} from './filter/filter.component'
+import {HttpParams} from '@angular/common/http'
 
 @Component({
   selector: 'schd-schedule',
@@ -18,6 +20,8 @@ import {
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent {
+
+  @ViewChildren(FilterComponent) filterComponents!: QueryList<FilterComponent<any>>
 
   semesterIndices = fakeSemesterIndices
 
@@ -197,5 +201,48 @@ export class ScheduleComponent {
         filters.push(tu => studyPrograms.some(_ => _.teachingUnit === tu.id))
       }
     })
+  }
+
+  search = () => {
+    const tu = this.tu
+    const sp = this.sp
+    const si = this.si
+    const c = this.c
+    const l = this.l
+    let p = new HttpParams()
+
+    if (tu) {
+      console.log('aaaa', tu)
+      p = p.append('teachingUnit', tu.id)
+    }
+
+    if (sp) {
+      p = p.append('studyProgram', sp.id)
+    }
+
+    if (si) {
+      p = p.append('semesterIndex', si.toString())
+    }
+
+    if (c) {
+      p = p.append('course', c.id)
+    }
+
+    if (l) {
+      p = p.append('lecturer', l.id)
+    }
+
+    console.log(p.toString())
+  }
+
+  reset = () => {
+    this.tu = undefined
+    this.sp = undefined
+    this.si = undefined
+    this.c = undefined
+    this.l = undefined
+
+    this.updateAll()
+    this.filterComponents.forEach(a => a.reset())
   }
 }
