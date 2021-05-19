@@ -1,5 +1,5 @@
 export interface Graduation {
-    label: string,
-    abbreviation: string, 
-    id: string
+  label: string,
+  abbreviation: string,
+  id: string
 }

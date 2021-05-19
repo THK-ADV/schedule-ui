@@ -1,11 +1,8 @@
-import {Component, Input, OnInit, Output, EventEmitter, ViewChild} from '@angular/core'
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core'
 import {FormControl} from '@angular/forms'
 import {EMPTY, Observable} from 'rxjs'
 import {map, startWith} from 'rxjs/operators'
-import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete/autocomplete'
-import {MatOptionSelectionChange} from '@angular/material/core/option/option'
-import {MatAutocompleteTrigger} from '@angular/material/autocomplete'
-
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete/autocomplete'
 
 @Component({
   selector: 'schd-filter',
@@ -14,8 +11,6 @@ import {MatAutocompleteTrigger} from '@angular/material/autocomplete'
 })
 export class FilterComponent<T> implements OnInit {
 
-  @ViewChild('auto') auto: MatAutocomplete | undefined
-  @ViewChild(MatAutocompleteTrigger) private trigger: MatAutocompleteTrigger | undefined
   @Input() title = ''
   @Input() display: (value: T) => string = (_ => '')
   options: T[] = []
@@ -36,8 +31,7 @@ export class FilterComponent<T> implements OnInit {
     this.initFilterOptions()
   }
 
-
-  initFilterOptions = () => {
+  private initFilterOptions = () => {
     this.filteredOptions = this.formControl.valueChanges.pipe(
       startWith(''),
       map(value => typeof value === 'string' ? value : this.display(value)),

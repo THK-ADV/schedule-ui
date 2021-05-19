@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core'
-import {Graduation, fakeGraduation, StudyProgram, fakeStudyProgram, TeachingUnit, fakeTeachingUnit} from './mocks'
+import {Component} from '@angular/core'
+import {fakeGraduation, fakeStudyProgram, fakeTeachingUnit, Graduation, StudyProgram, TeachingUnit} from './mocks'
 
 @Component({
   selector: 'schd-root',
