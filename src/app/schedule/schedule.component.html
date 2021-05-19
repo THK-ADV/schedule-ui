@@ -1,9 +1,14 @@
 <h1 class="space-between"><span>Stundenplan</span><span>Sommersemester 2021</span></h1>
 
 <form>
-    <schd-filter [title]="'Lehreinheit'" [display]="displayTU" [values]="teachingUnits"
+    <schd-filter [title]="'Lehreinheit'" [display]="displayTU" [values]="currentTeachingUnits"
                  (onSelect)="selectedTU($event)"></schd-filter>
-    <schd-filter [title]="'Abschluss'" [display]="displayG" [values]="graduations"
-                 (onSelect)="selectedG($event)"></schd-filter>
-    <schd-filter [title]="'Studiengang'" [display]="displaySP" [values]="currentStudyPrograms"></schd-filter>
+    <schd-filter [title]="'Studiengang'" [display]="displaySP" [values]="currentStudyPrograms"
+                 (onSelect)="selectedSP($event)"></schd-filter>
+    <schd-filter [title]="'Fachsemester'" [display]="displaySI" [values]="semesterIndices"
+                 (onSelect)="selectedSI($event)"></schd-filter>
+    <schd-filter [title]="'Veranstaltung'" [display]="displayC" [values]="currentCourses"
+                 (onSelect)="selectedC($event)"></schd-filter>
+    <schd-filter [title]="'Dozent'" [display]="displayL" [values]="currentLecturer"
+                 (onSelect)="selectedL($event)"></schd-filter>
 </form>
