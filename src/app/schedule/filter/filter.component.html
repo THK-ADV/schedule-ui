@@ -1,0 +1,16 @@
+<mat-form-field class="example-full-width">
+    <mat-label>{{title}}</mat-label>
+    <input type="text"
+           placeholder="Pick one"
+           aria-label="teachingUnit"
+           matInput
+           [formControl]="formControl"
+           [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn"
+                      (optionSelected)="onSelected($event)" (closed)="onClosed()">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+            {{displayFn(option)}}
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>
+
