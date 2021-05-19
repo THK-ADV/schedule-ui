@@ -2,18 +2,7 @@
 
 <div class="main-content-box">
     <div class="main-container">
-        <h1 class="space-between"><span>Stundenplan</span><span>Sommersemester 2021</span></h1>
-
-        <form>
-            <schd-filter [title]="'Lehreinheit'" [display]="displayTU" [values]="teachingUnits"
-                         (onSelect)="selectedTU($event)"></schd-filter>
-            <schd-filter [title]="'Abschluss'" [display]="displayG" [values]="graduations"
-                         (onSelect)="selectedG($event)"></schd-filter>
-            <schd-filter [title]="'Studiengang'" [display]="displaySP" [values]="currentStudyPrograms"></schd-filter>
-        </form>
-
+        <router-outlet></router-outlet>
     </div>
 </div>
 
-
-<router-outlet></router-outlet>

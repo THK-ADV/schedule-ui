@@ -9,7 +9,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations'
 import {ScheduleMaterialModule} from './app.material.module'
 import {HeaderComponent} from './structure/header/header.component'
 import {NavComponent} from './structure/nav/nav.component'
-import {FilterComponent} from './structure/filter/filter.component'
+import {FilterComponent} from './schedule/filter/filter.component'
+import {ScheduleComponent} from './schedule/schedule.component'
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {FilterComponent} from './structure/filter/filter.component'
     AppComponent,
     HeaderComponent,
     NavComponent,
-    FilterComponent
+    FilterComponent,
+    ScheduleComponent
   ],
   imports: [
     BrowserModule,
