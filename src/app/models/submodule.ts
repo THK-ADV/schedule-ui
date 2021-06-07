@@ -1,22 +1,38 @@
-import {ModuleAtom} from './module'
+import {Module} from './module'
+
+export enum Language {
+  de,
+  en,
+  de_en
+}
+
+export enum Season {
+  SoSe,
+  WiSe,
+  SoSe_WiSe,
+  unknown
+}
 
 export interface Submodule {
-  label: string,
-  abbreviation: string,
-  markdownFile: string,
-  mandatory: boolean,
-  recommendedSemester: number,
-  module: string,
+  moduleId: string
+  label: string
+  abbreviation: string
+  recommendedSemester: number
+  credits: number
+  descriptionUrl: string
+  language: Language
+  season: Season
   id: string
 }
 
 export interface SubmoduleAtom {
-  label: string,
-  abbreviation: string,
-  markdownFile: string,
-  ects: number,
-  mandatory: boolean,
-  recommendedSemester: number,
-  module: ModuleAtom,
+  moduleId: Module
+  label: string
+  abbreviation: string
+  recommendedSemester: number
+  credits: number
+  descriptionUrl: string
+  language: Language
+  season: Season
   id: string
 }

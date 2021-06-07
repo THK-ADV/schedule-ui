@@ -1,21 +1,37 @@
-import {People} from './people'
-import {SemesterAtom} from './semester'
-import {SubmoduleAtom} from './submodule'
+import {Lecturer} from './user'
+import {Semester} from './semester'
+import {Submodule} from './submodule'
+
+export enum CourseInterval {
+  regularly,
+  irregularly,
+  block,
+  unknown
+}
+
+export enum CourseType {
+  lecture,
+  practical,
+  exercise,
+  tutorial,
+  seminar,
+  unknown
+}
 
 export interface Course {
-  intervall: string,
-  courseType: string,
-  lecturer: string[],
-  semester: string,
-  submodule: string,
+  interval: CourseInterval
+  courseType: CourseType
+  lecturer: string
+  semester: string
+  subModule: string
   id: string
 }
 
 export interface CourseAtom {
-  intervall: string,
-  courseType: string,
-  lecturer: People[],
-  semester: SemesterAtom,
-  submodule: SubmoduleAtom,
+  interval: CourseInterval
+  courseType: CourseType
+  lecturer: Lecturer
+  semester: Semester
+  subModule: Submodule
   id: string
 }

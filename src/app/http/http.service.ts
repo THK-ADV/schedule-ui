@@ -42,7 +42,7 @@ export class HttpService {
     )
   }
 
-  getAll = <A>(url: string, params: HttpParams = atomicParams): Observable<A[]> =>
+  getAll = <A>(url: string, params: HttpParams): Observable<A[]> =>
     this.http.get<A[]>(url, {params})
       .pipe(catchError(this.handleError))
 }

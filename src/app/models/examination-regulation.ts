@@ -1,21 +1,17 @@
-import {StudyProgram} from './study-program'
+import {StudyProgramAtom} from './study-program'
 
 export interface ExaminationRegulation {
-  label: string,
-  abbreviation: string,
-  accreditationDate: string,
-  activationDate: string,
-  expiringDate?: string,
-  studyProgram: string,
+  studyProgram: string
+  number: number
+  start: Date
+  end?: Date
   id: string
 }
 
 export interface ExaminationRegulationAtom {
-  label: string,
-  abbreviation: string,
-  accreditationDate: Date,
-  activationDate: Date,
-  expiringDate?: Date,
-  studyProgram: StudyProgram,
+  studyProgram: StudyProgramAtom
+  number: number
+  start: Date
+  end?: Date
   id: string
 }

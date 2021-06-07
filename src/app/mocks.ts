@@ -13,7 +13,7 @@ export interface StudyProgram {
 
 export interface Course {
   lecturer: string,
-  semester: SemesterIndex,
+  semester: number,
   subModule: string,
   courseType: CourseType,
   studyProgram: string
@@ -24,8 +24,6 @@ export interface Lecturer {
   id: string
   lastname: string
 }
-
-export type SemesterIndex = 1 | 2 | 3 | 4 | 5 | 6
 
 export type CourseType = 'labwork' | 'lecture' | 'seminar' | 'exercise'
 
@@ -42,8 +40,6 @@ export const fakeStudyProgram: StudyProgram[] = [
   {id: '14', label: 'Automation & IT', abbreviation: 'AIT', teachingUnit: '19'},
   {id: '15', label: 'Medieninformatik (MA)', abbreviation: 'MMI', teachingUnit: '20'}
 ]
-
-export const fakeSemesterIndices: SemesterIndex[] = [1, 2, 3, 4, 5, 6]
 
 export const fakeLecturer: Lecturer[] = [
   {id: '1', lastname: 'Noss'},

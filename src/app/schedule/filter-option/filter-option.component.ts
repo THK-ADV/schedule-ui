@@ -61,6 +61,8 @@ export class FilterOptionComponent<T> implements OnInit {
     this.hasSelection = false
   }
 
-  reset = () =>
+  reset = () => {
     this.formControl.reset(undefined, {emitEvent: false})
+    this.initFilterOptions()
+  }
 }
