@@ -1,16 +1,17 @@
-<mat-form-field class="example-full-width">
-    <mat-label>{{title}}</mat-label>
-    <input type="text"
-           placeholder="Pick one"
-           aria-label="teachingUnit"
-           matInput
-           [formControl]="formControl"
-           [matAutocomplete]="auto">
-    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn"
-                      (optionSelected)="onSelected($event)" (closed)="onClosed()">
-        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-            {{displayFn(option)}}
-        </mat-option>
-    </mat-autocomplete>
-</mat-form-field>
+<form>
+    <schd-filter-option [title]="'Lehreinheit'" [display]="displayTU" [values]="currentTeachingUnits"
+                        (onSelect)="selectedTU($event)"></schd-filter-option>
+    <schd-filter-option [title]="'Studiengang'" [display]="displaySP" [values]="currentStudyPrograms"
+                        (onSelect)="selectedSP($event)"></schd-filter-option>
+    <schd-filter-option [title]="'Fachsemester'" [display]="displaySI" [values]="semesterIndices"
+                        (onSelect)="selectedSI($event)"></schd-filter-option>
+    <schd-filter-option [title]="'Veranstaltung'" [display]="displayC" [values]="currentCourses"
+                        (onSelect)="selectedC($event)"></schd-filter-option>
+    <schd-filter-option [title]="'Dozent'" [display]="displayL" [values]="currentLecturer"
+                        (onSelect)="selectedL($event)"></schd-filter-option>
+</form>
 
+<div class="example-button-row">
+    <button mat-button color="primary" (click)="search()">Suchen</button>
+    <button mat-button color="warn" (click)="reset()">Zurücksetzen</button>
+</div>
