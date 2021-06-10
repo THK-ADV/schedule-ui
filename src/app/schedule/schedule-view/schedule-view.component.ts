@@ -1,6 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core'
-import {ScheduleService} from './schedule.service'
-import {Subscription} from 'rxjs'
+import {Component, Input} from '@angular/core'
 import {ScheduleAtom} from '../../models/schedule'
 
 @Component({
@@ -8,19 +6,7 @@ import {ScheduleAtom} from '../../models/schedule'
   templateUrl: './schedule-view.component.html',
   styleUrls: ['./schedule-view.component.scss']
 })
-export class ScheduleViewComponent implements OnInit, OnDestroy {
+export class ScheduleViewComponent {
 
-  private sub!: Subscription
-  schedules: ScheduleAtom[] = []
-
-  constructor(private readonly service: ScheduleService) {
-  }
-
-  ngOnInit(): void {
-    this.sub = this.service.schedules().subscribe(s => this.schedules = s)
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe()
-  }
+  @Input() schedules: ScheduleAtom[] = []
 }

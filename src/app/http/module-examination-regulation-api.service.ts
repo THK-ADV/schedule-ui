@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core'
-import {atomicParams, HttpService} from './http.service'
+import {HttpService} from './http.service'
 import {Observable} from 'rxjs'
 import {ModuleExaminationRegulationAtom} from '../models/module-examination-regulation'
+import {atomicParams} from './http-filter'
 
 @Injectable({
   providedIn: 'root'

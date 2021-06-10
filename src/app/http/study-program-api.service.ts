@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core'
-import {HttpService, nonAtomicParams} from './http.service'
+import {HttpService} from './http.service'
 import {Observable} from 'rxjs'
 import {StudyProgram} from '../models/study-program'
+import {nonAtomicParams} from './http-filter'
 
 @Injectable({
   providedIn: 'root'

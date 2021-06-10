@@ -4,10 +4,6 @@ import {Observable, throwError} from 'rxjs'
 import {catchError} from 'rxjs/operators'
 import {timeFromString} from '../models/time'
 
-export const nonAtomicParams = new HttpParams().set('atomic', 'false')
-
-export const atomicParams = new HttpParams().set('atomic', 'true')
-
 export const parseDateStartEndFromJSON = <A>(a: any): A => {
   const date = new Date(a.date)
   const start = timeFromString(a.start, date)
