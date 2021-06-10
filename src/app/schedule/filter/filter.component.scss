@@ -1,4 +1,15 @@
-.example-button-row button,
-.example-button-row a {
-  margin-right: 8px;
+@import "../../../schedule.vars.scss";
+
+form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-content: center;
+  height: 60px;
 }
+
+
+
+
