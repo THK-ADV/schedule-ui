@@ -1,16 +1,391 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
-@import 'schedule.theme.config';
-// Plus imports for other components in your app.
+@import "~@angular/material/theming";
+@import "schedule.theme.config";
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat-core();
 
+@mixin schd-core-theme($theme) {
+  @include mat-core-theme(map-get($theme, main));
+}
 
-@function schedule-ui-light-theme($primary, $accent, $warn, $foreground: (), $background: ()) {
+@mixin schd-autocomplete-theme($theme) {
+  @include mat-autocomplete-theme(map-get($theme, main));
+}
+
+@mixin schd-badge-theme($theme) {
+  @include mat-badge-theme(map-get($theme, main));
+}
+
+@mixin schd-bottom-sheet-theme($theme) {
+  @include mat-bottom-sheet-theme(map-get($theme, main));
+}
+
+@mixin schd-button-theme($theme) {
+  @include mat-button-theme(map-get($theme, main));
+
+  button.mat-stroked-button.mat-primary {
+    border: 2px lighten($th-magenta, 40) solid;
+    margin-right: $small-spacing;
+  }
+
+  button.mat-stroked-button.mat-accent {
+    border: 2px lighten($th-orange, 40) solid;
+    margin-right: $small-spacing;
+  }
+
+  button.mat-stroked-button.mat-warn {
+    border: 2px lighten($th-red, 40) solid;
+    margin-right: $small-spacing;
+  }
+}
+
+@mixin schd-button-toggle-theme($theme) {
+  @include mat-button-toggle-theme(map-get($theme, main));
+  $failed-col: #ff4500;
+  $neutral-col: #888;
+  $passed-col: #32cd32;
+  $bg-col: #c0c0c0;
+  .toggle-group.mat-button-toggle-group-appearance-standard {
+    border: none;
+
+    .mat-button-toggle-label-content {
+      line-height: 2.5em !important;
+      padding: 0 7px !important;
+    }
+
+    i {
+      font-size: 1.5em;
+    }
+
+    .mat-button-toggle {
+      border: none;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      margin: 0px 0 8px 0;
+      padding: 0;
+      background-color: $bg-col;
+      color: white;
+    }
+
+    .mat-button-toggle.failed {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+
+    .mat-button-toggle.passed {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+    .mat-button-toggle-checked.failed {
+      background-color: $failed-col;
+    }
+
+    .mat-button-toggle-checked.neutral {
+      background-color: $neutral-col;
+    }
+
+    .mat-button-toggle-checked.passed {
+      background-color: $passed-col;
+    }
+  }
+}
+
+@mixin schd-card-theme($theme) {
+  @include mat-card-theme(map-get($theme, main));
+  .mat-card {
+    margin: $low-spacing 0 $med-spacing 0;
+    padding: 0 !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+
+    //background-color: red;
+
+    mat-card-content {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      margin: 0;
+      padding: 0;
+
+      mat-form-field:not(:first-child) {
+        margin: 0;
+        margin-left: $h-spacing;
+      }
+    }
+
+    .mat-card-actions {
+      margin: 0;
+      padding: 0;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@mixin schd-checkbox-theme($theme) {
+  @include mat-checkbox-theme(map-get($theme, main));
+}
+
+@mixin schd-chips-theme($theme) {
+  @include mat-chips-theme(map-get($theme, main));
+  $height: 32px;
+  $fontSize: 14px;
+
+  mat-basic-chip {
+    display: inline-block;
+    padding: 0 12px;
+    border-radius: $height;
+    height: $height;
+    line-height: $height;
+    font-size: $fontSize;
+    margin: 0 5px;
+  }
+
+  mat-basic-chip.primary {
+    background-color: $th-magenta;
+    color: white;
+  }
+
+  mat-basic-chip.accent {
+    background-color: $th-orange;
+    color: white;
+  }
+}
+
+@mixin schd-datepicker-theme($theme) {
+  @include mat-datepicker-theme(map-get($theme, main));
+}
+
+@mixin schd-dialog-theme($theme) {
+  @include mat-dialog-theme(map-get($theme, main));
+
+  h1.mat-dialog-title {
+    font-size: 2em;
+  }
+
+  h2.mat-dialog-title {
+    font-size: 1.5em;
+  }
+
+  .mat-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .mat-form-field-infix {
+    margin-top: 20px;
+  }
+
+
+  mat-dialog-container {
+    .mat-form-field-ripple {
+      background-color: $th-magenta !important;
+    }
+
+    app-user-edit-dialog .mat-dialog-actions,
+    app-delete-dialog .mat-dialog-actions,
+    app-create-update-dialog .mat-dialog-actions,
+    schd-group-edit .mat-dialog-actions,
+    schd-course-authority-dialog .mat-dialog-actions,
+    schd-timetable-entry .mat-dialog-actions,
+    schd-group-preview-modal .mat-dialog-actions,
+    schd-confirm-dialog .mat-dialog-actions,
+    schd-decision-dialog .mat-dialog-actions,
+    schd-reschedule .mat-dialog-actions,
+    schd-annotation .mat-dialog-actions,
+    schd-student-create-application .mat-dialog-actions,
+    schd-assignment-entry-takeover-dialog .mat-dialog-actions {
+      background-color: $ivory;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: end;
+      -ms-flex-align: end;
+      align-items: flex-end;
+      -webkit-box-pack: end;
+      -ms-flex-pack: end;
+      justify-content: flex-end;
+      margin: $med-spacing $med-spacing * (-1);
+      margin-bottom: $med-spacing * (-1);
+      padding-right: $med-spacing;
+
+      button {
+        margin: $med-spacing 0 $med-spacing $low-spacing;
+      }
+    }
+  }
+}
+
+@mixin schd-expansion-panel-theme($theme) {
+  @include mat-expansion-panel-theme(map-get($theme, main));
+}
+
+@mixin schd-form-field-theme($theme) {
+  @include mat-form-field-theme(map-get($theme, main));
+
+  .reportcard-bonus {
+    max-width: 100px !important;
+  }
+}
+
+@mixin schd-grid-list-theme($theme) {
+  @include mat-grid-list-theme(map-get($theme, main));
+}
+
+@mixin schd-icon-theme($theme) {
+  @include mat-icon-theme(map-get($theme, main));
+  .material-icons.mat-14 {
+    font-size: 14px;
+  }
+
+  .material-icons.mat-18 {
+    font-size: 18px;
+  }
+
+  .material-icons.mat-24 {
+    font-size: 24px;
+  }
+
+  .material-icons.mat-36 {
+    font-size: 36px;
+  }
+
+  .material-icons.mat-48 {
+    font-size: 48px;
+  }
+}
+
+@mixin schd-input-theme($theme) {
+  @include mat-input-theme(map-get($theme, main));
+}
+
+@mixin schd-list-theme($theme) {
+  @include mat-list-theme(map-get($theme, main));
+}
+
+@mixin schd-menu-theme($theme) {
+  @include mat-menu-theme(map-get($theme, main));
+}
+
+@mixin schd-paginator-theme($theme) {
+  @include mat-paginator-theme(map-get($theme, main));
+  .mat-paginator {
+    margin-bottom: $high-spacing;
+  }
+}
+
+@mixin schd-progress-bar-theme($theme) {
+  @include mat-progress-bar-theme(map-get($theme, main));
+}
+
+@mixin schd-progress-spinner-theme($theme) {
+  @include mat-progress-spinner-theme(map-get($theme, main));
+}
+
+@mixin schd-radio-theme($theme) {
+  @include mat-radio-theme(map-get($theme, main));
+}
+
+@mixin schd-select-theme($theme) {
+  @include mat-select-theme(map-get($theme, main));
+}
+
+@mixin schd-sidenav-theme($theme) {
+  @include mat-sidenav-theme(map-get($theme, main));
+  .mat-drawer-container {
+    background-color: transparent !important;
+  }
+  .mat-drawer {
+    background-color: mat-color(map-get(map-get($theme, overlay), background), dialog);
+    color: mat-color(map-get(map-get($theme, overlay), foreground), text);
+    @include angular-material-theme(map-get($theme, overlay));
+  }
+}
+
+@mixin schd-slide-toggle-theme($theme) {
+  @include mat-slide-toggle-theme(map-get($theme, main));
+}
+
+@mixin schd-slider-theme($theme) {
+  @include mat-slider-theme(map-get($theme, main));
+}
+
+@mixin schd-stepper-theme($theme) {
+  @include mat-stepper-theme(map-get($theme, main));
+}
+
+@mixin schd-sort-theme($theme) {
+  @include mat-sort-theme(map-get($theme, main));
+}
+
+@mixin schd-table-theme($theme) {
+  @include mat-table-theme(map-get($theme, main));
+
+  table {
+    width: 100%;
+    margin-bottom: $high-spacing;
+    border-collapse: initial;
+
+    td.mat-cell,
+    th.mat-cell,
+    td.mat-header-cell,
+    th.mat-header-cell {
+      padding: $low-spacing $med-spacing;
+      min-width: 60px;
+      word-wrap: initial;
+    }
+
+    td.mat-cell,
+    th.mat-cell {
+      vertical-align: text-top;
+      padding: $low-spacing $med-spacing;
+      min-width: 60px;
+      word-wrap: initial;
+    }
+  }
+
+  .mat-row:hover {
+    background-color: $hover-color;
+    cursor: pointer;
+  }
+}
+
+@mixin schd-tabs-theme($theme) {
+  @include mat-tabs-theme(map-get($theme, main));
+}
+
+@mixin schd-toolbar-theme($theme) {
+  @include mat-toolbar-theme(map-get($theme, main));
+}
+
+@mixin schd-tooltip-theme($theme) {
+  @include mat-tooltip-theme(map-get($theme, main));
+}
+
+@mixin schd-tree-theme($theme) {
+  @include mat-tree-theme(map-get($theme, main));
+}
+
+@mixin schd-snack-bar-theme($theme) {
+  @include mat-snack-bar-theme(map-get($theme, main));
+}
+
+@function schd-light-theme($primary, $accent, $warn, $foreground: (), $background: ()) {
   @return (
           primary: mat-palette(palette-from($primary)),
           accent: mat-palette(palette-from($accent)),
@@ -21,7 +396,7 @@
   );
 }
 
-@function schedule-ui-typography-config(
+@function schd-typography-config(
   $font-family: '"Helvetica Neue", "Ostrich Sans", sans-serif',
   $display-4: mat-typography-level(112px, 112px, 300),
   $display-3: mat-typography-level(56px, 56px, 400),
@@ -55,15 +430,12 @@
   );
 }
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@mixin schedule-ui-theme(
+@mixin schd-theme(
   $main-theme,
   $overlay-theme,
   $app-bg-1: #303030,
   $app-bg-2: #303030,
-  $typography: schedule-ui-typography-config()
+  $typography: schd-typography-config()
 ) {
   $theme: (
           main: $main-theme,
@@ -73,13 +445,47 @@
   );
   @include mat-core($typography);
 
+  @include schd-core-theme($theme);
+  @include schd-autocomplete-theme($theme);
+  @include schd-badge-theme($theme);
+  @include schd-bottom-sheet-theme($theme);
+  @include schd-button-theme($theme);
+  @include schd-button-toggle-theme($theme);
+  @include schd-card-theme($theme);
+  @include schd-checkbox-theme($theme);
+  @include schd-chips-theme($theme);
+  @include schd-table-theme($theme);
+  @include schd-datepicker-theme($theme);
+  @include schd-dialog-theme($theme);
+  @include schd-expansion-panel-theme($theme);
+  @include schd-form-field-theme($theme);
+  @include schd-grid-list-theme($theme);
+  @include schd-icon-theme($theme);
+  @include schd-input-theme($theme);
+  @include schd-list-theme($theme);
+  @include schd-menu-theme($theme);
+  @include schd-paginator-theme($theme);
+  @include schd-progress-bar-theme($theme);
+  @include schd-progress-spinner-theme($theme);
+  @include schd-radio-theme($theme);
+  @include schd-select-theme($theme);
+  @include schd-sidenav-theme($theme);
+  @include schd-slide-toggle-theme($theme);
+  @include schd-slider-theme($theme);
+  @include schd-stepper-theme($theme);
+  @include schd-sort-theme($theme);
+  @include schd-tabs-theme($theme);
+  @include schd-toolbar-theme($theme);
+  @include schd-tooltip-theme($theme);
+  @include schd-tree-theme($theme);
+  @include schd-snack-bar-theme($theme);
 }
 
-//.lwm-base-theme {
-@include schedule-ui-theme(
-                schedule-ui-light-theme($primary: $th-magenta, $accent: $th-orange, $warn: $th-red),
-                schedule-ui-light-theme($primary: $th-magenta, $accent: $th-orange, $warn: $th-red),
-                $th-white,
-                $th-white,
-                schedule-ui-typography-config()
+//.schd-base-theme {
+@include schd-theme(
+                schd-light-theme($primary: $th-magenta, $accent: $th-orange, $warn: $th-red),
+                schd-light-theme($primary: $th-magenta, $accent: $th-orange, $warn: $th-red),
+                $ivory,
+                $ivory,
+                schd-typography-config()
 );

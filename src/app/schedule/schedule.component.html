@@ -1,19 +1,10 @@
 <h1 class="space-between"><span>Stundenplan</span><span>Sommersemester 2021</span></h1>
 
-<form>
-    <schd-filter [title]="'Lehreinheit'" [display]="displayTU" [values]="currentTeachingUnits"
-                 (onSelect)="selectedTU($event)"></schd-filter>
-    <schd-filter [title]="'Studiengang'" [display]="displaySP" [values]="currentStudyPrograms"
-                 (onSelect)="selectedSP($event)"></schd-filter>
-    <schd-filter [title]="'Fachsemester'" [display]="displaySI" [values]="semesterIndices"
-                 (onSelect)="selectedSI($event)"></schd-filter>
-    <schd-filter [title]="'Veranstaltung'" [display]="displayC" [values]="currentCourses"
-                 (onSelect)="selectedC($event)"></schd-filter>
-    <schd-filter [title]="'Dozent'" [display]="displayL" [values]="currentLecturer"
-                 (onSelect)="selectedL($event)"></schd-filter>
-</form>
+<schd-filter
+        (onSearch)="searchSchedule($event)"
+        (onReset)="resetSchedule()">
+</schd-filter>
 
-<div class="example-button-row">
-    <button mat-button color="primary" (click)="search()">Suchen</button>
-    <button mat-button color="warn" (click)="reset()">Zurücksetzen</button>
-</div>
+<schd-schedule-view
+        [scheduleEntries]="scheduleEntries">
+</schd-schedule-view>

@@ -1,0 +1,9 @@
+<p>{{scheduleEntries.length}}</p>
+
+<ng-container *ngFor="let s of scheduleEntries">
+    <h2>{{s.subModule}}</h2>
+    <p>{{s.studyProgram}}</p>
+    <p>{{s.lecturer}}</p>
+    <p>{{s.courseType}}</p>
+    <p>Am {{s.date}} von {{s.start}} - {{s.end}} Uhr in {{s.room}}</p>
+</ng-container>
