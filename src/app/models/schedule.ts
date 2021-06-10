@@ -1,7 +1,7 @@
-import {Course} from './course'
+import {CourseAtom} from './course'
 import {Room} from './room'
 import {Time} from './time'
-import {ModuleExaminationRegulation} from './module-examination-regulation'
+import {ModuleExaminationRegulationAtom} from './module-examination-regulation'
 
 export interface Schedule {
   course: string,
@@ -10,9 +10,9 @@ export interface Schedule {
 }
 
 export interface ScheduleAtom {
-  course: Course
+  course: CourseAtom
   room: Room
-  moduleExaminationRegulation: ModuleExaminationRegulation
+  moduleExaminationRegulation: ModuleExaminationRegulationAtom
   date: Date
   start: Time
   end: Time

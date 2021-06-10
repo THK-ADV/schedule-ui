@@ -4,7 +4,7 @@ import {TeachingUnit} from '../../models/teaching-unit'
 import {forkJoin, Observable, of} from 'rxjs'
 import {map} from 'rxjs/operators'
 import {CourseApiService} from '../../http/course-api.service'
-import {CourseAtom} from '../../models/course'
+import {CourseAtom, ordinal} from '../../models/course'
 import {ModuleExaminationRegulationApiService} from '../../http/module-examination-regulation-api.service'
 import {ModuleExaminationRegulationAtom} from '../../models/module-examination-regulation'
 import {Lecturer} from '../../models/user'
@@ -88,10 +88,14 @@ export class ScheduleFilterService {
       (_, courses) => {
         return {
           course: {...(courses[0])},
-          lecturer: distinctBy(courses, c => c.lecturer.id).map(c => c.lecturer) // TODO proper ordering
+          lecturer: this.sortCoursesByCourseType(distinctBy(courses, c => c.lecturer.id))
+            .map(c => c.lecturer)
         }
       }
     )
+
+  private sortCoursesByCourseType = (cs: CourseAtom[]): CourseAtom[] =>
+    cs.sort((lhs, rhs) => ordinal(lhs.courseType) - ordinal(rhs.courseType))
 
   private sortExams = (lhs: ExaminationRegulationAtom, rhs: ExaminationRegulationAtom): number =>
     lhs.studyProgram.label.localeCompare(rhs.studyProgram.label) || lhs.number - rhs.number

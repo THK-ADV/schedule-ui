@@ -31,7 +31,8 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   @ViewChildren(FilterOptionComponent) filterComponents!: QueryList<FilterOptionComponent<any>>
 
-  @Output() filterSelection = new EventEmitter<ScheduleFilterSections>()
+  @Output() onSearch = new EventEmitter<ScheduleFilterSections>()
+  @Output() onReset = new EventEmitter()
 
   semesterIndices: SemesterIndex[] = []
   currentTeachingUnits: TeachingUnit[] = []
@@ -110,11 +111,12 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   search = () =>
-    this.filterSelection.emit(this.selections)
+    this.onSearch.emit(this.selections)
 
   reset = () => {
     this.selections = emptyScheduleFilterSections()
     this.updateAll()
     this.filterComponents.forEach(a => a.reset())
+    this.onReset.emit()
   }
 }

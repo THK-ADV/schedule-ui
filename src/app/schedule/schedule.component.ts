@@ -3,6 +3,9 @@ import {ScheduleFilterSections} from './filter/filter.component'
 import {Subscription} from 'rxjs'
 import {ScheduleAtom} from '../models/schedule'
 import {ScheduleService} from './schedule-view/schedule.service'
+import {ScheduleViewEntry} from './schedule-view/schedule-view.component'
+import {formatLong} from '../models/course'
+import {formatDate, formatTime} from '../utils/date-format'
 
 @Component({
   selector: 'schd-schedule',
@@ -12,7 +15,7 @@ import {ScheduleService} from './schedule-view/schedule.service'
 export class ScheduleComponent implements OnInit, OnDestroy {
 
   private sub!: Subscription
-  schedules: ScheduleAtom[] = []
+  scheduleEntries: ScheduleViewEntry[] = []
 
   constructor(private readonly service: ScheduleService) {
   }
@@ -27,6 +30,29 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
   searchSchedule = (selection: ScheduleFilterSections) => {
     this.sub = this.service.schedules(selection)
-      .subscribe(s => this.schedules = s)
+      .subscribe(xs => this.scheduleEntries = this.toScheduleView(xs))
   }
+
+  resetSchedule = () =>
+    this.scheduleEntries = []
+
+  private toScheduleView = (schedules: ScheduleAtom[]): ScheduleViewEntry[] =>
+    schedules.map(s => {
+      const examReg = s.moduleExaminationRegulation.examinationRegulation
+      const studyProgram = examReg.studyProgram
+      const subModule = s.course.subModule
+      const lecturer = s.course.lecturer
+
+      return ({
+        s,
+        subModule: `${subModule.label} (${subModule.abbreviation})`,
+        studyProgram: `${studyProgram.label} (${studyProgram.graduation.abbreviation} ${examReg.number})`,
+        lecturer: `${lecturer.lastname}, ${lecturer.firstname}`,
+        courseType: formatLong(s.course.courseType),
+        room: s.room.abbreviation,
+        date: formatDate(s.date, 'dd.MM.yyyy'),
+        start: formatTime(s.start, 'HH:mm'),
+        end: formatTime(s.end, 'HH:mm')
+      })
+    })
 }
