@@ -14,7 +14,7 @@ export enum Season {
 }
 
 export interface Submodule {
-  moduleId: string
+  module: string
   label: string
   abbreviation: string
   recommendedSemester: number
@@ -26,7 +26,7 @@ export interface Submodule {
 }
 
 export interface SubmoduleAtom {
-  moduleId: Module
+  module: Module
   label: string
   abbreviation: string
   recommendedSemester: number

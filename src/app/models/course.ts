@@ -11,10 +11,10 @@ export enum CourseInterval {
 
 export enum CourseType {
   lecture,
+  seminar,
   practical,
   exercise,
   tutorial,
-  seminar,
   unknown
 }
 

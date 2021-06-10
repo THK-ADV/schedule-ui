@@ -1,7 +1,7 @@
 <form>
     <schd-filter-option [title]="'Lehreinheit'" [display]="displayTU" [values]="currentTeachingUnits"
                         (onSelect)="selectedTU($event)"></schd-filter-option>
-    <schd-filter-option [title]="'Studiengang (mit PO)'" [display]="displayER" [values]="currentExams"
+    <schd-filter-option [title]="'Studiengang (mit PO)'" [display]="displayER" [values]="currentStudyProgramWithExam"
                         (onSelect)="selectedER($event)"></schd-filter-option>
     <schd-filter-option [title]="'Fachsemester'" [display]="displaySI" [values]="semesterIndices"
                         (onSelect)="selectedSI($event)"></schd-filter-option>
