@@ -15,7 +15,16 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http'
 import {BackendUrlInterceptorInterceptor} from './http/backend-url-interceptor.interceptor'
 import {ScheduleComponent} from './schedule/schedule.component'
 import {ScheduleViewComponent} from './schedule/schedule-view/schedule-view.component'
+import {FullCalendarModule} from '@fullcalendar/angular'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import timeGridPlugin from '@fullcalendar/timegrid'
 
+FullCalendarModule.registerPlugins([
+  dayGridPlugin,
+  interactionPlugin,
+  timeGridPlugin,
+])
 
 @NgModule({
   declarations: [
@@ -33,7 +42,8 @@ import {ScheduleViewComponent} from './schedule/schedule-view/schedule-view.comp
     NgbModule,
     ScheduleMaterialModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    FullCalendarModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: BackendUrlInterceptorInterceptor, multi: true}],
   bootstrap: [AppComponent]

@@ -67,3 +67,20 @@ export const formatLong = (c: CourseType): string => {
       return 'Unbekannt'
   }
 }
+
+export const formatShort = (c: CourseType): string => {
+  switch (c) {
+    case 'lecture':
+      return 'V'
+    case 'seminar':
+      return 'S'
+    case 'practical':
+      return 'P'
+    case 'exercise':
+      return 'Ü'
+    case 'tutorial':
+      return 'T'
+    case 'unknown':
+      return '???'
+  }
+}
