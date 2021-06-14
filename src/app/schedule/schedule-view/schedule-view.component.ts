@@ -2,9 +2,9 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core'
 import {ScheduleAtom} from '../../models/schedule'
 import {CalendarOptions, EventClickArg} from '@fullcalendar/angular'
 import {EMPTY, Observable, Subscription} from 'rxjs'
-import {formatShort} from '../../models/course'
 import {groupBy, mapGroup} from '../../utils/group-by'
 import {ExaminationRegulationAtom} from '../../models/examination-regulation'
+import {CourseType, formatShort} from '../../models/course-type'
 
 export interface ScheduleViewEntry {
   s: ScheduleAtom
@@ -22,8 +22,11 @@ interface Event<A> {
   title: string
   start: Date
   end: Date
+  backgroundColor: string
   extendedProps: A
 }
+
+type PartialEvent<A> = Pick<Event<A>, 'start' | 'end' | 'extendedProps'>
 
 @Component({
   selector: 'schd-schedule-view',
@@ -53,7 +56,7 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
     weekNumbers: true,
     weekText: 'KW',
     slotEventOverlap: false,
-    eventMaxStack: undefined
+    eventMaxStack: undefined,
   }
 
   private sub!: Subscription
@@ -61,7 +64,7 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
   @Input() scheduleEntries: Observable<ScheduleAtom[]> = EMPTY
 
   ngOnInit(): void {
-    this.calendarOptions.eventClick = this.handleDateClick
+    this.calendarOptions.eventClick = this.onEventClick
     // this.calendarOptions.eventContent = this.eventContent
     // this.calendarOptions.eventClassNames = this.eventClassNames
     this.sub = this.scheduleEntries.subscribe(xs => {
@@ -77,8 +80,8 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe()
   }
 
-  handleDateClick = (arg: EventClickArg): void =>
-    console.log('date click! ' + arg.event.start)
+  onEventClick = (arg: EventClickArg): void =>
+    console.log('date click! ' + arg.event.title)
 
   /*
   eventContent: function(arg) {
@@ -109,39 +112,35 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
   //   return ['foo']
   // }
 
-  private makeEvents = (xs: ScheduleAtom[]): Event<ScheduleAtom[]>[] => {
-    const allEvents = xs.map(x => {
-      const subModule = x.course.subModule
-      const studyProgram = x.moduleExaminationRegulation.examinationRegulation.studyProgram
-      return {
-        title: `${subModule.abbreviation} ${formatShort(x.course.courseType)} ${studyProgram.abbreviation}`,
-        start: x.start.date,
-        end: x.end.date,
-        extendedProps: x,
-      }
-    })
+  private makeEvents = (xs: ScheduleAtom[]): PartialEvent<ScheduleAtom[]>[] => {
+    const partialEvents = xs.map(x => ({
+      start: x.start.date,
+      end: x.end.date,
+      extendedProps: x,
+    }))
 
-    return this.mergeSameSlots(allEvents)
+    return this.mergeSameSlots(partialEvents)
   }
 
-  private mergeSameSlots = (events: Event<ScheduleAtom>[]): Event<ScheduleAtom[]>[] => {
-    const uniqueEventID = (e: Event<ScheduleAtom>) =>
+  private mergeSameSlots = (events: PartialEvent<ScheduleAtom>[]): Event<ScheduleAtom[]>[] => {
+    const uniqueEventID = (e: PartialEvent<ScheduleAtom>) =>
       `${e.extendedProps.course.id}_${e.start.getTime()}_${e.end.getTime()}`
     const groupByCourse = groupBy(events, uniqueEventID)
 
     return mapGroup(groupByCourse, ((_, xs) => {
       const x = xs[0]
-      const subModule = x.extendedProps.course.subModule.abbreviation
-      const courseType = formatShort(x.extendedProps.course.courseType)
-      const courseInfo = `${subModule} ${courseType}`
-      const studyPrograms = xs
+      const courseType = x.extendedProps.course.courseType
+      const subModuleLabel = x.extendedProps.course.subModule.abbreviation
+      const courseTypeLabel = formatShort(courseType)
+      const studyProgramLabel = xs
         .map(e => this.formatStudyProgram(e.extendedProps.moduleExaminationRegulation.examinationRegulation))
         .join(',')
 
       return {
-        title: `${courseInfo} ${studyPrograms}`,
+        title: `${subModuleLabel} ${courseTypeLabel} ${studyProgramLabel}`,
         start: x.start,
         end: x.end,
+        backgroundColor: this.colorForCourseType(courseType),
         extendedProps: xs.map(e => e.extendedProps)
       }
     }))
@@ -151,5 +150,22 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
     const poNumber = e.number
     const studyProgram = e.studyProgram.abbreviation
     return `${studyProgram} (${poNumber})`
+  }
+
+  private colorForCourseType = (ct: CourseType): string => {
+    switch (ct) {
+      case 'lecture':
+        return '#fc8403'
+      case 'seminar':
+        return '#fcdf03'
+      case 'practical':
+        return '#11c255'
+      case 'exercise':
+        return '#0048ff'
+      case 'tutorial':
+        return '#9d00ff'
+      case 'unknown':
+        return '#ff0040'
+    }
   }
 }
