@@ -1,10 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core'
 import {ScheduleAtom} from '../../models/schedule'
-import {CalendarOptions, EventClickArg} from '@fullcalendar/angular'
+import {CalendarOptions, EventClickArg, EventContentArg} from '@fullcalendar/angular'
 import {EMPTY, Observable, Subscription} from 'rxjs'
 import {groupBy, mapGroup} from '../../utils/group-by'
 import {ExaminationRegulationAtom} from '../../models/examination-regulation'
 import {CourseType, formatShort} from '../../models/course-type'
+import {formatTime} from '../../utils/date-format'
 
 export interface ScheduleViewEntry {
   s: ScheduleAtom
@@ -23,7 +24,9 @@ interface Event<A> {
   start: Date
   end: Date
   backgroundColor: string
-  extendedProps: A
+  extendedProps: {
+    value: A
+  }
 }
 
 type PartialEvent<A> = Pick<Event<A>, 'start' | 'end' | 'extendedProps'>
@@ -65,7 +68,7 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.calendarOptions.eventClick = this.onEventClick
-    // this.calendarOptions.eventContent = this.eventContent
+    this.calendarOptions.eventContent = this.eventContent
     // this.calendarOptions.eventClassNames = this.eventClassNames
     this.sub = this.scheduleEntries.subscribe(xs => {
       if (xs) {
@@ -96,18 +99,29 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
 	return { domNodes: arrayOfDomNodes }
 }
    */
-  // eventContent = (arg: EventContentArg) => {
-  //   const event = arg.event
-  //   const a: ScheduleAtom[] = arg.event.extendedProps.a
-  //   const b: number = arg.event.extendedProps.b
-  //   const studyPrograms = a
-  //     .map(e => this.formatStudyProgram(e.moduleExaminationRegulation.examinationRegulation))
-  //     .join(',')
-  //   const divEl = document.createElement('div')
-  //   divEl.innerHTML = `<p>${event.title}<br>${studyPrograms}</p>`
-  //   return { domNodes: [divEl] }
-  // }
-  //
+
+  eventContent = (arg: EventContentArg) => {
+    const event = arg.event
+    const a: ScheduleAtom[] = arg.event.extendedProps.value
+    const studyPrograms = a
+      .map(e => this.formatStudyProgram(e.moduleExaminationRegulation.examinationRegulation))
+      .join(',')
+    const first = a[0]
+    const start = formatTime(first.start, 'HH:mm')
+    const end = formatTime(first.end, 'HH:mm')
+
+    const divEl = document.createElement('p')
+    divEl.innerHTML =
+      `
+      <span style="font-size: x-small">${start} - ${end}</span>
+      <br>
+      <span>${event.title}</span>
+      <br>
+      <span>${studyPrograms}</span>
+      `
+    return {domNodes: [divEl]}
+  }
+
   // eventClassNames = (arg: EventContentArg) => {
   //   return ['foo']
   // }
@@ -116,7 +130,9 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
     const partialEvents = xs.map(x => ({
       start: x.start.date,
       end: x.end.date,
-      extendedProps: x,
+      extendedProps: {
+        value: x
+      },
     }))
 
     return this.mergeSameSlots(partialEvents)
@@ -124,24 +140,26 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
 
   private mergeSameSlots = (events: PartialEvent<ScheduleAtom>[]): Event<ScheduleAtom[]>[] => {
     const uniqueEventID = (e: PartialEvent<ScheduleAtom>) =>
-      `${e.extendedProps.course.id}_${e.start.getTime()}_${e.end.getTime()}`
+      `${e.extendedProps.value.course.id}_${e.start.getTime()}_${e.end.getTime()}`
     const groupByCourse = groupBy(events, uniqueEventID)
 
     return mapGroup(groupByCourse, ((_, xs) => {
       const x = xs[0]
-      const courseType = x.extendedProps.course.courseType
-      const subModuleLabel = x.extendedProps.course.subModule.abbreviation
+      const courseType = x.extendedProps.value.course.courseType
+      const subModuleLabel = x.extendedProps.value.course.subModule.abbreviation
       const courseTypeLabel = formatShort(courseType)
-      const studyProgramLabel = xs
-        .map(e => this.formatStudyProgram(e.extendedProps.moduleExaminationRegulation.examinationRegulation))
-        .join(',')
+      // const studyProgramLabel = xs
+      //   .map(e => this.formatStudyProgram(e.extendedProps.value.moduleExaminationRegulation.examinationRegulation))
+      //   .join(',')
 
       return {
-        title: `${subModuleLabel} ${courseTypeLabel} ${studyProgramLabel}`,
+        title: `${subModuleLabel} ${courseTypeLabel}`,
         start: x.start,
         end: x.end,
         backgroundColor: this.colorForCourseType(courseType),
-        extendedProps: xs.map(e => e.extendedProps)
+        extendedProps: {
+          value: xs.map(e => e.extendedProps.value)
+        }
       }
     }))
   }
