@@ -19,6 +19,10 @@ import {FullCalendarModule} from '@fullcalendar/angular'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
+import {LoginComponent} from './login/login/login.component'
+import {AdminMenuComponent} from './structure/admin-menu/admin-menu.component'
+import {StudyProgramsComponent} from './admin/study-programs/study-programs.component'
+import {TableComponent} from './generic-ui/table/table.component'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -36,7 +40,9 @@ FullCalendarModule.registerPlugins([
     ScheduleComponent,
     ScheduleViewComponent,
     LoginComponent,
-    AdminMenuComponent
+    AdminMenuComponent,
+    StudyProgramsComponent,
+    TableComponent
   ],
   imports: [
     BrowserModule,

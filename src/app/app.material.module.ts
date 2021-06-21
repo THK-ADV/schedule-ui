@@ -6,6 +6,10 @@ import {ReactiveFormsModule} from '@angular/forms'
 import {MatButtonModule} from '@angular/material/button'
 import {MatMenuModule} from '@angular/material/menu'
 import {MatIconModule} from '@angular/material/icon'
+import {MatTooltipModule} from '@angular/material/tooltip'
+import {MatTableModule} from '@angular/material/table'
+import {MatSortModule} from '@angular/material/sort'
+import {MatPaginatorModule} from '@angular/material/paginator'
 
 
 @NgModule({
@@ -16,7 +20,11 @@ import {MatIconModule} from '@angular/material/icon'
     ReactiveFormsModule,
     MatButtonModule,
     MatMenuModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule
   ]
 })
 export class ScheduleMaterialModule {
