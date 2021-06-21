@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output, QueryList, ViewChildren} from '@angular/core'
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren} from '@angular/core'
 import {FilterOptionComponent} from '../filter-option/filter-option.component'
 import {Course, ScheduleFilterService, SemesterIndex} from './schedule-filter.service'
 import {Subscription} from 'rxjs'
@@ -14,14 +14,6 @@ export interface ScheduleFilterSections {
   lecturer?: Lecturer
 }
 
-const emptyScheduleFilterSections = (): ScheduleFilterSections => ({
-  teachingUnit: undefined,
-  examReg: undefined,
-  semesterIndex: undefined,
-  course: undefined,
-  lecturer: undefined
-})
-
 @Component({
   selector: 'schd-filter',
   templateUrl: './filter.component.html',
@@ -31,7 +23,8 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   @ViewChildren(FilterOptionComponent) filterComponents!: QueryList<FilterOptionComponent<any>>
 
-  @Output() onSearch = new EventEmitter<ScheduleFilterSections>()
+  @Input() selections!: ScheduleFilterSections
+  @Output() onSearch = new EventEmitter()
   @Output() onReset = new EventEmitter()
 
   semesterIndices: SemesterIndex[] = []
@@ -42,10 +35,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   private sub!: Subscription
 
-  private selections: ScheduleFilterSections
-
   constructor(private readonly service: ScheduleFilterService) {
-    this.selections = emptyScheduleFilterSections()
   }
 
   ngOnInit(): void {
@@ -111,10 +101,9 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   search = () =>
-    this.onSearch.emit(this.selections)
+    this.onSearch.emit()
 
   reset = () => {
-    this.selections = emptyScheduleFilterSections()
     this.updateAll()
     this.filterComponents.forEach(a => a.reset())
     this.onReset.emit()

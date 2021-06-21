@@ -4,7 +4,7 @@ import {TeachingUnit} from '../../models/teaching-unit'
 import {forkJoin, Observable, of} from 'rxjs'
 import {map} from 'rxjs/operators'
 import {CourseApiService} from '../../http/course-api.service'
-import {CourseAtom, ordinal} from '../../models/course'
+import {CourseAtom} from '../../models/course'
 import {ModuleExaminationRegulationApiService} from '../../http/module-examination-regulation-api.service'
 import {ModuleExaminationRegulationAtom} from '../../models/module-examination-regulation'
 import {Lecturer} from '../../models/user'
@@ -13,6 +13,7 @@ import {ExaminationRegulationAtom} from '../../models/examination-regulation'
 import {distinctBy} from '../../utils/array-ops'
 import {Module} from '../../models/module'
 import {groupBy, mapGroup} from '../../utils/group-by'
+import {ordinal} from '../../models/course-type'
 
 export type SemesterIndex = 1 | 2 | 3 | 4 | 5 | 6
 

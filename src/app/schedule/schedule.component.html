@@ -1,7 +1,8 @@
 <h1 class="space-between"><span>Stundenplan</span><span>Sommersemester 2021</span></h1>
 
 <schd-filter
-        (onSearch)="searchSchedule($event)"
+        [selections]="filterSelection"
+        (onSearch)="searchSchedule()"
         (onReset)="resetSchedule()">
 </schd-filter>
 
