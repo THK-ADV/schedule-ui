@@ -34,7 +34,9 @@ FullCalendarModule.registerPlugins([
     FilterOptionComponent,
     FilterComponent,
     ScheduleComponent,
-    ScheduleViewComponent
+    ScheduleViewComponent,
+    LoginComponent,
+    AdminMenuComponent
   ],
   imports: [
     BrowserModule,

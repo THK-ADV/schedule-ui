@@ -33,7 +33,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   currentLecturer: Lecturer[] = []
   currentStudyProgramWithExam: ExaminationRegulationAtom[] = []
 
-  private sub!: Subscription
+  private sub?: Subscription
 
   constructor(private readonly service: ScheduleFilterService) {
   }
@@ -49,7 +49,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe()
+    this.sub?.unsubscribe()
   }
 
   displayTU = (tu: TeachingUnit) =>
