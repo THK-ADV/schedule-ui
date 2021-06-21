@@ -19,7 +19,7 @@ const emptySelection = (): ScheduleFilterSections => ({
 })
 export class ScheduleComponent implements OnDestroy {
 
-  private sub!: Subscription
+  private sub?: Subscription
 
   scheduleEntries: ScheduleAtom[] = []
 
@@ -29,7 +29,7 @@ export class ScheduleComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe()
+    this.sub?.unsubscribe()
   }
 
   searchSchedule = () => {
