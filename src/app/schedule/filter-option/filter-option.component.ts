@@ -48,14 +48,13 @@ export class FilterOptionComponent<T> implements OnInit {
     return (value && this.display(value)) ?? ''
   }
 
-
   onSelected = (e: MatAutocompleteSelectedEvent) => {
     this.hasSelection = true
     this.onSelect.emit(e.option.value)
   }
 
   onClosed = () => {
-    if (!this.hasSelection) {
+    if (!this.hasSelection && !this.formControl.value) {
       this.onSelect.emit(undefined)
     }
     this.hasSelection = false

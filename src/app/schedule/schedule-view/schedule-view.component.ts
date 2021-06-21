@@ -1,23 +1,10 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core'
+import {Component, Input, OnInit} from '@angular/core'
 import {ScheduleAtom} from '../../models/schedule'
 import {CalendarOptions, EventClickArg, EventContentArg} from '@fullcalendar/angular'
-import {EMPTY, Observable, Subscription} from 'rxjs'
 import {groupBy, mapGroup} from '../../utils/group-by'
 import {ExaminationRegulationAtom} from '../../models/examination-regulation'
 import {CourseType, formatShort} from '../../models/course-type'
 import {formatTime} from '../../utils/date-format'
-
-export interface ScheduleViewEntry {
-  s: ScheduleAtom
-  subModule: string
-  courseType: string
-  studyProgram: string
-  lecturer: string
-  room: string
-  date: string
-  start: string
-  end: string
-}
 
 interface Event<A> {
   title: string
@@ -36,7 +23,7 @@ type PartialEvent<A> = Pick<Event<A>, 'start' | 'end' | 'extendedProps'>
   templateUrl: './schedule-view.component.html',
   styleUrls: ['./schedule-view.component.scss']
 })
-export class ScheduleViewComponent implements OnInit, OnDestroy {
+export class ScheduleViewComponent implements OnInit {
 
   calendarOptions: CalendarOptions = {
     initialView: 'timeGridWeek',
@@ -62,25 +49,14 @@ export class ScheduleViewComponent implements OnInit, OnDestroy {
     eventMaxStack: undefined,
   }
 
-  private sub!: Subscription
-
-  @Input() scheduleEntries: Observable<ScheduleAtom[]> = EMPTY
+  @Input() set scheduleEntries(xs: ScheduleAtom[]) {
+    this.calendarOptions.events = this.makeEvents(xs)
+  }
 
   ngOnInit(): void {
     this.calendarOptions.eventClick = this.onEventClick
     this.calendarOptions.eventContent = this.eventContent
     // this.calendarOptions.eventClassNames = this.eventClassNames
-    this.sub = this.scheduleEntries.subscribe(xs => {
-      if (xs) {
-        this.calendarOptions.events = this.makeEvents(xs)
-      } else {
-        this.calendarOptions.events = []
-      }
-    })
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe()
   }
 
   onEventClick = (arg: EventClickArg): void =>
