@@ -34,8 +34,8 @@ export class TableComponent<A> implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() columns: TableHeaderColumn[] = []
   @Input() pageSizeOptions = [25, 50, 100]
-  @Input() filterPredicate?: (a: A, filter: string) => boolean
-  @Input() sortingDataAccessor: (a: A, property: string) => string =
+  @Input() useTableContentForFiltering = false
+  @Input() sortingDataAccessor: (a: A, property: string) => any =
     nestedObjectPropertyAccessor
   @Input() tableContent: (a: A, attr: string) => string =
     nestedObjectPropertyAccessor
@@ -44,12 +44,14 @@ export class TableComponent<A> implements OnInit, AfterViewInit, OnDestroy {
   @Input() select?: (a: A) => void
   @Input() data: Observable<A[]> = EMPTY
   @Input() sort?: Sort
+  @Input() filterAttrs?: string[]
+
+  filterHint = 'Filter'
 
   private sub?: Subscription
 
   dataSource = new MatTableDataSource<A>()
   displayedColumns: string[] = []
-  filterHint = 'Filter'
 
   constructor() {
   }
@@ -57,8 +59,8 @@ export class TableComponent<A> implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.initDisplayedColumns()
     this.initDataSource()
+    this.initFilterHints()
     this.updateDataSourceWithData()
-    this.initActiveFilterHints()
   }
 
   ngAfterViewInit(): void {
@@ -86,17 +88,6 @@ export class TableComponent<A> implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
-  private initActiveFilterHints = () => {
-    const activeFilter = this.columns
-      .filter(a => !a.attr.includes('.'))
-      .map(a => a.title)
-      .join(', ')
-
-    if (activeFilter) {
-      this.filterHint = `Filtern nach: ${activeFilter}`
-    }
-  }
-
   private initDisplayedColumns = () => {
     this.displayedColumns = this.columns.map(_ => _.attr)
     if (this.edit || this.delete) {
@@ -106,8 +97,21 @@ export class TableComponent<A> implements OnInit, AfterViewInit, OnDestroy {
 
   private initDataSource = () => {
     this.dataSource.sortingDataAccessor = this.sortingDataAccessor
-    if (this.filterPredicate) {
-      this.dataSource.filterPredicate = this.filterPredicate
+    if (this.useTableContentForFiltering) {
+      this.dataSource.filterPredicate = (obj, filter) =>
+        Object.keys(obj).some(k => this.tableContent(obj, k).toLowerCase().includes(filter))
+    }
+  }
+
+  private initFilterHints = () => {
+    const filterAttrs = this.filterAttrs ?? this.columns
+      .filter(a => !a.attr.includes('.'))
+      .map(a => a.title)
+
+    const activeFilter = filterAttrs.join(', ')
+
+    if (activeFilter) {
+      this.filterHint = `Filtern nach: ${activeFilter}`
     }
   }
 

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core'
+import {Component} from '@angular/core'
 import {StudyProgramsService} from './study-programs.service'
 import {TableHeaderColumn} from '../../generic-ui/table/table.component'
 import {Observable} from 'rxjs'
@@ -9,7 +9,7 @@ import {StudyProgramAtom} from '../../models/study-program'
   templateUrl: './study-programs.component.html',
   styleUrls: ['./study-programs.component.scss']
 })
-export class StudyProgramsComponent implements OnInit {
+export class StudyProgramsComponent {
 
   columns: TableHeaderColumn[]
   data: Observable<StudyProgramAtom[]>
@@ -22,9 +22,6 @@ export class StudyProgramsComponent implements OnInit {
       {attr: 'graduation.abbreviation', title: 'Abschluss'},
     ]
     this.data = service.studyPrograms()
-  }
-
-  ngOnInit(): void {
   }
 
   delete = (sp: StudyProgramAtom) =>

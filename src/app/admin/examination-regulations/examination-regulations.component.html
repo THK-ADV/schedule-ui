@@ -1,0 +1,25 @@
+<div class="abstractTableMainTitle">
+    <h1>Prüfungsordnungen</h1>
+    <span>
+        <button mat-flat-button
+                [color]="'primary'"
+                (click)="create()"
+                [matTooltip]="'Prüfungsordnung hinzufügen'"
+                matTooltipPosition="below">
+            <mat-icon>add</mat-icon>
+        </button>
+    </span>
+</div>
+
+<schd-table
+        [data]="data"
+        [columns]="columns"
+        [sort]="{active: 'studyProgram', direction: 'asc'}"
+        [tableContent]="tableContent"
+        [sortingDataAccessor]="sortingDataAccessor"
+        [useTableContentForFiltering]="true"
+        [filterAttrs]="filterAttrs"
+        [delete]="delete"
+        [edit]="edit"
+        [select]="select">
+</schd-table>

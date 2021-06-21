@@ -8,7 +8,8 @@ interface AdminMenu {
 }
 
 const adminMenus = (): AdminMenu[] => [
-  {label: 'Studiengänge', icon: 'school', routerLink: 'studyPaths'}
+  {label: 'Studiengänge', icon: 'school', routerLink: 'studyPaths'},
+  {label: 'Prüfungsordnungen', icon: 'approval', routerLink: 'examinationRegulations'},
 ]
 
 @Component({
