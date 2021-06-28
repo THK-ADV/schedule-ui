@@ -1,0 +1,15 @@
+<schd-crud-table
+        [headerTitle]="headerTitle"
+        [tooltipTitle]="tooltipTitle"
+        (create)="create()"
+        [data]="data"
+        [columns]="columns"
+        [sort]="{active: 'studyProgram', direction: 'asc'}"
+        [tableContent]="tableContent"
+        [sortingDataAccessor]="sortingDataAccessor"
+        [useTableContentForFiltering]="true"
+        [filterAttrs]="filterAttrs"
+        [delete]="delete"
+        [edit]="edit"
+        [select]="select">
+</schd-crud-table>
