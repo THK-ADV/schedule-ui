@@ -41,4 +41,8 @@ export class HttpService {
   getAll = <A>(url: string, params: HttpParams): Observable<A[]> =>
     this.http.get<A[]>(url, {params})
       .pipe(catchError(this.handleError))
+
+  delete = <A>(url: string): Observable<A> =>
+    this.http.delete<A>(url)
+      .pipe(catchError(this.handleError))
 }

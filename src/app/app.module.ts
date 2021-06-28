@@ -26,6 +26,7 @@ import {TableComponent} from './generic-ui/table/table.component'
 import {ExaminationRegulationsComponent} from './admin/examination-regulations/examination-regulations.component'
 import {HeaderButtonComponent} from './generic-ui/header-button/header-button.component'
 import {CrudTableComponent} from './generic-ui/crud-table/crud-table.component'
+import {DeleteDialogComponent} from './generic-ui/delete-dialog/delete-dialog.component'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -48,7 +49,8 @@ FullCalendarModule.registerPlugins([
     TableComponent,
     ExaminationRegulationsComponent,
     HeaderButtonComponent,
-    CrudTableComponent
+    CrudTableComponent,
+    DeleteDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core'
 import {StudyProgramApiService} from '../../http/study-program-api.service'
-import {Observable} from 'rxjs'
+import {Observable, of} from 'rxjs'
 import {StudyProgramAtom} from '../../models/study-program'
 
 @Injectable({
@@ -13,4 +13,7 @@ export class StudyProgramsService {
 
   studyPrograms = (): Observable<StudyProgramAtom[]> =>
     this.http.studyProgramsAtomic()
+
+  delete = (sp: StudyProgramAtom): Observable<StudyProgramAtom> =>
+    of(sp) //this.http.delete(sp.id)
 }

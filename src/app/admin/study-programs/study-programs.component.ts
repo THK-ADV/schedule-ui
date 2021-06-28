@@ -3,6 +3,7 @@ import {StudyProgramsService} from './study-programs.service'
 import {TableHeaderColumn} from '../../generic-ui/table/table.component'
 import {Observable} from 'rxjs'
 import {StudyProgramAtom} from '../../models/study-program'
+import {Delete} from '../../generic-ui/crud-table/crud-table.component'
 
 @Component({
   selector: 'schd-study-programs',
@@ -14,7 +15,8 @@ export class StudyProgramsComponent {
   headerTitle = 'Studiengänge'
   tooltipTitle = 'Studiengang hinzufügen'
   columns: TableHeaderColumn[]
-  data: Observable<StudyProgramAtom[]>
+  data: () => Observable<StudyProgramAtom[]>
+  delete: Delete<StudyProgramAtom>
 
   constructor(private readonly service: StudyProgramsService) {
     this.columns = [
@@ -23,18 +25,10 @@ export class StudyProgramsComponent {
       {attr: 'teachingUnit.label', title: 'Lehreinheit'},
       {attr: 'graduation.abbreviation', title: 'Abschluss'},
     ]
-    this.data = service.studyPrograms()
+    this.data = service.studyPrograms
+    this.delete = {
+      labelForDialog: (sp) => sp.label,
+      delete: service.delete
+    }
   }
-
-  delete = (sp: StudyProgramAtom) =>
-    console.log('delete', sp)
-
-  edit = (sp: StudyProgramAtom) =>
-    console.log('edit', sp)
-
-  select = (sp: StudyProgramAtom) =>
-    console.log('select', sp)
-
-  create = () =>
-    console.log('create')
 }

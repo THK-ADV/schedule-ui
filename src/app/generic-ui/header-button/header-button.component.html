@@ -1,9 +1,10 @@
 <div class="abstractTableMainTitle">
     <h1>{{headerTitle}}</h1>
     <span>
-        <button mat-flat-button
+        <button *ngIf="create"
+                mat-flat-button
                 [color]="'primary'"
-                (click)="create.emit()"
+                (click)="onCreate()"
                 [matTooltip]="tooltipTitle"
                 matTooltipPosition="below">
             <mat-icon>add</mat-icon>

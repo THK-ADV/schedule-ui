@@ -18,7 +18,6 @@ export const nestedObjectPropertyAccessor = <A>(obj: A, prop: string): any =>
     obj
   )
 
-
 @Component({
   selector: 'schd-table',
   templateUrl: './table.component.html',
@@ -37,12 +36,15 @@ export class TableComponent<A> implements OnInit, AfterViewInit, OnDestroy {
   @Input() useTableContentForFiltering!: boolean
   @Input() sortingDataAccessor!: (a: A, property: string) => any
   @Input() tableContent!: (a: A, attr: string) => string
-  @Input() data!: Observable<A[]>
   @Input() edit?: (a: A) => void
   @Input() delete?: (a: A) => void
   @Input() select?: (a: A) => void
   @Input() sort?: Sort
   @Input() filterAttrs?: string[]
+
+  @Input() set data(data$: Observable<A[]>) {
+    this.updateDataSourceWithData(data$)
+  }
 
   filterHint = 'Filter'
 
@@ -58,7 +60,6 @@ export class TableComponent<A> implements OnInit, AfterViewInit, OnDestroy {
     this.initDisplayedColumns()
     this.initDataSource()
     this.initFilterHints()
-    this.updateDataSourceWithData()
   }
 
   ngAfterViewInit(): void {
@@ -75,8 +76,8 @@ export class TableComponent<A> implements OnInit, AfterViewInit, OnDestroy {
     this.sub?.unsubscribe()
   }
 
-  private updateDataSourceWithData = () => {
-    this.sub = this.data.subscribe(data => {
+  private updateDataSourceWithData = (data$: Observable<A[]>) => {
+    this.sub = data$.subscribe(data => {
       if (data) {
         this.dataSource.data = data
         this.triggerSort()

@@ -16,7 +16,7 @@ export class ExaminationRegulationsComponent {
   tooltipTitle = 'Prüfungsordnung hinzufügen'
 
   columns: TableHeaderColumn[]
-  data: Observable<ExaminationRegulationAtom[]>
+  data: () => Observable<ExaminationRegulationAtom[]>
   filterAttrs: string[]
 
   constructor(private readonly service: ExaminationRegulationsService) {
@@ -27,20 +27,8 @@ export class ExaminationRegulationsComponent {
       {attr: 'end', title: 'Ende'},
     ]
     this.filterAttrs = this.columns.map(_ => _.title)
-    this.data = service.examinationRegulations()
+    this.data = service.examinationRegulations
   }
-
-  delete = (sp: ExaminationRegulationAtom) =>
-    console.log('delete', sp)
-
-  edit = (sp: ExaminationRegulationAtom) =>
-    console.log('edit', sp)
-
-  select = (sp: ExaminationRegulationAtom) =>
-    console.log('select', sp)
-
-  create = () =>
-    console.log('create')
 
   tableContent = (exam: ExaminationRegulationAtom, attr: string): string => {
     switch (attr) {

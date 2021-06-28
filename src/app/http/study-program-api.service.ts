@@ -19,4 +19,7 @@ export class StudyProgramApiService {
 
   studyProgramsAtomic = (): Observable<StudyProgramAtom[]> =>
     this.http.getAll(this.resource, atomicParams)
+
+  delete = (id: string): Observable<StudyProgram> =>
+    this.http.delete(`${this.resource}/${id}`)
 }
