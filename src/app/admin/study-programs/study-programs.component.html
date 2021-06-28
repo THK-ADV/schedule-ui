@@ -1,21 +1,11 @@
-<div class="abstractTableMainTitle">
-    <h1>Studiengänge</h1>
-    <span>
-        <button mat-flat-button
-                [color]="'primary'"
-                (click)="create()"
-                [matTooltip]="'Studiengang hinzufügen'"
-                matTooltipPosition="below">
-            <mat-icon>add</mat-icon>
-        </button>
-    </span>
-</div>
-
-<schd-table
+<schd-crud-table
+        [headerTitle]="headerTitle"
+        [tooltipTitle]="tooltipTitle"
+        (create)="create()"
         [data]="data"
         [columns]="columns"
         [sort]="{active: 'label', direction: 'asc'}"
         [delete]="delete"
         [edit]="edit"
         [select]="select">
-</schd-table>
+</schd-crud-table>

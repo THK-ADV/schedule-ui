@@ -1,0 +1,12 @@
+<div class="abstractTableMainTitle">
+    <h1>{{headerTitle}}</h1>
+    <span>
+        <button mat-flat-button
+                [color]="'primary'"
+                (click)="create.emit()"
+                [matTooltip]="tooltipTitle"
+                matTooltipPosition="below">
+            <mat-icon>add</mat-icon>
+        </button>
+    </span>
+</div>

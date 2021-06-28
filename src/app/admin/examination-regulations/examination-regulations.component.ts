@@ -12,6 +12,9 @@ import {formatDate} from '../../utils/date-format'
 })
 export class ExaminationRegulationsComponent {
 
+  headerTitle = 'Prüfungsordnungen'
+  tooltipTitle = 'Prüfungsordnung hinzufügen'
+
   columns: TableHeaderColumn[]
   data: Observable<ExaminationRegulationAtom[]>
   filterAttrs: string[]
