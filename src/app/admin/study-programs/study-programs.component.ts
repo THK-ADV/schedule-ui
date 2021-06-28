@@ -11,6 +11,8 @@ import {StudyProgramAtom} from '../../models/study-program'
 })
 export class StudyProgramsComponent {
 
+  headerTitle = 'Studiengänge'
+  tooltipTitle = 'Studiengang hinzufügen'
   columns: TableHeaderColumn[]
   data: Observable<StudyProgramAtom[]>
 

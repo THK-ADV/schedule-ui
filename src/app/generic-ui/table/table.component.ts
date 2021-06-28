@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core'
 import {MatSort, Sort} from '@angular/material/sort'
 import {MatPaginator} from '@angular/material/paginator'
-import {EMPTY, Observable, Subscription} from 'rxjs'
+import {Observable, Subscription} from 'rxjs'
 import {MatTableDataSource} from '@angular/material/table'
 
 export interface TableHeaderColumn {
@@ -32,17 +32,15 @@ export class TableComponent<A> implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator, {static: true})
   private paginator?: MatPaginator
 
-  @Input() columns: TableHeaderColumn[] = []
-  @Input() pageSizeOptions = [25, 50, 100]
-  @Input() useTableContentForFiltering = false
-  @Input() sortingDataAccessor: (a: A, property: string) => any =
-    nestedObjectPropertyAccessor
-  @Input() tableContent: (a: A, attr: string) => string =
-    nestedObjectPropertyAccessor
+  @Input() columns!: TableHeaderColumn[]
+  @Input() pageSizeOptions!: number[]
+  @Input() useTableContentForFiltering!: boolean
+  @Input() sortingDataAccessor!: (a: A, property: string) => any
+  @Input() tableContent!: (a: A, attr: string) => string
+  @Input() data!: Observable<A[]>
   @Input() edit?: (a: A) => void
   @Input() delete?: (a: A) => void
   @Input() select?: (a: A) => void
-  @Input() data: Observable<A[]> = EMPTY
   @Input() sort?: Sort
   @Input() filterAttrs?: string[]
 

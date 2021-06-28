@@ -1,15 +1,19 @@
-<schd-crud-table
+<schd-header-button
         [headerTitle]="headerTitle"
         [tooltipTitle]="tooltipTitle"
-        (create)="create()"
+        (create)="create">
+</schd-header-button>
+
+<schd-table
         [data]="data"
         [columns]="columns"
-        [sort]="{active: 'studyProgram', direction: 'asc'}"
+        [sort]="sort"
         [tableContent]="tableContent"
         [sortingDataAccessor]="sortingDataAccessor"
-        [useTableContentForFiltering]="true"
+        [useTableContentForFiltering]="useTableContentForFiltering"
+        [pageSizeOptions]="pageSizeOptions"
         [filterAttrs]="filterAttrs"
         [delete]="delete"
         [edit]="edit"
         [select]="select">
-</schd-crud-table>
+</schd-table>
