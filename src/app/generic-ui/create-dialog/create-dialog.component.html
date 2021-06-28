@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{title}}</h1>
+
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+        <mat-form-field *ngFor="let i of data.inputs">
+            <ng-container [ngSwitch]="i.kind">
+                <input *ngSwitchDefault
+                       matInput
+                       [placeholder]="i.label"
+                       [type]="i.kind"
+                       [formControlName]="i.attr">
+            </ng-container>
+        </mat-form-field>
+    </div>
+
+    <div mat-dialog-actions>
+        <button type="button" mat-flat-button (click)="cancel()">Abbrechen</button>
+        <button mat-flat-button color="primary" [disabled]="!formGroup.valid">Erstellen</button>
+    </div>
+</form>
+

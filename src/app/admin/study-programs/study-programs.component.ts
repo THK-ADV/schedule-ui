@@ -1,9 +1,9 @@
 import {Component} from '@angular/core'
 import {StudyProgramsService} from './study-programs.service'
 import {TableHeaderColumn} from '../../generic-ui/table/table.component'
-import {Observable} from 'rxjs'
+import {EMPTY, Observable} from 'rxjs'
 import {StudyProgramAtom} from '../../models/study-program'
-import {Delete} from '../../generic-ui/crud-table/crud-table.component'
+import {Create, Delete} from '../../generic-ui/crud-table/crud-table.component'
 
 @Component({
   selector: 'schd-study-programs',
@@ -17,6 +17,7 @@ export class StudyProgramsComponent {
   columns: TableHeaderColumn[]
   data: () => Observable<StudyProgramAtom[]>
   delete: Delete<StudyProgramAtom>
+  create: Create<never, StudyProgramAtom>
 
   constructor(private readonly service: StudyProgramsService) {
     this.columns = [
@@ -29,6 +30,9 @@ export class StudyProgramsComponent {
     this.delete = {
       labelForDialog: (sp) => sp.label,
       delete: service.delete
+    }
+    this.create = {
+      create: (a) => EMPTY
     }
   }
 }

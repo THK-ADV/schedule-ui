@@ -27,7 +27,7 @@ export class AlertComponent implements OnInit, OnDestroy {
     )
 
     this.subs.push(
-      alerts.pipe(delay(2000))
+      alerts.pipe(delay(3000))
         .subscribe(a => this.close(a))
     )
   }

@@ -28,6 +28,7 @@ import {HeaderButtonComponent} from './generic-ui/header-button/header-button.co
 import {CrudTableComponent} from './generic-ui/crud-table/crud-table.component'
 import {DeleteDialogComponent} from './generic-ui/delete-dialog/delete-dialog.component'
 import {AlertComponent} from './structure/alert/alert.component'
+import {CreateDialogComponent} from './generic-ui/create-dialog/create-dialog.component'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -52,7 +53,8 @@ FullCalendarModule.registerPlugins([
     HeaderButtonComponent,
     CrudTableComponent,
     DeleteDialogComponent,
-    AlertComponent
+    AlertComponent,
+    CreateDialogComponent,
   ],
   imports: [
     BrowserModule,
