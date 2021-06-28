@@ -24,6 +24,8 @@ import {AdminMenuComponent} from './structure/admin-menu/admin-menu.component'
 import {StudyProgramsComponent} from './admin/study-programs/study-programs.component'
 import {TableComponent} from './generic-ui/table/table.component'
 import {ExaminationRegulationsComponent} from './admin/examination-regulations/examination-regulations.component'
+import {HeaderButtonComponent} from './generic-ui/header-button/header-button.component'
+import {CrudTableComponent} from './generic-ui/crud-table/crud-table.component'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -44,7 +46,9 @@ FullCalendarModule.registerPlugins([
     AdminMenuComponent,
     StudyProgramsComponent,
     TableComponent,
-    ExaminationRegulationsComponent
+    ExaminationRegulationsComponent,
+    HeaderButtonComponent,
+    CrudTableComponent
   ],
   imports: [
     BrowserModule,
