@@ -4,6 +4,7 @@ import {Sort} from '@angular/material/sort'
 import {nestedObjectPropertyAccessor, TableHeaderColumn} from '../table/table.component'
 import {MatDialog} from '@angular/material/dialog'
 import {openDeleteDialog} from '../dialog-opener'
+import {AlertService} from '../../structure/alert/alert.service'
 
 export interface Delete<A> {
   labelForDialog: (a: A) => string
@@ -36,7 +37,10 @@ export class CrudTableComponent<A> implements OnInit, OnDestroy {
 
   @Input() fetchData: () => Observable<A[]> = () => of([])
 
-  constructor(private readonly dialog: MatDialog) {
+  constructor(
+    private readonly dialog: MatDialog,
+    private readonly alertService: AlertService
+  ) {
   }
 
   ngOnInit(): void {
@@ -53,12 +57,16 @@ export class CrudTableComponent<A> implements OnInit, OnDestroy {
 
   private initOnDelete = (d: Delete<A>) => {
     this.onDelete = (a) => {
-      const s = openDeleteDialog(this.dialog, {label: d.labelForDialog(a)}, () => d.delete(a))
-        .subscribe(deleted => {
+      const label = d.labelForDialog(a)
+      const s = openDeleteDialog(this.dialog, {label}, () => d.delete(a))
+        .subscribe(_ => {
           this.data$ = this.fetchData()
-          console.log(deleted)
+          this.reportDeleted(label)
         })
       this.subs.push(s)
     }
   }
+
+  private reportDeleted = (str: string) =>
+    this.alertService.reportSuccess(`deleted: ${str}`)
 }

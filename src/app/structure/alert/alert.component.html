@@ -1,0 +1,9 @@
+<ng-container *ngFor="let alert of alerts">
+    <ngb-alert
+            [type]="alert.type"
+            (close)="close(alert)">
+        <ng-container [ngSwitch]="alert.body.kind">
+            <p *ngSwitchCase="'message'">{{alert.body.value}}</p>
+        </ng-container>
+    </ngb-alert>
+</ng-container>
