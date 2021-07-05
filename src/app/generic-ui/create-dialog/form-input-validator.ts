@@ -17,3 +17,13 @@ export function mandatoryOptionsValidator(): ValidatorFn {
     return null
   }
 }
+
+export function optionalOptionsValidator(): ValidatorFn {
+  return (ctl: AbstractControl): ValidationErrors | null => {
+    if (ctl.value === '' || isJSON(ctl.value)) {
+      return null
+    }
+
+    return {[invalidChoiceKey]: 'Invalide Auswahl'}
+  }
+}

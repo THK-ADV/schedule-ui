@@ -31,6 +31,7 @@ import {AlertComponent} from './structure/alert/alert.component'
 import {CreateDialogComponent} from './generic-ui/create-dialog/create-dialog.component'
 import {InputTextComponent} from './generic-ui/create-dialog/input-text/input-text.component'
 import {InputAutoCompleteComponent} from './generic-ui/create-dialog/input-auto-complete/input-auto-complete.component'
+import {InputDateComponent} from './generic-ui/create-dialog/input-date/input-date.component'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -58,7 +59,8 @@ FullCalendarModule.registerPlugins([
     AlertComponent,
     CreateDialogComponent,
     InputTextComponent,
-    InputAutoCompleteComponent
+    InputAutoCompleteComponent,
+    InputDateComponent
   ],
   imports: [
     BrowserModule,

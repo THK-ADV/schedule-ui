@@ -4,6 +4,7 @@ import {FormControl, FormGroup} from '@angular/forms'
 import {formControlForTextInput, NumberInput, TextInput} from './input-text/input-text.component'
 import {AutoCompleteInput, formControlForAutocompleteInput} from './input-auto-complete/input-auto-complete.component'
 import {combine, FormInput} from './form-input'
+import {DateInput, formControlForDateInput} from './input-date/input-date.component'
 
 export type CreateDialogResult =
   { [attr: string]: string } |
@@ -29,7 +30,8 @@ export class CreateDialogComponent implements OnInit {
 
   private formControlForInput = combine([
     formControlForTextInput,
-    formControlForAutocompleteInput
+    formControlForAutocompleteInput,
+    formControlForDateInput
   ])
 
   static instance = <A>(
@@ -83,4 +85,7 @@ export class CreateDialogComponent implements OnInit {
 
   asTextInput = (i: FormInput): TextInput | NumberInput =>
     i as TextInput || i as NumberInput
+
+  asDateInput = (i: FormInput): DateInput =>
+    i as DateInput
 }

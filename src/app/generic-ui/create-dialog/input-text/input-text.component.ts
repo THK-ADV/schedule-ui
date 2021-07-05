@@ -17,9 +17,15 @@ export interface NumberInput extends FormInputLike {
 export const formControlForTextInput = (i: FormInput): FormControl | undefined => {
   switch (i.kind) {
     case 'text':
-      return new FormControl({value: i.initialValue, disabled: i.disabled}, Validators.required)
+      return new FormControl(
+        {value: i.initialValue, disabled: i.disabled},
+        i.required ? Validators.required : undefined
+      )
     case 'number':
-      const validators = [Validators.required, Validators.min(i.min)]
+      const validators = [Validators.min(i.min)]
+      if (i.required) {
+        validators.push(Validators.required)
+      }
       if (i.max) {
         validators.push(Validators.max(i.max))
       }

@@ -46,6 +46,7 @@ export class StudyProgramsComponent {
     const tuInput: AutoCompleteInput<TeachingUnit> = {
       label: 'Lehreinheit',
       disabled: false,
+      required: true,
       attr: 'tu',
       kind: 'auto-complete',
       data: tuService.teachingUnits(),
@@ -60,6 +61,7 @@ export class StudyProgramsComponent {
     const gInput: AutoCompleteInput<Graduation> = {
       label: 'Abschluss',
       disabled: false,
+      required: true,
       attr: 'g',
       kind: 'auto-complete',
       data: gService.graduations(),
@@ -90,8 +92,8 @@ export class StudyProgramsComponent {
       {
         objectName: 'Studiengang',
         inputs: [
-          {label: 'Bezeichnung', attr: 'label', kind: 'text', disabled: false},
-          {label: 'Abkürzung', attr: 'abbrev', kind: 'text', disabled: false},
+          {label: 'Bezeichnung', attr: 'label', kind: 'text', disabled: false, required: true},
+          {label: 'Abkürzung', attr: 'abbrev', kind: 'text', disabled: false, required: true},
           tuInput,
           gInput
         ]
@@ -114,8 +116,8 @@ export class StudyProgramsComponent {
       sp => ({
         objectName: 'Studiengang',
         inputs: [
-          {label: 'Bezeichnung', attr: 'label', kind: 'text', disabled: false, initialValue: sp.label},
-          {label: 'Abkürzung', attr: 'abbrev', kind: 'text', disabled: false, initialValue: sp.abbreviation},
+          {label: 'Bezeichnung', attr: 'label', kind: 'text', disabled: false, initialValue: sp.label, required: true},
+          {label: 'Abkürzung', attr: 'abbrev', kind: 'text', disabled: false, initialValue: sp.abbreviation, required: true},
           tuEditInput(sp),
           gEditInput(sp)
         ]

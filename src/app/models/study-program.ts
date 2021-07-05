@@ -16,3 +16,10 @@ export interface StudyProgramAtom {
   graduation: Graduation
   id: string
 }
+
+export const isStudyProgramAtom = (a: any): a is StudyProgramAtom =>
+  (a as StudyProgramAtom)?.label !== undefined &&
+  (a as StudyProgramAtom)?.abbreviation !== undefined &&
+  (a as StudyProgramAtom)?.teachingUnit !== undefined &&
+  (a as StudyProgramAtom)?.graduation !== undefined &&
+  (a as StudyProgramAtom)?.id !== undefined

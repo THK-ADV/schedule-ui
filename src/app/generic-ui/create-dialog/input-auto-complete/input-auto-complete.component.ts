@@ -3,7 +3,7 @@ import {EMPTY, Observable, Subscription} from 'rxjs'
 import {FormControl} from '@angular/forms'
 import {map, startWith} from 'rxjs/operators'
 import {FormInput, FormInputLike} from '../form-input'
-import {mandatoryOptionsValidator} from '../form-input-validator'
+import {mandatoryOptionsValidator, optionalOptionsValidator} from '../form-input-validator'
 
 export interface AutoCompleteInput<A> extends FormInputLike {
   data: Observable<A[]>
@@ -15,7 +15,10 @@ export interface AutoCompleteInput<A> extends FormInputLike {
 export const formControlForAutocompleteInput = (i: FormInput): FormControl | undefined => {
   switch (i.kind) {
     case 'auto-complete':
-      return new FormControl({value: undefined, disabled: i.disabled}, mandatoryOptionsValidator())
+      return new FormControl(
+        {value: undefined, disabled: i.disabled},
+        i.required ? mandatoryOptionsValidator() : optionalOptionsValidator()
+      )
     default:
       return undefined
   }

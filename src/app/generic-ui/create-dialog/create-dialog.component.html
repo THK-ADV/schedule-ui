@@ -10,6 +10,12 @@
                         [input]="asAutocomplete(i)"
                         [formControl]="formControl(i.attr)">
                 </schd-input-auto-complete>
+                <schd-input-date
+                        *ngSwitchCase="'date'"
+                        ngDefaultControl
+                        [input]="asDateInput(i)"
+                        [formControl]="formControl(i.attr)">
+                </schd-input-date>
                 <schd-input-text
                         *ngSwitchDefault
                         ngDefaultControl
