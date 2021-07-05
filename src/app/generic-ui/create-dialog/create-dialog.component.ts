@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog
 import {FormControl, FormGroup} from '@angular/forms'
 import {formControlForTextInput, NumberInput, TextInput} from './input-text/input-text.component'
 import {AutoCompleteInput, formControlForAutocompleteInput} from './input-auto-complete/input-auto-complete.component'
+import {combine, FormInput} from './form-input'
 
 export type CreateDialogResult =
   { [attr: string]: string } |
@@ -13,23 +14,7 @@ export interface CreateDialogData {
   inputs: FormInput[]
 }
 
-export type FormInput =
-  TextInput |
-  NumberInput |
-  AutoCompleteInput<any>
-
-const combine = (
-  fs: Array<(i: FormInput) => FormControl | undefined>
-): (i: FormInput) => FormControl | undefined =>
-  i => {
-    for (const f of fs) {
-      const res = f(i)
-      if (res) {
-        return res
-      }
-    }
-    return undefined
-  }
+type DialogType = 'create' | 'update'
 
 @Component({
   selector: 'schd-create-dialog',
@@ -39,6 +24,7 @@ const combine = (
 export class CreateDialogComponent implements OnInit {
 
   title: string
+  buttonTitle: string
   formGroup: FormGroup = new FormGroup({})
 
   private formControlForInput = combine([
@@ -48,27 +34,36 @@ export class CreateDialogComponent implements OnInit {
 
   static instance = <A>(
     dialog: MatDialog,
-    data: CreateDialogData
+    data: CreateDialogData,
+    kind: DialogType
   ): MatDialogRef<CreateDialogComponent, CreateDialogResult> =>
     dialog.open<CreateDialogComponent>(
-      CreateDialogComponent, {data}
+      CreateDialogComponent, {data: [data, kind]}
     )
 
   constructor(
     private dialogRef: MatDialogRef<CreateDialogComponent, CreateDialogResult>,
-    @Inject(MAT_DIALOG_DATA) public data: CreateDialogData
+    @Inject(MAT_DIALOG_DATA) public payload: [CreateDialogData, DialogType]
   ) {
-    this.title = `${data.objectName} erstellen`
+    const [data, kind] = payload
+    this.buttonTitle = kind === 'create' ? 'Erstellen' : 'Aktualisieren'
+    this.title = `${data.objectName} ${this.buttonTitle.toLowerCase()}`
     data.inputs.forEach(i => {
-      const input = this.formControlForInput(i)
-      if (input) {
-        this.formGroup.addControl(i.attr, input)
+      const fc = this.formControlForInput(i)
+      if (fc) {
+        if (i.disabled) {
+          fc.disable()
+        }
+        this.formGroup.addControl(i.attr, fc)
       }
     })
   }
 
   ngOnInit(): void {
   }
+
+  data = (): CreateDialogData =>
+    this.payload[0]
 
   cancel = () =>
     this.dialogRef.close('cancel')

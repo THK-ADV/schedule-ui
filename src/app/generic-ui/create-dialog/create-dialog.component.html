@@ -2,7 +2,7 @@
 
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
     <div mat-dialog-content>
-        <ng-container *ngFor="let i of data.inputs">
+        <ng-container *ngFor="let i of data().inputs">
             <ng-container [ngSwitch]="i.kind">
                 <schd-input-auto-complete
                         *ngSwitchCase="'auto-complete'"
@@ -22,7 +22,7 @@
 
     <div mat-dialog-actions>
         <button type="button" mat-flat-button (click)="cancel()">Abbrechen</button>
-        <button mat-flat-button color="primary" [disabled]="!formGroup.valid">Erstellen</button>
+        <button mat-flat-button color="primary" [disabled]="!formGroup.valid">{{buttonTitle}}</button>
     </div>
 </form>
 

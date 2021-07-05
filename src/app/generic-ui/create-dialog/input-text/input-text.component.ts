@@ -1,31 +1,29 @@
 import {Component, Input} from '@angular/core'
 import {FormControl, Validators} from '@angular/forms'
-import {FormInput} from '../create-dialog.component'
+import {FormInput, FormInputLike} from '../form-input'
 
-export interface TextInput {
+export interface TextInput extends FormInputLike {
+  initialValue?: string
   kind: 'text'
-  label: string
-  attr: string
 }
 
-export interface NumberInput {
-  kind: 'number'
-  label: string
-  attr: string
+export interface NumberInput extends FormInputLike {
+  initialValue?: number
   min: number
   max?: number
+  kind: 'number'
 }
 
 export const formControlForTextInput = (i: FormInput): FormControl | undefined => {
   switch (i.kind) {
     case 'text':
-      return new FormControl(undefined, Validators.required)
+      return new FormControl({value: i.initialValue, disabled: i.disabled}, Validators.required)
     case 'number':
       const validators = [Validators.required, Validators.min(i.min)]
       if (i.max) {
         validators.push(Validators.max(i.max))
       }
-      return new FormControl(undefined, validators)
+      return new FormControl({value: i.initialValue, disabled: i.disabled}, validators)
     default:
       return undefined
   }

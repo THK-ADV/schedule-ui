@@ -26,4 +26,7 @@ export class StudyProgramsService {
 
   create = (p: StudyProgramProtocol): Observable<StudyProgram> =>
     of({...p, id: 'random uuid'})
+
+  update = (p: StudyProgramProtocol, id: string): Observable<StudyProgram> =>
+    of({...p, id})
 }

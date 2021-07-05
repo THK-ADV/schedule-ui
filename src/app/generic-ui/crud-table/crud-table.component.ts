@@ -17,6 +17,11 @@ export interface Create<A0> {
   show: (a: A0) => string
 }
 
+export interface Update<A> {
+  update: (a: A, attrs: { [attr: string]: string }) => Observable<A>
+  show: (a: A) => string
+}
+
 @Component({
   selector: 'schd-crud-table',
   templateUrl: './crud-table.component.html',
@@ -37,9 +42,11 @@ export class CrudTableComponent<A0, A> implements OnInit, OnDestroy {
   @Input() filterAttrs?: string[]
   @Input() delete?: Delete<A>
   @Input() create?: [Create<A0>, CreateDialogData]
+  @Input() update?: [Update<A>, (a: A) => CreateDialogData]
 
   data$: Observable<A[]> = EMPTY
   onDelete?: (a: A) => void
+  onUpdate?: (a: A) => void
   onCreate?: () => void
 
   private subs: Subscription[] = []
@@ -60,6 +67,9 @@ export class CrudTableComponent<A0, A> implements OnInit, OnDestroy {
     }
     if (this.create) {
       this.initOnCreate(this.create)
+    }
+    if (this.update) {
+      this.initOnUpdate(this.update)
     }
   }
 
@@ -82,11 +92,24 @@ export class CrudTableComponent<A0, A> implements OnInit, OnDestroy {
   private initOnCreate = ([c, cdd]: [Create<A0>, CreateDialogData]) => {
     this.onCreate = () => {
       const s = openDialog(
-        CreateDialogComponent.instance(this.dialog, cdd),
+        CreateDialogComponent.instance(this.dialog, cdd, 'create'),
         res => res === 'cancel' ? EMPTY : c.create(res)
-      ).subscribe(a => {
+      ).subscribe(created => {
         this.data$ = this.fetchData()
-        this.reportCreated(c.show(a))
+        this.reportCreated(c.show(created))
+      })
+      this.subs.push(s)
+    }
+  }
+
+  private initOnUpdate = ([u, udd]: [Update<A>, (a: A) => CreateDialogData]) => {
+    this.onUpdate = (a: A) => {
+      const s = openDialog(
+        CreateDialogComponent.instance(this.dialog, udd(a), 'update'),
+        res => res === 'cancel' ? EMPTY : u.update(a, res)
+      ).subscribe(updated => {
+        this.data$ = this.fetchData()
+        this.reportUpdated(u.show(updated))
       })
       this.subs.push(s)
     }
@@ -97,4 +120,7 @@ export class CrudTableComponent<A0, A> implements OnInit, OnDestroy {
 
   private reportCreated = (str: string) =>
     this.alertService.reportSuccess(`created: ${str}`)
+
+  private reportUpdated = (str: string) =>
+    this.alertService.reportSuccess(`updated: ${str}`)
 }

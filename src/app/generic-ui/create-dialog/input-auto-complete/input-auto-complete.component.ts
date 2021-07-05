@@ -1,25 +1,26 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core'
 import {EMPTY, Observable, Subscription} from 'rxjs'
-import {FormControl, Validators} from '@angular/forms'
+import {FormControl} from '@angular/forms'
 import {map, startWith} from 'rxjs/operators'
-import {FormInput} from '../create-dialog.component'
+import {FormInput, FormInputLike} from '../form-input'
+import {mandatoryOptionsValidator} from '../form-input-validator'
 
-export interface AutoCompleteInput<A> {
-  label: string
+export interface AutoCompleteInput<A> extends FormInputLike {
   data: Observable<A[]>
   show: (a: A) => string
-  attr: string
   kind: 'auto-complete'
+  initialValue?: (opts: A[]) => A | undefined
 }
 
 export const formControlForAutocompleteInput = (i: FormInput): FormControl | undefined => {
   switch (i.kind) {
     case 'auto-complete':
-      return new FormControl(undefined, Validators.required)
+      return new FormControl({value: undefined, disabled: i.disabled}, mandatoryOptionsValidator())
     default:
       return undefined
   }
 }
+
 
 @Component({
   selector: 'schd-input-auto-complete',
@@ -47,8 +48,15 @@ export class InputAutoCompleteComponent<A> implements OnInit, OnDestroy {
   private observeData = () => {
     this.sub = this.input.data.subscribe(data => {
       this.options = data ?? []
+      this.selectInitialValue()
       this.initFilterOptions()
     })
+  }
+
+  private selectInitialValue = () => {
+    if (this.input.initialValue) {
+      this.formControl.setValue(this.input.initialValue(this.options))
+    }
   }
 
   private initFilterOptions = () => {
