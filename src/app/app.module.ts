@@ -29,6 +29,8 @@ import {CrudTableComponent} from './generic-ui/crud-table/crud-table.component'
 import {DeleteDialogComponent} from './generic-ui/delete-dialog/delete-dialog.component'
 import {AlertComponent} from './structure/alert/alert.component'
 import {CreateDialogComponent} from './generic-ui/create-dialog/create-dialog.component'
+import {InputTextComponent} from './generic-ui/create-dialog/input-text/input-text.component'
+import {InputAutoCompleteComponent} from './generic-ui/create-dialog/input-auto-complete/input-auto-complete.component'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -55,6 +57,8 @@ FullCalendarModule.registerPlugins([
     DeleteDialogComponent,
     AlertComponent,
     CreateDialogComponent,
+    InputTextComponent,
+    InputAutoCompleteComponent
   ],
   imports: [
     BrowserModule,

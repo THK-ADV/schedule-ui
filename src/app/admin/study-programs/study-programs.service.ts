@@ -1,7 +1,14 @@
 import {Injectable} from '@angular/core'
 import {StudyProgramApiService} from '../../http/study-program-api.service'
 import {Observable, of} from 'rxjs'
-import {StudyProgramAtom} from '../../models/study-program'
+import {StudyProgram, StudyProgramAtom} from '../../models/study-program'
+
+export interface StudyProgramProtocol {
+  label: string
+  abbreviation: string
+  teachingUnit: string
+  graduation: string
+}
 
 @Injectable({
   providedIn: 'root'
@@ -15,5 +22,8 @@ export class StudyProgramsService {
     this.http.studyProgramsAtomic()
 
   delete = (sp: StudyProgramAtom): Observable<StudyProgramAtom> =>
-    of(sp) //this.http.delete(sp.id)
+    of(sp)
+
+  create = (p: StudyProgramProtocol): Observable<StudyProgram> =>
+    of({...p, id: 'random uuid'})
 }

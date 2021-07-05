@@ -1,6 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core'
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog'
-import {FormControl, FormGroup, Validators} from '@angular/forms'
+import {FormControl, FormGroup} from '@angular/forms'
+import {formControlForTextInput, NumberInput, TextInput} from './input-text/input-text.component'
+import {AutoCompleteInput, formControlForAutocompleteInput} from './input-auto-complete/input-auto-complete.component'
 
 export type CreateDialogResult =
   { [attr: string]: string } |
@@ -8,39 +10,26 @@ export type CreateDialogResult =
 
 export interface CreateDialogData {
   objectName: string
-  inputs: Input[]
+  inputs: FormInput[]
 }
 
-export interface TextInput {
-  kind: 'text'
-  label: string
-  attr: string
-}
-
-export interface NumberInput {
-  kind: 'number'
-  label: string
-  attr: string
-  min: number
-  max?: number
-}
-
-export type Input =
+export type FormInput =
   TextInput |
-  NumberInput
+  NumberInput |
+  AutoCompleteInput<any>
 
-const formControlForInput = (i: Input): FormControl => {
-  switch (i.kind) {
-    case 'text':
-      return new FormControl(undefined, Validators.required)
-    case 'number':
-      const validators = [Validators.required, Validators.min(i.min)]
-      if (i.max) {
-        validators.push(Validators.max(i.max))
+const combine = (
+  fs: Array<(i: FormInput) => FormControl | undefined>
+): (i: FormInput) => FormControl | undefined =>
+  i => {
+    for (const f of fs) {
+      const res = f(i)
+      if (res) {
+        return res
       }
-      return new FormControl(undefined, validators)
+    }
+    return undefined
   }
-}
 
 @Component({
   selector: 'schd-create-dialog',
@@ -50,7 +39,12 @@ const formControlForInput = (i: Input): FormControl => {
 export class CreateDialogComponent implements OnInit {
 
   title: string
-  formGroup: FormGroup
+  formGroup: FormGroup = new FormGroup({})
+
+  private formControlForInput = combine([
+    formControlForTextInput,
+    formControlForAutocompleteInput
+  ])
 
   static instance = <A>(
     dialog: MatDialog,
@@ -65,10 +59,11 @@ export class CreateDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: CreateDialogData
   ) {
     this.title = `${data.objectName} erstellen`
-    this.formGroup = new FormGroup({})
-
     data.inputs.forEach(i => {
-      this.formGroup.addControl(i.attr, formControlForInput(i))
+      const input = this.formControlForInput(i)
+      if (input) {
+        this.formGroup.addControl(i.attr, input)
+      }
     })
   }
 
@@ -84,4 +79,13 @@ export class CreateDialogComponent implements OnInit {
     }
     this.dialogRef.close(this.formGroup.value)
   }
+
+  formControl = (attr: string) =>
+    this.formGroup.controls[attr] as FormControl
+
+  asAutocomplete = (i: FormInput) =>
+    i as AutoCompleteInput<any>
+
+  asTextInput = (i: FormInput): TextInput | NumberInput =>
+    i as TextInput || i as NumberInput
 }

@@ -5,15 +5,16 @@ import {nestedObjectPropertyAccessor, TableHeaderColumn} from '../table/table.co
 import {MatDialog} from '@angular/material/dialog'
 import {openDeleteDialog, openDialog} from '../dialog-opener'
 import {AlertService} from '../../structure/alert/alert.service'
-import {CreateDialogComponent} from '../create-dialog/create-dialog.component'
+import {CreateDialogComponent, CreateDialogData} from '../create-dialog/create-dialog.component'
 
 export interface Delete<A> {
   labelForDialog: (a: A) => string
   delete: (a: A) => Observable<A>
 }
 
-export interface Create<A0, A> {
-  create: (a0: A0) => Observable<A>
+export interface Create<A0> {
+  create: (attrs: { [attr: string]: string }) => Observable<A0>
+  show: (a: A0) => string
 }
 
 @Component({
@@ -35,7 +36,7 @@ export class CrudTableComponent<A0, A> implements OnInit, OnDestroy {
   @Input() sort?: Sort
   @Input() filterAttrs?: string[]
   @Input() delete?: Delete<A>
-  @Input() create?: Create<A0, A>
+  @Input() create?: [Create<A0>, CreateDialogData]
 
   data$: Observable<A[]> = EMPTY
   onDelete?: (a: A) => void
@@ -78,24 +79,22 @@ export class CrudTableComponent<A0, A> implements OnInit, OnDestroy {
     }
   }
 
-  private initOnCreate = (c: Create<A0, A>) => {
+  private initOnCreate = ([c, cdd]: [Create<A0>, CreateDialogData]) => {
     this.onCreate = () => {
-      const objectName = 'Studiengang'
       const s = openDialog(
-        CreateDialogComponent.instance(this.dialog, {
-          objectName,
-          inputs: [
-            {label: 'Bezeichnung', attr: 'label', kind: 'text'},
-            {label: 'Abkürzung', attr: 'abbrev', kind: 'text'},
-            {label: 'Prüfungsordnung', attr: 'po', kind: 'number', min: 1},
-          ]
-        }),
-        res => res === 'cancel' ? EMPTY : of(res)
-      ).subscribe(console.log)
+        CreateDialogComponent.instance(this.dialog, cdd),
+        res => res === 'cancel' ? EMPTY : c.create(res)
+      ).subscribe(a => {
+        this.data$ = this.fetchData()
+        this.reportCreated(c.show(a))
+      })
       this.subs.push(s)
     }
   }
 
   private reportDeleted = (str: string) =>
     this.alertService.reportSuccess(`deleted: ${str}`)
+
+  private reportCreated = (str: string) =>
+    this.alertService.reportSuccess(`created: ${str}`)
 }

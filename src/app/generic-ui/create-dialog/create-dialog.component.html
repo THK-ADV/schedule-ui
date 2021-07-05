@@ -2,15 +2,22 @@
 
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
     <div mat-dialog-content>
-        <mat-form-field *ngFor="let i of data.inputs">
+        <ng-container *ngFor="let i of data.inputs">
             <ng-container [ngSwitch]="i.kind">
-                <input *ngSwitchDefault
-                       matInput
-                       [placeholder]="i.label"
-                       [type]="i.kind"
-                       [formControlName]="i.attr">
+                <schd-input-auto-complete
+                        *ngSwitchCase="'auto-complete'"
+                        ngDefaultControl
+                        [input]="asAutocomplete(i)"
+                        [formControl]="formControl(i.attr)">
+                </schd-input-auto-complete>
+                <schd-input-text
+                        *ngSwitchDefault
+                        ngDefaultControl
+                        [input]="asTextInput(i)"
+                        [formControl]="formControl(i.attr)">
+                </schd-input-text>
             </ng-container>
-        </mat-form-field>
+        </ng-container>
     </div>
 
     <div mat-dialog-actions>
