@@ -4,7 +4,9 @@ export interface Graduation {
   id: string
 }
 
-export const isGraduation = (a: any): a is Graduation =>
-  (a as Graduation)?.label !== undefined &&
-  (a as Graduation)?.abbreviation !== undefined &&
-  (a as Graduation)?.id !== undefined
+export const isGraduation = (a: any): a is Graduation => {
+  const g = a as Graduation
+  return g?.label !== undefined &&
+    g?.abbreviation !== undefined &&
+    g?.id !== undefined
+}

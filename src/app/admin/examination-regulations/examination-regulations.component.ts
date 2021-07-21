@@ -7,16 +7,30 @@ import {formatDate} from '../../utils/date-format'
 import {Create, Delete, Update} from '../../generic-ui/crud-table/crud-table.component'
 import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
 import {AutoCompleteInput} from '../../generic-ui/create-dialog/input-auto-complete/input-auto-complete.component'
-import {isStudyProgramAtom, StudyProgramAtom} from '../../models/study-program'
+import {StudyProgramAtom} from '../../models/study-program'
 import {StudyProgramApiService} from '../../http/study-program-api.service'
 import {NumberInput} from '../../generic-ui/create-dialog/input-text/input-text.component'
 import {DateInput} from '../../generic-ui/create-dialog/input-date/input-date.component'
-import {isNumeric} from 'rxjs/internal-compatibility'
 import {map, tap} from 'rxjs/operators'
+import {parseDate, parseNumber, parseStudyProgramAtom} from '../../utils/parser'
+import {mapOpt, zip3} from '../../utils/optional'
 
 const showStudyProgram = (sp: StudyProgramAtom) =>
   `${sp.label} (${sp.abbreviation} ${sp.graduation.abbreviation})`
 
+const parseProtocol = (attrs: { [p: string]: string }): ExaminationRegulationProtocol | undefined =>
+  mapOpt(
+    zip3(
+      parseStudyProgramAtom(attrs.sp),
+      parseNumber(attrs.po),
+      parseDate(attrs.start)
+    ),
+    ([sp, po, d]) => ({
+      studyProgram: sp.id,
+      number: po,
+      start: d,
+    })
+  )
 
 @Component({
   selector: 'schd-examination-regulations',
@@ -106,17 +120,7 @@ export class ExaminationRegulationsComponent {
 
     this.create = [
       {
-        create: attrs => {
-          if (!isStudyProgramAtom(attrs.sp) || !isNumeric(attrs.po)) {
-            return EMPTY
-          }
-          const ep: ExaminationRegulationProtocol = {
-            studyProgram: attrs.sp.id,
-            number: +attrs.po,
-            start: new Date(attrs.start),
-          }
-          return service.create(ep)
-        },
+        create: attrs => mapOpt(parseProtocol(attrs), service.create) ?? EMPTY,
         show: a => JSON.stringify(a)
       },
       {
@@ -127,11 +131,16 @@ export class ExaminationRegulationsComponent {
     this.update = [
       {
         update: (a, attrs) => {
+          const start = parseDate(attrs.start)
+          if (!start) {
+            return EMPTY
+          }
+
           const ep: ExaminationRegulationProtocol = {
             studyProgram: a.studyProgram.id,
             number: a.number,
-            start: new Date(attrs.start),
-            end: attrs.end !== undefined ? new Date(attrs.end) : undefined
+            start,
+            end: mapOpt(attrs.end, parseDate)
           }
           return service.update(ep, a.id)
             .pipe(

@@ -7,10 +7,26 @@ import {Create, Delete, Update} from '../../generic-ui/crud-table/crud-table.com
 import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
 import {TeachingUnitApiService} from '../../http/teaching-unit-api.service'
 import {AutoCompleteInput} from '../../generic-ui/create-dialog/input-auto-complete/input-auto-complete.component'
-import {isTeachingUnit, TeachingUnit} from '../../models/teaching-unit'
-import {Graduation, isGraduation} from '../../models/graduation'
+import {TeachingUnit} from '../../models/teaching-unit'
+import {Graduation} from '../../models/graduation'
 import {GraduationApiService} from '../../http/graduation-api.service'
 import {map} from 'rxjs/operators'
+import {mapOpt, zip} from '../../utils/optional'
+import {parseGraduation, parseTeachingUnit} from '../../utils/parser'
+
+const parseProtocol = (attrs: { [p: string]: string }): StudyProgramProtocol | undefined =>
+  mapOpt(
+    zip(
+      parseTeachingUnit(attrs.tu),
+      parseGraduation(attrs.g)
+    ),
+    ([tu, g]) => ({
+      label: attrs.label,
+      abbreviation: attrs.abbrev,
+      teachingUnit: tu.id,
+      graduation: g.id
+    })
+  )
 
 @Component({
   selector: 'schd-study-programs',
@@ -75,18 +91,7 @@ export class StudyProgramsComponent {
 
     this.create = [
       {
-        create: (attrs) => {
-          if (!isTeachingUnit(attrs.tu) || !isGraduation(attrs.g)) {
-            return EMPTY
-          }
-          const sp = {
-            label: attrs.label,
-            abbreviation: attrs.abbrev,
-            teachingUnit: attrs.tu.id,
-            graduation: attrs.g.id
-          }
-          return service.create(sp)
-        },
+        create: attrs => mapOpt(parseProtocol(attrs), service.create) ?? EMPTY,
         show: a => a.label
       },
       {

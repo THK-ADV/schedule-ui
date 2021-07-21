@@ -17,9 +17,11 @@ export interface StudyProgramAtom {
   id: string
 }
 
-export const isStudyProgramAtom = (a: any): a is StudyProgramAtom =>
-  (a as StudyProgramAtom)?.label !== undefined &&
-  (a as StudyProgramAtom)?.abbreviation !== undefined &&
-  (a as StudyProgramAtom)?.teachingUnit !== undefined &&
-  (a as StudyProgramAtom)?.graduation !== undefined &&
-  (a as StudyProgramAtom)?.id !== undefined
+export const isStudyProgramAtom = (a: any): a is StudyProgramAtom => {
+  const sp = a as StudyProgramAtom
+  return sp?.label !== undefined &&
+    sp?.abbreviation !== undefined &&
+    sp?.teachingUnit !== undefined &&
+    sp?.graduation !== undefined &&
+    sp?.id !== undefined
+}
