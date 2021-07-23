@@ -33,6 +33,7 @@ import {InputTextComponent} from './generic-ui/create-dialog/input-text/input-te
 import {InputAutoCompleteComponent} from './generic-ui/create-dialog/input-auto-complete/input-auto-complete.component'
 import {InputDateComponent} from './generic-ui/create-dialog/input-date/input-date.component'
 import {ModulesComponent} from './admin/modules/modules.component'
+import {SubmoduleComponent} from './admin/submodule/submodule.component'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -62,7 +63,8 @@ FullCalendarModule.registerPlugins([
     InputTextComponent,
     InputAutoCompleteComponent,
     InputDateComponent,
-    ModulesComponent
+    ModulesComponent,
+    SubmoduleComponent
   ],
   imports: [
     BrowserModule,

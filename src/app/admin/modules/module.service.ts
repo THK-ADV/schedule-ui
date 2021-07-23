@@ -75,7 +75,7 @@ export class ModuleService {
   }
 
   modules = (): Observable<ModuleAtom[]> =>
-    this.http.modules()
+    this.http.modulesAtomic()
 
   delete = (m: ModuleAtom): Observable<ModuleAtom> =>
     of(m)
