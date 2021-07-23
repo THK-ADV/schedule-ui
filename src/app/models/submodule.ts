@@ -1,36 +1,27 @@
 import {Module} from './module'
-
-export type Language =
-  'de' |
-  'en' |
-  'de_en'
-
-export type Season =
-  'SoSe' |
-  'WiSe' |
-  'SoSe_WiSe' |
-  'unknown'
+import {Language} from './language'
+import {Season} from './season'
 
 export interface Submodule {
-  module: string
   label: string
   abbreviation: string
+  module: string
   recommendedSemester: number
   credits: number
-  descriptionUrl: string
   language: Language
   season: Season
+  descriptionUrl: string
   id: string
 }
 
 export interface SubmoduleAtom {
-  module: Module
   label: string
   abbreviation: string
+  module: Module
   recommendedSemester: number
   credits: number
-  descriptionUrl: string
   language: Language
   season: Season
+  descriptionUrl: string
   id: string
 }

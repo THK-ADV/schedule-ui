@@ -4,6 +4,7 @@ import {ScheduleComponent} from './schedule/schedule.component'
 import {StudyProgramsComponent} from './admin/study-programs/study-programs.component'
 import {ExaminationRegulationsComponent} from './admin/examination-regulations/examination-regulations.component'
 import {ModulesComponent} from './admin/modules/modules.component'
+import {SubmoduleComponent} from './admin/submodule/submodule.component'
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'modules',
     component: ModulesComponent
+  },
+  {
+    path: 'submodules',
+    component: SubmoduleComponent
   },
   {
     path: '',

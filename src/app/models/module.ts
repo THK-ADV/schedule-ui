@@ -17,3 +17,13 @@ export interface ModuleAtom {
   descriptionUrl: string
   id: string
 }
+
+export const isModule = (a: any): a is Module => {
+  const m = (a as Module)
+  return m?.courseManager !== undefined &&
+    m?.label !== undefined &&
+    m?.abbreviation !== undefined &&
+    m?.credits !== undefined &&
+    m?.descriptionUrl !== undefined &&
+    m?.id !== undefined
+}

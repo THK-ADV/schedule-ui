@@ -14,8 +14,7 @@ import {distinctBy} from '../../utils/array-ops'
 import {Module} from '../../models/module'
 import {groupBy, mapGroup} from '../../utils/group-by'
 import {ordinal} from '../../models/course-type'
-
-export type SemesterIndex = 1 | 2 | 3 | 4 | 5 | 6
+import {allSemesterIndices, SemesterIndex} from '../../models/semester-index'
 
 export interface Course {
   course: Omit<CourseAtom, 'lecturer'>
@@ -55,7 +54,7 @@ export class ScheduleFilterService {
       c: this.courseApi.coursesForCurrentSemester(),
       me: this.moduleExamsApi.moduleExams(),
       lec: this.userApi.lecturer(),
-      si: of<SemesterIndex[]>([1, 2, 3, 4, 5, 6])
+      si: of(allSemesterIndices())
     })
 
     return observables.pipe(map(a => {

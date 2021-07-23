@@ -1,11 +1,12 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren} from '@angular/core'
 import {FilterOptionComponent} from '../filter-option/filter-option.component'
-import {Course, ScheduleFilterService, SemesterIndex} from './schedule-filter.service'
+import {Course, ScheduleFilterService} from './schedule-filter.service'
 import {Subscription} from 'rxjs'
 import {TeachingUnit} from '../../models/teaching-unit'
 import {ExaminationRegulationAtom} from '../../models/examination-regulation'
 import {Lecturer} from '../../models/user'
 import {describeLecturer} from '../../utils/describe'
+import {SemesterIndex} from '../../models/semester-index'
 
 export interface ScheduleFilterSections {
   teachingUnit?: TeachingUnit

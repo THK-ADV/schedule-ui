@@ -48,7 +48,7 @@ export class ModulesComponent {
         show: a => JSON.stringify(a)
       },
       {
-        objectName: 'Module',
+        objectName: 'Modul',
         inputs: service.createInputs()
       }
     ]
@@ -63,23 +63,23 @@ export class ModulesComponent {
         show: a => `${a.label} (${a.abbreviation})`
       },
       m => ({
-        objectName: 'Module',
+        objectName: 'Modul',
         inputs: service.updateInputs(m)
       })
     ]
   }
 
-  tableContent = (exam: ModuleAtom, attr: string): string => {
+  tableContent = (module: ModuleAtom, attr: string): string => {
     switch (attr) {
       case 'label':
-        return exam.label
+        return module.label
       case 'abbreviation':
-        return exam.abbreviation
+        return module.abbreviation
       case 'courseManager':
-        const user = exam.courseManager
+        const user = module.courseManager
         return isLecturer(user) ? describeLecturer(user) : describeUser(user)
       case 'credits':
-        return exam.credits.toString()
+        return module.credits.toString()
       default:
         return '???'
     }
