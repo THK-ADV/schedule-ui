@@ -5,6 +5,7 @@ import {Subscription} from 'rxjs'
 import {TeachingUnit} from '../../models/teaching-unit'
 import {ExaminationRegulationAtom} from '../../models/examination-regulation'
 import {Lecturer} from '../../models/user'
+import {describeLecturer} from '../../utils/describe'
 
 export interface ScheduleFilterSections {
   teachingUnit?: TeachingUnit
@@ -21,6 +22,9 @@ export interface ScheduleFilterSections {
 })
 export class FilterComponent implements OnInit, OnDestroy {
 
+  constructor(private readonly service: ScheduleFilterService) {
+  }
+
   @ViewChildren(FilterOptionComponent) filterComponents!: QueryList<FilterOptionComponent<any>>
 
   @Input() selections!: ScheduleFilterSections
@@ -35,8 +39,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   private sub?: Subscription
 
-  constructor(private readonly service: ScheduleFilterService) {
-  }
+  displayL = describeLecturer
 
   ngOnInit(): void {
     this.sub = this.service.allFilters().subscribe(f => {
@@ -63,9 +66,6 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   displayC = (c: Course) =>
     `${c.course.subModule.label} (${c.lecturer.map(_ => _.lastname).join(', ')})`
-
-  displayL = (l: Lecturer) =>
-    `${l.lastname}, ${l.firstname} (${l.initials})`
 
   selectedTU = (tu?: TeachingUnit) => {
     this.selections.teachingUnit = tu

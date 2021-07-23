@@ -14,6 +14,11 @@ export interface NumberInput extends FormInputLike {
   kind: 'number'
 }
 
+export interface URLInput extends FormInputLike {
+  initialValue?: string
+  kind: 'url'
+}
+
 export const formControlForTextInput = (i: FormInput): FormControl | undefined => {
   switch (i.kind) {
     case 'text':
@@ -30,6 +35,12 @@ export const formControlForTextInput = (i: FormInput): FormControl | undefined =
         validators.push(Validators.max(i.max))
       }
       return new FormControl({value: i.initialValue, disabled: i.disabled}, validators)
+    case 'url':
+      const regex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'
+      return new FormControl(
+        {value: i.initialValue, disabled: i.disabled},
+        i.required ? Validators.pattern(regex) : undefined
+      )
     default:
       return undefined
   }
