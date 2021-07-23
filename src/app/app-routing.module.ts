@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router'
 import {ScheduleComponent} from './schedule/schedule.component'
 import {StudyProgramsComponent} from './admin/study-programs/study-programs.component'
 import {ExaminationRegulationsComponent} from './admin/examination-regulations/examination-regulations.component'
+import {ModulesComponent} from './admin/modules/modules.component'
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'examinationRegulations',
     component: ExaminationRegulationsComponent
+  },
+  {
+    path: 'modules',
+    component: ModulesComponent
   },
   {
     path: '',

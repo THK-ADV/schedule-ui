@@ -1,6 +1,7 @@
 import {isStudyProgramAtom, StudyProgramAtom} from '../models/study-program'
 import {isTeachingUnit, TeachingUnit} from '../models/teaching-unit'
 import {Graduation, isGraduation} from '../models/graduation'
+import {isLecturer, Lecturer} from '../models/user'
 
 export type Parser<A> = (s: string) => A | undefined
 
@@ -17,6 +18,9 @@ export const parseTeachingUnit: Parser<TeachingUnit> = s =>
 
 export const parseGraduation: Parser<Graduation> = s =>
   isGraduation(s) ? s : undefined
+
+export const parseLecturer: Parser<Lecturer> = s =>
+  isLecturer(s) ? s : undefined
 
 export const parseDate: Parser<Date> = s => {
   const d = new Date(s)

@@ -1,4 +1,4 @@
-import {NumberInput, TextInput} from './input-text/input-text.component'
+import {NumberInput, TextInput, URLInput} from './input-text/input-text.component'
 import {AutoCompleteInput} from './input-auto-complete/input-auto-complete.component'
 import {FormControl} from '@angular/forms'
 import {DateInput} from './input-date/input-date.component'
@@ -14,6 +14,7 @@ export interface FormInputLike {
 export type FormInput =
   TextInput |
   NumberInput |
+  URLInput |
   AutoCompleteInput<any> |
   DateInput
 
