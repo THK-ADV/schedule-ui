@@ -1,11 +1,11 @@
 <schd-header-button
         [headerTitle]="headerTitle"
         [tooltipTitle]="tooltipTitle"
-        (create)="create">
+        [create]="onCreate">
 </schd-header-button>
 
 <schd-table
-        [data]="data"
+        [data]="data$"
         [columns]="columns"
         [sort]="sort"
         [tableContent]="tableContent"
@@ -13,7 +13,6 @@
         [useTableContentForFiltering]="useTableContentForFiltering"
         [pageSizeOptions]="pageSizeOptions"
         [filterAttrs]="filterAttrs"
-        [delete]="delete"
-        [edit]="edit"
-        [select]="select">
+        [delete]="onDelete"
+        [edit]="onUpdate">
 </schd-table>

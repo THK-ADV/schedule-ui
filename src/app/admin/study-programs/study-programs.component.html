@@ -1,11 +1,10 @@
 <schd-crud-table
         [headerTitle]="headerTitle"
         [tooltipTitle]="tooltipTitle"
-        (create)="create()"
-        [data]="data"
+        [fetchData]="data"
         [columns]="columns"
         [sort]="{active: 'label', direction: 'asc'}"
         [delete]="delete"
-        [edit]="edit"
-        [select]="select">
+        [create]="create"
+        [update]="update">
 </schd-crud-table>

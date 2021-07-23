@@ -1,8 +1,7 @@
 <schd-crud-table
         [headerTitle]="headerTitle"
         [tooltipTitle]="tooltipTitle"
-        (create)="create()"
-        [data]="data"
+        [fetchData]="data"
         [columns]="columns"
         [sort]="{active: 'studyProgram', direction: 'asc'}"
         [tableContent]="tableContent"
@@ -10,6 +9,6 @@
         [useTableContentForFiltering]="true"
         [filterAttrs]="filterAttrs"
         [delete]="delete"
-        [edit]="edit"
-        [select]="select">
+        [create]="create"
+        [update]="update">
 </schd-crud-table>

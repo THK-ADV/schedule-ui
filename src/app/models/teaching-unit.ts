@@ -15,3 +15,12 @@ export interface TeachingUnitAtom {
   number: number
   id: string
 }
+
+export const isTeachingUnit = (a: any): a is TeachingUnit => {
+  const tu = a as TeachingUnit
+  return tu?.label !== undefined &&
+    tu?.abbreviation !== undefined &&
+    tu?.faculty !== undefined &&
+    tu?.number !== undefined &&
+    tu?.id !== undefined
+}

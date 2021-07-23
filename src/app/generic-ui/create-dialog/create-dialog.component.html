@@ -1,0 +1,34 @@
+<h1 mat-dialog-title>{{title}}</h1>
+
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+        <ng-container *ngFor="let i of data().inputs">
+            <ng-container [ngSwitch]="i.kind">
+                <schd-input-auto-complete
+                        *ngSwitchCase="'auto-complete'"
+                        ngDefaultControl
+                        [input]="asAutocomplete(i)"
+                        [formControl]="formControl(i.attr)">
+                </schd-input-auto-complete>
+                <schd-input-date
+                        *ngSwitchCase="'date'"
+                        ngDefaultControl
+                        [input]="asDateInput(i)"
+                        [formControl]="formControl(i.attr)">
+                </schd-input-date>
+                <schd-input-text
+                        *ngSwitchDefault
+                        ngDefaultControl
+                        [input]="asTextInput(i)"
+                        [formControl]="formControl(i.attr)">
+                </schd-input-text>
+            </ng-container>
+        </ng-container>
+    </div>
+
+    <div mat-dialog-actions>
+        <button type="button" mat-flat-button (click)="cancel()">Abbrechen</button>
+        <button mat-flat-button color="primary" [disabled]="!formGroup.valid">{{buttonTitle}}</button>
+    </div>
+</form>
+

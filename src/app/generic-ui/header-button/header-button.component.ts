@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core'
+import {Component, Input} from '@angular/core'
 
 @Component({
   selector: 'schd-header-button',
@@ -9,5 +9,8 @@ export class HeaderButtonComponent {
 
   @Input() headerTitle = 'Header'
   @Input() tooltipTitle = 'Tooltip'
-  @Output() create = new EventEmitter()
+  @Input() create?: () => void
+
+  onCreate = () =>
+    this.create && this.create()
 }
