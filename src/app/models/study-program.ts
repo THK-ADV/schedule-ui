@@ -1,5 +1,5 @@
-import {Graduation} from './graduation'
-import {TeachingUnit} from './teaching-unit'
+import {Graduation, isGraduation} from './graduation'
+import {isTeachingUnit, TeachingUnit} from './teaching-unit'
 
 export interface StudyProgram {
   label: string
@@ -21,7 +21,7 @@ export const isStudyProgramAtom = (a: any): a is StudyProgramAtom => {
   const sp = a as StudyProgramAtom
   return sp?.label !== undefined &&
     sp?.abbreviation !== undefined &&
-    sp?.teachingUnit !== undefined &&
-    sp?.graduation !== undefined &&
+    isTeachingUnit(sp?.teachingUnit) &&
+    isGraduation(sp?.graduation) &&
     sp?.id !== undefined
 }

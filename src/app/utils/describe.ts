@@ -1,7 +1,9 @@
 import {Lecturer, User} from '../models/user'
 import {Language} from '../models/language'
 import {Season} from '../models/season'
-import {Module} from '../models/module'
+import {Module, ModuleAtom} from '../models/module'
+import {ExaminationRegulationAtom} from '../models/examination-regulation'
+import {StudyProgramAtom} from '../models/study-program'
 
 export type Describe<A> = (a: A) => string
 
@@ -14,6 +16,21 @@ export const describeUser: Describe<User> = u =>
 export const describeUserWithCampusId: Describe<User> = u =>
   `${describeUser(u)} (${u.username})`
 
+export const describeModule: Describe<Module> = m =>
+  `${m.label} (${m.abbreviation})`
+
+export const describeModuleAtom: Describe<ModuleAtom> = m =>
+  `${m.label} (${m.abbreviation}) (${describeUserWithCampusId(m.courseManager)})`
+
+export const describeExamReg: Describe<ExaminationRegulationAtom> = er =>
+  `${er.studyProgram.label} (${er.studyProgram.graduation.abbreviation} ${er.number})`
+
+export const describeStudyProgramAtom: Describe<StudyProgramAtom> = sp =>
+  `${sp.label} (${sp.abbreviation} ${sp.graduation.abbreviation})`
+
+export const describeBoolean: Describe<boolean> = b =>
+  b ? 'Ja' : 'Nein'
+
 export const describeLanguage: Describe<Language> = l => {
   switch (l) {
     case 'de':
@@ -22,6 +39,8 @@ export const describeLanguage: Describe<Language> = l => {
       return 'englisch'
     case 'de_en':
       return 'deutsch und englisch'
+    case 'unknown':
+      return 'unbekannt'
   }
 }
 
@@ -36,6 +55,3 @@ export const describeSeason: Describe<Season> = s => {
       return 'unbekannt'
   }
 }
-
-export const describeModule: Describe<Module> = m =>
-  `${m.label} (${m.abbreviation})`

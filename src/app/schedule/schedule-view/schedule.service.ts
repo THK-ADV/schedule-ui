@@ -4,7 +4,7 @@ import {ScheduleFilterSections} from '../filter/filter.component'
 import {Observable} from 'rxjs'
 import {ScheduleAtom} from '../../models/schedule'
 import {applyFilter, atomicParams, ParamFilter} from '../../http/http-filter'
-import {tap} from '../../utils/tap'
+import {inspect} from '../../utils/inspect'
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +43,6 @@ export class ScheduleService {
       filter.push({attribute: 'subModule_recommendedSemester', value: semesterIndex.toString()})
     }
 
-    return tap(filter)
+    return inspect(filter)
   }
 }

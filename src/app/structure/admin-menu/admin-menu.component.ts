@@ -10,8 +10,11 @@ interface AdminMenu {
 const adminMenus = (): AdminMenu[] => [
   {label: 'Studiengänge', icon: 'school', routerLink: 'studyPaths'},
   {label: 'Prüfungsordnungen', icon: 'approval', routerLink: 'examinationRegulations'},
+  {label: 'Module in PO', icon: 'approval', routerLink: 'moduleExaminationRegulations'},
   {label: 'Module', icon: 'class', routerLink: 'modules'},
   {label: 'Submodule', icon: 'class', routerLink: 'submodules'},
+  {label: 'Semester', icon: 'date_range', routerLink: 'semesters'},
+  {label: 'Benutzer', icon: 'people', routerLink: 'users'},
 ]
 
 @Component({

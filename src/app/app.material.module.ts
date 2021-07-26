@@ -12,6 +12,7 @@ import {MatSortModule} from '@angular/material/sort'
 import {MatPaginatorModule} from '@angular/material/paginator'
 import {MatDialogModule} from '@angular/material/dialog'
 import {MatDatepickerModule} from '@angular/material/datepicker'
+import {MatSlideToggleModule} from '@angular/material/slide-toggle'
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker'
     MatSortModule,
     MatPaginatorModule,
     MatDialogModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatSlideToggleModule
   ]
 })
 export class ScheduleMaterialModule {

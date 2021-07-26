@@ -34,6 +34,10 @@ import {InputAutoCompleteComponent} from './generic-ui/create-dialog/input-auto-
 import {InputDateComponent} from './generic-ui/create-dialog/input-date/input-date.component'
 import {ModulesComponent} from './admin/modules/modules.component'
 import {SubmoduleComponent} from './admin/submodule/submodule.component'
+import {ModuleExaminationRegulationsComponent} from './admin/module-examination-regulations/module-examination-regulations.component'
+import {InputBooleanComponent} from './generic-ui/create-dialog/input-boolean/input-boolean.component'
+import {SemestersComponent} from './admin/semesters/semesters.component'
+import {UsersComponent} from './admin/users/users.component'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -64,7 +68,11 @@ FullCalendarModule.registerPlugins([
     InputAutoCompleteComponent,
     InputDateComponent,
     ModulesComponent,
-    SubmoduleComponent
+    SubmoduleComponent,
+    ModuleExaminationRegulationsComponent,
+    InputBooleanComponent,
+    SemestersComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,

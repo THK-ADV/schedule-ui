@@ -5,6 +5,9 @@ import {StudyProgramsComponent} from './admin/study-programs/study-programs.comp
 import {ExaminationRegulationsComponent} from './admin/examination-regulations/examination-regulations.component'
 import {ModulesComponent} from './admin/modules/modules.component'
 import {SubmoduleComponent} from './admin/submodule/submodule.component'
+import {ModuleExaminationRegulationsComponent} from './admin/module-examination-regulations/module-examination-regulations.component'
+import {SemestersComponent} from './admin/semesters/semesters.component'
+import {UsersComponent} from './admin/users/users.component'
 
 const routes: Routes = [
   {
@@ -20,12 +23,24 @@ const routes: Routes = [
     component: ExaminationRegulationsComponent
   },
   {
+    path: 'moduleExaminationRegulations',
+    component: ModuleExaminationRegulationsComponent
+  },
+  {
     path: 'modules',
     component: ModulesComponent
   },
   {
     path: 'submodules',
     component: SubmoduleComponent
+  },
+  {
+    path: 'semesters',
+    component: SemestersComponent
+  },
+  {
+    path: 'users',
+    component: UsersComponent
   },
   {
     path: '',

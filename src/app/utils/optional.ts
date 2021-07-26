@@ -18,6 +18,19 @@ export const zip3 = <A, B, C>(
     ? [a, b, c]
     : undefined
 
+export const zip4 = <A, B, C, D>(
+  a: A | undefined,
+  b: B | undefined,
+  c: C | undefined,
+  d: D | undefined,
+): [A, B, C, D] | undefined =>
+  a !== undefined &&
+  b !== undefined &&
+  c !== undefined &&
+  d !== undefined
+    ? [a, b, c, d]
+    : undefined
+
 export const zip5 = <A, B, C, D, E>(
   a: A | undefined,
   b: B | undefined,
