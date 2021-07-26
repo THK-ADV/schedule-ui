@@ -59,8 +59,7 @@ export class SubmoduleComponent {
           mapOpt(
             service.createProtocol(sm, attrs),
             p => service.update(p, sm.id).pipe(map(a => ({...a, module: sm.module}))) // remove
-          ) ?? EMPTY
-        ,
+          ) ?? EMPTY,
         show: a => JSON.stringify(a)
       },
       m => ({

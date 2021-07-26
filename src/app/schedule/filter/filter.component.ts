@@ -5,7 +5,7 @@ import {Subscription} from 'rxjs'
 import {TeachingUnit} from '../../models/teaching-unit'
 import {ExaminationRegulationAtom} from '../../models/examination-regulation'
 import {Lecturer} from '../../models/user'
-import {describeLecturer} from '../../utils/describe'
+import {describeExamReg, describeLecturer} from '../../utils/describe'
 import {SemesterIndex} from '../../models/semester-index'
 
 export interface ScheduleFilterSections {
@@ -42,6 +42,8 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   displayL = describeLecturer
 
+  displayER = describeExamReg
+
   ngOnInit(): void {
     this.sub = this.service.allFilters().subscribe(f => {
       this.semesterIndices = f.semesterIndices
@@ -58,9 +60,6 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   displayTU = (tu: TeachingUnit) =>
     tu.label
-
-  displayER = (er: ExaminationRegulationAtom) =>
-    `${er.studyProgram.label} (${er.studyProgram.graduation.abbreviation} ${er.number})`
 
   displaySI = (si: SemesterIndex) =>
     si.toString()

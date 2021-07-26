@@ -2,6 +2,7 @@ import {NumberInput, TextInput, URLInput} from './input-text/input-text.componen
 import {AutoCompleteInput} from './input-auto-complete/input-auto-complete.component'
 import {FormControl} from '@angular/forms'
 import {DateInput} from './input-date/input-date.component'
+import {BooleanInput} from './input-boolean/input-boolean.component'
 
 export interface FormInputLike {
   label: string
@@ -14,6 +15,7 @@ export interface FormInputLike {
 export type FormInput =
   TextInput |
   NumberInput |
+  BooleanInput |
   URLInput |
   AutoCompleteInput<any> |
   DateInput

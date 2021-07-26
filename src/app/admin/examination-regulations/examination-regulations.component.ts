@@ -12,7 +12,7 @@ import {StudyProgramApiService} from '../../http/study-program-api.service'
 import {NumberInput} from '../../generic-ui/create-dialog/input-text/input-text.component'
 import {DateInput} from '../../generic-ui/create-dialog/input-date/input-date.component'
 import {map, tap} from 'rxjs/operators'
-import {parseDate, parseNumber, parseStudyProgramAtom} from '../../utils/parser'
+import {parseDate, parseIntNumber, parseStudyProgramAtom} from '../../utils/parser'
 import {mapOpt, zip3} from '../../utils/optional'
 
 const showStudyProgram = (sp: StudyProgramAtom) =>
@@ -22,7 +22,7 @@ const parseProtocol = (attrs: { [p: string]: string }): ExaminationRegulationPro
   mapOpt(
     zip3(
       parseStudyProgramAtom(attrs.sp),
-      parseNumber(attrs.po),
+      parseIntNumber(attrs.po),
       parseDate(attrs.start)
     ),
     ([sp, po, d]) => ({

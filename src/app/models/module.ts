@@ -1,4 +1,4 @@
-import {User} from './user'
+import {isUser, User} from './user'
 
 export interface Module {
   courseManager: string
@@ -21,6 +21,16 @@ export interface ModuleAtom {
 export const isModule = (a: any): a is Module => {
   const m = (a as Module)
   return m?.courseManager !== undefined &&
+    m?.label !== undefined &&
+    m?.abbreviation !== undefined &&
+    m?.credits !== undefined &&
+    m?.descriptionUrl !== undefined &&
+    m?.id !== undefined
+}
+
+export const isModuleAtom = (a: any): a is ModuleAtom => {
+  const m = a as ModuleAtom
+  return isUser(m?.courseManager) &&
     m?.label !== undefined &&
     m?.abbreviation !== undefined &&
     m?.credits !== undefined &&

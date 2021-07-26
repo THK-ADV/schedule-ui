@@ -1,4 +1,4 @@
-import {StudyProgramAtom} from './study-program'
+import {isStudyProgramAtom, StudyProgramAtom} from './study-program'
 
 export interface ExaminationRegulation {
   studyProgram: string
@@ -14,4 +14,12 @@ export interface ExaminationRegulationAtom {
   start: Date
   end?: Date
   id: string
+}
+
+export const isExaminationRegulationAtom = (a: any): a is ExaminationRegulationAtom => {
+  const er = a as ExaminationRegulationAtom
+  return isStudyProgramAtom(er?.studyProgram) &&
+    er?.number !== undefined &&
+    er?.start !== undefined &&
+    er?.id !== undefined
 }

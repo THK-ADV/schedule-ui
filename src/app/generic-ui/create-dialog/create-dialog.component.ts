@@ -5,6 +5,7 @@ import {formControlForTextInput, NumberInput, TextInput} from './input-text/inpu
 import {AutoCompleteInput, formControlForAutocompleteInput} from './input-auto-complete/input-auto-complete.component'
 import {combine, FormInput} from './form-input'
 import {DateInput, formControlForDateInput} from './input-date/input-date.component'
+import {BooleanInput, formControlForBooleanInput} from './input-boolean/input-boolean.component'
 
 export type CreateDialogResult =
   { [attr: string]: string } |
@@ -31,7 +32,8 @@ export class CreateDialogComponent implements OnInit {
   private formControlForInput = combine([
     formControlForTextInput,
     formControlForAutocompleteInput,
-    formControlForDateInput
+    formControlForDateInput,
+    formControlForBooleanInput
   ])
 
   static instance = <A>(
@@ -88,4 +90,7 @@ export class CreateDialogComponent implements OnInit {
 
   asDateInput = (i: FormInput): DateInput =>
     i as DateInput
+
+  asBooleanInput = (i: FormInput): BooleanInput =>
+    i as BooleanInput
 }
