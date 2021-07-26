@@ -63,7 +63,7 @@
       text-align: center;
       text-decoration: none;
       display: inline-block;
-      margin: 0px 0 8px 0;
+      margin: 0 0 8px 0;
       padding: 0;
       background-color: $bg-col;
       color: white;
@@ -95,46 +95,6 @@
 
 @mixin schd-card-theme($theme) {
   @include mat-card-theme(map-get($theme, main));
-  .mat-card {
-    margin: $low-spacing 0 $med-spacing 0;
-    padding: 0 !important;
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
-
-    //background-color: red;
-
-    mat-card-content {
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-orient: horizontal;
-      -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-      flex-direction: row;
-      -webkit-box-align: start;
-      -ms-flex-align: start;
-      align-items: flex-start;
-      -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-      justify-content: space-between;
-      margin: 0;
-      padding: 0;
-
-      mat-form-field:not(:first-child) {
-        margin: 0;
-        margin-left: $h-spacing;
-      }
-    }
-
-    .mat-card-actions {
-      margin: 0;
-      padding: 0;
-
-      button {
-        width: 100%;
-      }
-    }
-  }
 }
 
 @mixin schd-checkbox-theme($theme) {
@@ -143,28 +103,6 @@
 
 @mixin schd-chips-theme($theme) {
   @include mat-chips-theme(map-get($theme, main));
-  $height: 32px;
-  $fontSize: 14px;
-
-  mat-basic-chip {
-    display: inline-block;
-    padding: 0 12px;
-    border-radius: $height;
-    height: $height;
-    line-height: $height;
-    font-size: $fontSize;
-    margin: 0 5px;
-  }
-
-  mat-basic-chip.primary {
-    background-color: $th-magenta;
-    color: white;
-  }
-
-  mat-basic-chip.accent {
-    background-color: $th-orange;
-    color: white;
-  }
 }
 
 @mixin schd-datepicker-theme($theme) {
@@ -197,19 +135,8 @@
       background-color: $th-magenta !important;
     }
 
-    app-user-edit-dialog .mat-dialog-actions,
-    app-delete-dialog .mat-dialog-actions,
-    app-create-update-dialog .mat-dialog-actions,
-    schd-group-edit .mat-dialog-actions,
-    schd-course-authority-dialog .mat-dialog-actions,
-    schd-timetable-entry .mat-dialog-actions,
-    schd-group-preview-modal .mat-dialog-actions,
-    schd-confirm-dialog .mat-dialog-actions,
-    schd-decision-dialog .mat-dialog-actions,
-    schd-reschedule .mat-dialog-actions,
-    schd-annotation .mat-dialog-actions,
-    schd-student-create-application .mat-dialog-actions,
-    schd-assignment-entry-takeover-dialog .mat-dialog-actions {
+    schd-create-dialog .mat-dialog-actions,
+    schd-delete-dialog .mat-dialog-actions {
       background-color: $ivory;
       display: -webkit-box;
       display: -ms-flexbox;
@@ -237,10 +164,6 @@
 
 @mixin schd-form-field-theme($theme) {
   @include mat-form-field-theme(map-get($theme, main));
-
-  .reportcard-bonus {
-    max-width: 100px !important;
-  }
 }
 
 @mixin schd-grid-list-theme($theme) {
@@ -336,6 +259,7 @@
 @mixin schd-table-theme($theme) {
   @include mat-table-theme(map-get($theme, main));
 
+
   table {
     width: 100%;
     margin-bottom: $high-spacing;
@@ -363,6 +287,7 @@
     background-color: $hover-color;
     cursor: pointer;
   }
+
 }
 
 @mixin schd-tabs-theme($theme) {
