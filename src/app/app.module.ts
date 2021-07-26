@@ -36,6 +36,7 @@ import {ModulesComponent} from './admin/modules/modules.component'
 import {SubmoduleComponent} from './admin/submodule/submodule.component'
 import {ModuleExaminationRegulationsComponent} from './admin/module-examination-regulations/module-examination-regulations.component'
 import {InputBooleanComponent} from './generic-ui/create-dialog/input-boolean/input-boolean.component'
+import {SemestersComponent} from './admin/semesters/semesters.component'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -68,7 +69,8 @@ FullCalendarModule.registerPlugins([
     ModulesComponent,
     SubmoduleComponent,
     ModuleExaminationRegulationsComponent,
-    InputBooleanComponent
+    InputBooleanComponent,
+    SemestersComponent
   ],
   imports: [
     BrowserModule,

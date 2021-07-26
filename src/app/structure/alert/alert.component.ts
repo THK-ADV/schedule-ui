@@ -10,6 +10,7 @@ import {Alert, AlertService} from './alert.service'
 })
 export class AlertComponent implements OnInit, OnDestroy {
 
+  private readonly delay = 5000
   private subs: Subscription[] = []
   alerts: Alert[] = []
 
@@ -27,7 +28,7 @@ export class AlertComponent implements OnInit, OnDestroy {
     )
 
     this.subs.push(
-      alerts.pipe(delay(3000))
+      alerts.pipe(delay(this.delay))
         .subscribe(a => this.close(a))
     )
   }

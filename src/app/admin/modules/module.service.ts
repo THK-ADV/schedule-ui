@@ -97,7 +97,7 @@ export class ModuleService {
   updateInputs = (m: ModuleAtom): FormInput[] => [
     {...this.label, initialValue: m.label},
     {...this.abbreviation, initialValue: m.abbreviation},
-    {...this.user, initialValue: users => users.find(_ => _.id === m.courseManager.id)},
+    {...this.user, initialValue: (users: Lecturer[]) => users.find(_ => _.id === m.courseManager.id)},
     {...this.credits, disabled: true, initialValue: m.credits},
     {...this.descriptionUrl, initialValue: m.descriptionUrl}
   ]
