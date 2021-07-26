@@ -11,7 +11,7 @@ export const formControlForBooleanInput = (i: FormInput): FormControl | undefine
   switch (i.kind) {
     case 'boolean':
       return new FormControl(
-        {value: i.initialValue, disabled: i.disabled},
+        {value: i.initialValue ?? false, disabled: i.disabled},
         i.required ? Validators.required : undefined
       )
     default:
