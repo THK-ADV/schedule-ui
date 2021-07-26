@@ -1,14 +1,12 @@
 import {Component} from '@angular/core'
 import {TableHeaderColumn} from '../../generic-ui/table/table.component'
-import {EMPTY, Observable} from 'rxjs'
+import {Observable} from 'rxjs'
 import {Module, ModuleAtom} from '../../models/module'
-import {ModuleProtocol, ModuleService} from './module.service'
+import {ModuleService} from './module.service'
 import {isLecturer} from '../../models/user'
 import {describeLecturer, describeUser} from '../../utils/describe'
 import {Create, Delete, Update} from '../../generic-ui/crud-table/crud-table.component'
-import {mapOpt} from '../../utils/optional'
 import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
-import {inspect} from '../../utils/inspect'
 
 @Component({
   selector: 'schd-modules',
@@ -25,47 +23,16 @@ export class ModulesComponent {
   filterAttrs: string[]
 
   delete: Delete<ModuleAtom>
-  create: [Create<ModuleProtocol>, CreateDialogData]
+  create: [Create<Module>, CreateDialogData]
   update: [Update<ModuleAtom, Module>, (e: ModuleAtom) => CreateDialogData]
 
   constructor(private readonly service: ModuleService) {
-    this.columns = [
-      {attr: 'label', title: 'Bezeichnung'},
-      {attr: 'abbreviation', title: 'Abkürzung'},
-      {attr: 'courseManager', title: 'Modulverantwortlicher'},
-      {attr: 'credits', title: 'ECTS'},
-    ]
+    this.columns = service.columns()
     this.filterAttrs = this.columns.map(_ => _.title)
     this.data = service.modules
-    this.delete = {
-      labelForDialog: a => a.label,
-      delete: service.delete
-    }
-    this.create = [
-      {
-        create: attrs => mapOpt(service.parseProtocol(attrs), service.create) ?? EMPTY,
-        show: a => JSON.stringify(a)
-      },
-      {
-        objectName: 'Modul',
-        inputs: service.createInputs()
-      }
-    ]
-    this.update = [
-      {
-        update: (m, attrs) =>
-          mapOpt(
-            inspect(service.createProtocol(m, attrs)),
-            p => service.update(p, m.id)
-          ) ?? EMPTY
-        ,
-        show: a => `${a.label} (${a.abbreviation})`
-      },
-      m => ({
-        objectName: 'Modul',
-        inputs: service.updateInputs(m)
-      })
-    ]
+    this.delete = service.deleteAction()
+    this.create = service.createAction()
+    this.update = service.updateAction()
   }
 
   tableContent = (module: ModuleAtom, attr: string): string => {
