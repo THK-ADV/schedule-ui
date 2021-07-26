@@ -12,7 +12,7 @@ import {formatDate} from '../../utils/date-format'
 import {Create, Delete, Update} from '../../generic-ui/crud-table/crud-table.component'
 import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
 
-export interface SemesterProtocol {
+interface SemesterProtocol {
   label: string
   abbreviation: string
   start: string
