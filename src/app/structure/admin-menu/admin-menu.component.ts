@@ -13,6 +13,7 @@ const adminMenus = (): AdminMenu[] => [
   {label: 'Module in PO', icon: 'approval', routerLink: 'moduleExaminationRegulations'},
   {label: 'Module', icon: 'class', routerLink: 'modules'},
   {label: 'Submodule', icon: 'class', routerLink: 'submodules'},
+  {label: 'Semester', icon: 'date_range', routerLink: 'semesters'},
 ]
 
 @Component({

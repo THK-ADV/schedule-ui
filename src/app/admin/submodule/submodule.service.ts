@@ -140,11 +140,11 @@ export class SubmoduleService {
   updateInputs = (m: SubmoduleAtom): FormInput[] => [
     {...this.label, initialValue: m.label},
     {...this.abbreviation, initialValue: m.abbreviation},
-    {...this.module, initialValue: ms => ms.find(_ => _.id === m.module.id), disabled: true},
-    {...this.recommendedSemester, initialValue: rrs => rrs.find(rs => rs === m.recommendedSemester)},
+    {...this.module, initialValue: (ms: Module[]) => ms.find(_ => _.id === m.module.id), disabled: true},
+    {...this.recommendedSemester, initialValue: (rrs: number[]) => rrs.find(rs => rs === m.recommendedSemester)},
     {...this.credits, initialValue: m.credits, disabled: true},
-    {...this.language, initialValue: ls => ls.find(l => l.value === m.language)},
-    {...this.season, initialValue: ss => ss.find(s => s.value === m.season)},
+    {...this.language, initialValue: (ls: Lang[]) => ls.find(l => l.value === m.language)},
+    {...this.season, initialValue: (ss: Seas[]) => ss.find(s => s.value === m.season)},
     {...this.descriptionUrl, initialValue: m.descriptionUrl}
   ]
 

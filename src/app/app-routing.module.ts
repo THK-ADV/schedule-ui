@@ -6,6 +6,7 @@ import {ExaminationRegulationsComponent} from './admin/examination-regulations/e
 import {ModulesComponent} from './admin/modules/modules.component'
 import {SubmoduleComponent} from './admin/submodule/submodule.component'
 import {ModuleExaminationRegulationsComponent} from './admin/module-examination-regulations/module-examination-regulations.component'
+import {SemestersComponent} from './admin/semesters/semesters.component'
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'submodules',
     component: SubmoduleComponent
+  },
+  {
+    path: 'semesters',
+    component: SemestersComponent
   },
   {
     path: '',
