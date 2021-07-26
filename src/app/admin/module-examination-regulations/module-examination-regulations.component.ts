@@ -1,13 +1,11 @@
 import {Component} from '@angular/core'
 import {TableHeaderColumn} from '../../generic-ui/table/table.component'
-import {EMPTY, Observable} from 'rxjs'
-import {ModuleExaminationRegulationAtom} from '../../models/module-examination-regulation'
-import {ModuleExaminationRegulationProtocol, ModuleExaminationRegulationService} from './module-examination-regulation.service'
+import {Observable} from 'rxjs'
+import {ModuleExaminationRegulation, ModuleExaminationRegulationAtom} from '../../models/module-examination-regulation'
+import {ModuleExaminationRegulationService} from './module-examination-regulation.service'
 import {describeBoolean, describeExamReg, describeModule} from '../../utils/describe'
 import {Create, Delete} from '../../generic-ui/crud-table/crud-table.component'
-import {mapOpt} from '../../utils/optional'
 import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
-import {inspect} from '../../utils/inspect'
 
 @Component({
   selector: 'schd-module-examination-regulations',
@@ -24,30 +22,14 @@ export class ModuleExaminationRegulationsComponent {
   filterAttrs: string[]
 
   delete: Delete<ModuleExaminationRegulationAtom>
-  create: [Create<ModuleExaminationRegulationProtocol>, CreateDialogData]
+  create: [Create<ModuleExaminationRegulation>, CreateDialogData]
 
   constructor(private readonly service: ModuleExaminationRegulationService) {
-    this.columns = [
-      {attr: 'module', title: 'Modul'},
-      {attr: 'examinationRegulation', title: 'Prüfungsordnung'},
-      {attr: 'mandatory', title: 'Pflichtmodul'}
-    ]
+    this.columns = service.columns()
     this.data = service.moduleExams
     this.filterAttrs = this.columns.map(_ => _.title)
-    this.delete = {
-      labelForDialog: a => `${describeModule(a.module)} für ${describeExamReg(a.examinationRegulation)}`,
-      delete: service.delete
-    }
-    this.create = [
-      {
-        create: attrs => mapOpt(service.parseProtocol(inspect(attrs)), service.create) ?? EMPTY,
-        show: a => JSON.stringify(a)
-      },
-      {
-        objectName: 'Modul mit Prüfungsordnung',
-        inputs: service.createInputs()
-      }
-    ]
+    this.delete = service.deleteAction()
+    this.create = service.createAction()
   }
 
   tableContent = (me: ModuleExaminationRegulationAtom, attr: string): string => {

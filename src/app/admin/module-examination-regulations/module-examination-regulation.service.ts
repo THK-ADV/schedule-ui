@@ -1,19 +1,22 @@
 import {Injectable} from '@angular/core'
 import {ModuleExaminationRegulationApiService} from '../../http/module-examination-regulation-api.service'
-import {Observable, of} from 'rxjs'
+import {EMPTY, Observable, of} from 'rxjs'
 import {ModuleExaminationRegulation, ModuleExaminationRegulationAtom} from '../../models/module-examination-regulation'
 import {FormInput} from '../../generic-ui/create-dialog/form-input'
 import {AutoCompleteInput} from '../../generic-ui/create-dialog/input-auto-complete/input-auto-complete.component'
 import {ModuleAtom} from '../../models/module'
 import {ExaminationRegulationAtom} from '../../models/examination-regulation'
-import {describeExamReg, describeModuleAtom} from '../../utils/describe'
+import {describeExamReg, describeModule, describeModuleAtom} from '../../utils/describe'
 import {ModuleApiService} from '../../http/module-api.service'
 import {ExaminationRegulationApiService} from '../../http/examination-regulation-api.service'
 import {mapOpt, zip3} from '../../utils/optional'
 import {parseBoolean, parseExaminationRegulationAtom, parseModuleAtom} from '../../utils/parser'
 import {BooleanInput} from '../../generic-ui/create-dialog/input-boolean/input-boolean.component'
+import {Create, Delete} from '../../generic-ui/crud-table/crud-table.component'
+import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
+import {TableHeaderColumn} from '../../generic-ui/table/table.component'
 
-export interface ModuleExaminationRegulationProtocol {
+interface ModuleExaminationRegulationProtocol {
   module: string
   examinationRegulation: string
   mandatory: boolean
@@ -63,22 +66,44 @@ export class ModuleExaminationRegulationService {
   moduleExams = (): Observable<ModuleExaminationRegulationAtom[]> =>
     this.http.moduleExams()
 
-  delete = (me: ModuleExaminationRegulationAtom): Observable<ModuleExaminationRegulationAtom> =>
+  columns = (): TableHeaderColumn[] => [
+    {attr: 'module', title: 'Modul'},
+    {attr: 'examinationRegulation', title: 'Prüfungsordnung'},
+    {attr: 'mandatory', title: 'Pflichtmodul'}
+  ]
+
+  deleteAction = (): Delete<ModuleExaminationRegulationAtom> => ({
+    labelForDialog: a => `${describeModule(a.module)} für ${describeExamReg(a.examinationRegulation)}`,
+    delete: this.delete
+  })
+
+  createAction = (): [Create<ModuleExaminationRegulation>, CreateDialogData] => [
+    {
+      create: attrs => mapOpt(this.parseProtocol(attrs), this.create) ?? EMPTY,
+      show: a => JSON.stringify(a)
+    },
+    {
+      objectName: 'Modul mit Prüfungsordnung',
+      inputs: this.createInputs()
+    }
+  ]
+
+  private delete = (me: ModuleExaminationRegulationAtom): Observable<ModuleExaminationRegulationAtom> =>
     of(me)
 
-  create = (p: ModuleExaminationRegulationProtocol): Observable<ModuleExaminationRegulation> =>
+  private create = (p: ModuleExaminationRegulationProtocol): Observable<ModuleExaminationRegulation> =>
     of({...p, id: 'random uuid'})
 
-  update = (p: ModuleExaminationRegulationProtocol, id: string): Observable<ModuleExaminationRegulation> =>
+  private update = (p: ModuleExaminationRegulationProtocol, id: string): Observable<ModuleExaminationRegulation> =>
     of({...p, id})
 
-  createInputs = (): FormInput[] => [
+  private createInputs = (): FormInput[] => [
     this.module,
     this.exam,
     this.mandatory
   ]
 
-  parseProtocol = (attrs: { [p: string]: string }): ModuleExaminationRegulationProtocol | undefined =>
+  private parseProtocol = (attrs: { [p: string]: string }): ModuleExaminationRegulationProtocol | undefined =>
     mapOpt(
       zip3(
         parseModuleAtom(attrs.module),

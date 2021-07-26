@@ -12,7 +12,7 @@ import {formatDate} from '../../utils/date-format'
 import {Create, Delete, Update} from '../../generic-ui/crud-table/crud-table.component'
 import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
 
-export interface SemesterProtocol {
+interface SemesterProtocol {
   label: string
   abbreviation: string
   start: string
@@ -103,12 +103,12 @@ export class SemestersService {
     }
   ]
 
-  updateAction = (): [Update<Semester>, (e: Semester) => CreateDialogData] => [
+  updateAction = (): [Update<Semester, Semester>, (e: Semester) => CreateDialogData] => [
     {
       update: (m, attrs) =>
         mapOpt(
           this.createProtocol(m, attrs),
-          p => this.update(p, m.id) // remove
+          p => this.update(p, m.id)
         ) ?? EMPTY
       ,
       show: a => JSON.stringify(a)

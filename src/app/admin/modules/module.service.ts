@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core'
 import {ModuleApiService} from '../../http/module-api.service'
-import {Observable, of} from 'rxjs'
+import {EMPTY, Observable, of} from 'rxjs'
 import {Module, ModuleAtom} from '../../models/module'
 import {mapOpt, zip} from '../../utils/optional'
 import {parseFloatNumber, parseLecturer} from '../../utils/parser'
@@ -10,8 +10,11 @@ import {describeUserWithCampusId} from '../../utils/describe'
 import {NumberInput, TextInput, URLInput} from '../../generic-ui/create-dialog/input-text/input-text.component'
 import {FormInput} from '../../generic-ui/create-dialog/form-input'
 import {UserApiService} from '../../http/user-api.service'
+import {TableHeaderColumn} from '../../generic-ui/table/table.component'
+import {Create, Delete, Update} from '../../generic-ui/crud-table/crud-table.component'
+import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
 
-export interface ModuleProtocol {
+interface ModuleProtocol {
   courseManager: string
   label: string
   abbreviation: string
@@ -77,16 +80,54 @@ export class ModuleService {
   modules = (): Observable<ModuleAtom[]> =>
     this.http.modulesAtomic()
 
-  delete = (m: ModuleAtom): Observable<ModuleAtom> =>
+  columns = (): TableHeaderColumn[] => [
+    {attr: 'label', title: 'Bezeichnung'},
+    {attr: 'abbreviation', title: 'Abkürzung'},
+    {attr: 'courseManager', title: 'Modulverantwortlicher'},
+    {attr: 'credits', title: 'ECTS'},
+  ]
+
+  deleteAction = (): Delete<ModuleAtom> => ({
+    labelForDialog: a => a.label,
+    delete: this.delete
+  })
+
+  createAction = (): [Create<Module>, CreateDialogData] => [
+    {
+      create: attrs => mapOpt(this.parseProtocol(attrs), this.create) ?? EMPTY,
+      show: a => JSON.stringify(a)
+    },
+    {
+      objectName: 'Modul',
+      inputs: this.createInputs()
+    }
+  ]
+
+  updateAction = (): [Update<ModuleAtom, Module>, (e: ModuleAtom) => CreateDialogData] => [
+    {
+      update: (m, attrs) =>
+        mapOpt(
+          this.createProtocol(m, attrs),
+          p => this.update(p, m.id)
+        ) ?? EMPTY,
+      show: a => JSON.stringify(a)
+    },
+    m => ({
+      objectName: 'Modul',
+      inputs: this.updateInputs(m)
+    })
+  ]
+
+  private delete = (m: ModuleAtom): Observable<ModuleAtom> =>
     of(m)
 
-  create = (p: ModuleProtocol): Observable<Module> =>
+  private create = (p: ModuleProtocol): Observable<Module> =>
     of({...p, id: 'random uuid'})
 
-  update = (p: ModuleProtocol, id: string): Observable<Module> =>
+  private update = (p: ModuleProtocol, id: string): Observable<Module> =>
     of({...p, id})
 
-  createInputs = (): FormInput[] => [
+  private createInputs = (): FormInput[] => [
     this.label,
     this.abbreviation,
     this.user,
@@ -94,7 +135,7 @@ export class ModuleService {
     this.descriptionUrl
   ]
 
-  updateInputs = (m: ModuleAtom): FormInput[] => [
+  private updateInputs = (m: ModuleAtom): FormInput[] => [
     {...this.label, initialValue: m.label},
     {...this.abbreviation, initialValue: m.abbreviation},
     {...this.user, initialValue: (users: Lecturer[]) => users.find(_ => _.id === m.courseManager.id)},
@@ -102,7 +143,7 @@ export class ModuleService {
     {...this.descriptionUrl, initialValue: m.descriptionUrl}
   ]
 
-  parseProtocol = (attrs: { [p: string]: string }): ModuleProtocol | undefined =>
+  private parseProtocol = (attrs: { [p: string]: string }): ModuleProtocol | undefined =>
     mapOpt(
       zip(
         parseLecturer(attrs.courseManager),
@@ -117,7 +158,7 @@ export class ModuleService {
       })
     )
 
-  createProtocol = (m: ModuleAtom, attrs: { [p: string]: string }): ModuleProtocol | undefined =>
+  private createProtocol = (m: ModuleAtom, attrs: { [p: string]: string }): ModuleProtocol | undefined =>
     this.parseProtocol({...attrs, credits: m.credits.toString()})
 }
 
