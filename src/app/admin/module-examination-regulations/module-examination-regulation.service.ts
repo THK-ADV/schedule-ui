@@ -15,7 +15,6 @@ import {BooleanInput} from '../../generic-ui/create-dialog/input-boolean/input-b
 import {Create, Delete} from '../../generic-ui/crud-table/crud-table.component'
 import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
 import {TableHeaderColumn} from '../../generic-ui/table/table.component'
-import {inspect} from '../../utils/inspect'
 
 interface ModuleExaminationRegulationProtocol {
   module: string
@@ -80,7 +79,7 @@ export class ModuleExaminationRegulationService {
 
   createAction = (): [Create<ModuleExaminationRegulation>, CreateDialogData] => [
     {
-      create: attrs => mapOpt(this.parseProtocol(inspect(attrs)), this.create) ?? EMPTY,
+      create: attrs => mapOpt(this.parseProtocol(attrs), this.create) ?? EMPTY,
       show: a => JSON.stringify(a)
     },
     {

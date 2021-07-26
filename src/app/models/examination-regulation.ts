@@ -4,7 +4,7 @@ export interface ExaminationRegulation {
   studyProgram: string
   number: number
   start: Date
-  end?: Date
+  end: Date | undefined
   id: string
 }
 
@@ -12,7 +12,7 @@ export interface ExaminationRegulationAtom {
   studyProgram: StudyProgramAtom
   number: number
   start: Date
-  end?: Date
+  end: Date | undefined
   id: string
 }
 
