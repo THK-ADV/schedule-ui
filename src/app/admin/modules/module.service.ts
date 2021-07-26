@@ -3,7 +3,7 @@ import {ModuleApiService} from '../../http/module-api.service'
 import {Observable, of} from 'rxjs'
 import {Module, ModuleAtom} from '../../models/module'
 import {mapOpt, zip} from '../../utils/optional'
-import {parseLecturer, parseNumber} from '../../utils/parser'
+import {parseFloatNumber, parseLecturer} from '../../utils/parser'
 import {AutoCompleteInput} from '../../generic-ui/create-dialog/input-auto-complete/input-auto-complete.component'
 import {Lecturer} from '../../models/user'
 import {describeUserWithCampusId} from '../../utils/describe'
@@ -26,7 +26,7 @@ export class ModuleService {
 
   private readonly label: TextInput
   private readonly abbreviation: TextInput
-  private readonly userInput: AutoCompleteInput<Lecturer>
+  private readonly user: AutoCompleteInput<Lecturer>
   private readonly credits: NumberInput
   private readonly descriptionUrl: URLInput
 
@@ -48,7 +48,7 @@ export class ModuleService {
       disabled: false,
       required: true
     })
-    this.userInput = ({
+    this.user = ({
       label: 'Modulverantwortlicher',
       attr: 'courseManager',
       required: true,
@@ -89,7 +89,7 @@ export class ModuleService {
   createInputs = (): FormInput[] => [
     this.label,
     this.abbreviation,
-    this.userInput,
+    this.user,
     this.credits,
     this.descriptionUrl
   ]
@@ -97,7 +97,7 @@ export class ModuleService {
   updateInputs = (m: ModuleAtom): FormInput[] => [
     {...this.label, initialValue: m.label},
     {...this.abbreviation, initialValue: m.abbreviation},
-    {...this.userInput, initialValue: users => users.find(_ => _.id === m.courseManager.id)},
+    {...this.user, initialValue: users => users.find(_ => _.id === m.courseManager.id)},
     {...this.credits, disabled: true, initialValue: m.credits},
     {...this.descriptionUrl, initialValue: m.descriptionUrl}
   ]
@@ -106,7 +106,7 @@ export class ModuleService {
     mapOpt(
       zip(
         parseLecturer(attrs.courseManager),
-        parseNumber(attrs.credits)
+        parseFloatNumber(attrs.credits)
       ),
       ([courseManager, credits]) => ({
         abbreviation: attrs.abbreviation,

@@ -6,7 +6,7 @@ import {describeLanguage, describeModule, describeSeason} from '../../utils/desc
 import {Observable, of} from 'rxjs'
 import {FormInput} from '../../generic-ui/create-dialog/form-input'
 import {mapOpt, zip5} from '../../utils/optional'
-import {parseModule, parseNumber, parseSemesterIndex} from '../../utils/parser'
+import {parseFloatNumber, parseModule, parseSemesterIndex} from '../../utils/parser'
 import {Submodule, SubmoduleAtom} from '../../models/submodule'
 import {Module} from '../../models/module'
 import {ModuleApiService} from '../../http/module-api.service'
@@ -165,7 +165,7 @@ export class SubmoduleService {
         parseSemesterIndex(attrs.recommendedSemester),
         this.parseLang(attrs.language),
         this.parseSeas(attrs.season),
-        parseNumber(attrs.credits),
+        parseFloatNumber(attrs.credits),
       ),
       ([m, rs, l, s, c]) => ({
         label: attrs.label,

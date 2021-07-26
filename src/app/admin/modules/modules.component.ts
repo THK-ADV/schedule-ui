@@ -9,7 +9,7 @@ import {Create, Delete, Update} from '../../generic-ui/crud-table/crud-table.com
 import {mapOpt} from '../../utils/optional'
 import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
 import {map} from 'rxjs/operators'
-import {tap} from '../../utils/tap'
+import {inspect} from '../../utils/inspect'
 
 @Component({
   selector: 'schd-modules',
@@ -56,7 +56,7 @@ export class ModulesComponent {
       {
         update: (m, attrs) =>
           mapOpt(
-            tap(service.createProtocol(m, attrs)),
+            inspect(service.createProtocol(m, attrs)),
             p => service.update(p, m.id).pipe(map(a => ({...a, courseManager: m.courseManager}))) // remove
           ) ?? EMPTY
         ,

@@ -16,6 +16,12 @@
                         [input]="asDateInput(i)"
                         [formControl]="formControl(i.attr)">
                 </schd-input-date>
+                <schd-input-boolean
+                        *ngSwitchCase="'boolean'"
+                        ngDefaultControl
+                        [input]="asBooleanInput(i)"
+                        [formControl]="formControl(i.attr)">
+                </schd-input-boolean>
                 <schd-input-text
                         *ngSwitchDefault
                         ngDefaultControl
