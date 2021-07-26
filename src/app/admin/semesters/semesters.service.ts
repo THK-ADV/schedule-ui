@@ -103,12 +103,12 @@ export class SemestersService {
     }
   ]
 
-  updateAction = (): [Update<Semester>, (e: Semester) => CreateDialogData] => [
+  updateAction = (): [Update<Semester, Semester>, (e: Semester) => CreateDialogData] => [
     {
       update: (m, attrs) =>
         mapOpt(
           this.createProtocol(m, attrs),
-          p => this.update(p, m.id) // remove
+          p => this.update(p, m.id)
         ) ?? EMPTY
       ,
       show: a => JSON.stringify(a)

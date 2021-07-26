@@ -23,7 +23,7 @@ export class SemestersComponent {
 
   delete: Delete<Semester>
   create: [Create<Semester>, CreateDialogData]
-  update: [Update<Semester>, (e: Semester) => CreateDialogData]
+  update: [Update<Semester, Semester>, (e: Semester) => CreateDialogData]
 
   constructor(private readonly service: SemestersService) {
     this.columns = service.columns()

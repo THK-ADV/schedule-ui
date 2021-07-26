@@ -35,6 +35,8 @@ export const describeLanguage: Describe<Language> = l => {
       return 'englisch'
     case 'de_en':
       return 'deutsch und englisch'
+    case 'unknown':
+      return 'unbekannt'
   }
 }
 

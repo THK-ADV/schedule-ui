@@ -2,7 +2,7 @@ import {Component} from '@angular/core'
 import {StudyProgramProtocol, StudyProgramsService} from './study-programs.service'
 import {TableHeaderColumn} from '../../generic-ui/table/table.component'
 import {EMPTY, Observable} from 'rxjs'
-import {StudyProgramAtom} from '../../models/study-program'
+import {StudyProgram, StudyProgramAtom} from '../../models/study-program'
 import {Create, Delete, Update} from '../../generic-ui/crud-table/crud-table.component'
 import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
 import {TeachingUnitApiService} from '../../http/teaching-unit-api.service'
@@ -10,7 +10,6 @@ import {AutoCompleteInput} from '../../generic-ui/create-dialog/input-auto-compl
 import {TeachingUnit} from '../../models/teaching-unit'
 import {Graduation} from '../../models/graduation'
 import {GraduationApiService} from '../../http/graduation-api.service'
-import {map} from 'rxjs/operators'
 import {mapOpt, zip} from '../../utils/optional'
 import {parseGraduation, parseTeachingUnit} from '../../utils/parser'
 
@@ -41,7 +40,7 @@ export class StudyProgramsComponent {
   data: () => Observable<StudyProgramAtom[]>
   delete: Delete<StudyProgramAtom>
   create: [Create<StudyProgramProtocol>, CreateDialogData]
-  update: [Update<StudyProgramAtom>, (sp: StudyProgramAtom) => CreateDialogData]
+  update: [Update<StudyProgramAtom, StudyProgram>, (sp: StudyProgramAtom) => CreateDialogData]
 
   constructor(
     private readonly service: StudyProgramsService,
@@ -114,7 +113,6 @@ export class StudyProgramsComponent {
             graduation: a.graduation.id
           }
           return service.update(sp, a.id)
-            .pipe(map(b => ({...b, teachingUnit: a.teachingUnit, graduation: a.graduation})))           // remove
         },
         show: a => `${a.label} (${a.abbreviation})`
       },

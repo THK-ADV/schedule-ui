@@ -17,9 +17,9 @@ export interface Create<A0> {
   show: (a: A0) => string
 }
 
-export interface Update<A> {
-  update: (a: A, attrs: { [attr: string]: string }) => Observable<A>
-  show: (a: A) => string
+export interface Update<A, B> {
+  update: (a: A, attrs: { [attr: string]: string }) => Observable<B>
+  show: (a: B) => string
 }
 
 @Component({
@@ -27,7 +27,7 @@ export interface Update<A> {
   templateUrl: './crud-table.component.html',
   styleUrls: ['./crud-table.component.scss']
 })
-export class CrudTableComponent<A0, A> implements OnInit, OnDestroy {
+export class CrudTableComponent<A0, A, B> implements OnInit, OnDestroy {
 
   @Input() headerTitle = 'header'
   @Input() tooltipTitle = 'tooltip'
@@ -42,7 +42,7 @@ export class CrudTableComponent<A0, A> implements OnInit, OnDestroy {
   @Input() filterAttrs?: string[]
   @Input() delete?: Delete<A>
   @Input() create?: [Create<A0>, CreateDialogData]
-  @Input() update?: [Update<A>, (a: A) => CreateDialogData]
+  @Input() update?: [Update<A, B>, (a: A) => CreateDialogData]
 
   data$: Observable<A[]> = EMPTY
   onDelete?: (a: A) => void
@@ -102,7 +102,7 @@ export class CrudTableComponent<A0, A> implements OnInit, OnDestroy {
     }
   }
 
-  private initOnUpdate = ([u, udd]: [Update<A>, (a: A) => CreateDialogData]) => {
+  private initOnUpdate = ([u, udd]: [Update<A, B>, (a: A) => CreateDialogData]) => {
     this.onUpdate = (a: A) => {
       const s = openDialog(
         CreateDialogComponent.instance(this.dialog, udd(a), 'update'),

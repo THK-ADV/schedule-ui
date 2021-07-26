@@ -1,7 +1,7 @@
 import {Component} from '@angular/core'
 import {TableHeaderColumn} from '../../generic-ui/table/table.component'
 import {EMPTY, Observable} from 'rxjs'
-import {ExaminationRegulationAtom} from '../../models/examination-regulation'
+import {ExaminationRegulation, ExaminationRegulationAtom} from '../../models/examination-regulation'
 import {ExaminationRegulationProtocol, ExaminationRegulationsService} from './examination-regulations.service'
 import {formatDate} from '../../utils/date-format'
 import {Create, Delete, Update} from '../../generic-ui/crud-table/crud-table.component'
@@ -11,7 +11,6 @@ import {StudyProgramAtom} from '../../models/study-program'
 import {StudyProgramApiService} from '../../http/study-program-api.service'
 import {NumberInput} from '../../generic-ui/create-dialog/input-text/input-text.component'
 import {DateInput} from '../../generic-ui/create-dialog/input-date/input-date.component'
-import {map, tap} from 'rxjs/operators'
 import {parseDate, parseIntNumber, parseStudyProgramAtom} from '../../utils/parser'
 import {mapOpt, zip3} from '../../utils/optional'
 
@@ -48,7 +47,7 @@ export class ExaminationRegulationsComponent {
 
   delete: Delete<ExaminationRegulationAtom>
   create: [Create<ExaminationRegulationProtocol>, CreateDialogData]
-  update: [Update<ExaminationRegulationAtom>, (e: ExaminationRegulationAtom) => CreateDialogData]
+  update: [Update<ExaminationRegulationAtom, ExaminationRegulation>, (e: ExaminationRegulationAtom) => CreateDialogData]
 
   constructor(
     private readonly service: ExaminationRegulationsService,
@@ -143,10 +142,6 @@ export class ExaminationRegulationsComponent {
             end: mapOpt(attrs.end, parseDate)
           }
           return service.update(ep, a.id)
-            .pipe(
-              map(b => ({...b, studyProgram: a.studyProgram})), // remove
-              tap(console.log)
-            )
         },
         show: a => JSON.stringify(a)
       },
