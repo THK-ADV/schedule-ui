@@ -18,7 +18,7 @@ import {Create, Delete, Update} from '../../generic-ui/crud-table/crud-table.com
 import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
 import {inspect} from '../../utils/inspect'
 
-export interface SubmoduleProtocol {
+interface SubmoduleProtocol {
   module: string
   label: string
   abbreviation: string
