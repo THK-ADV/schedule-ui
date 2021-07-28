@@ -38,6 +38,7 @@ import {ModuleExaminationRegulationsComponent} from './admin/module-examination-
 import {InputBooleanComponent} from './generic-ui/create-dialog/input-boolean/input-boolean.component'
 import {SemestersComponent} from './admin/semesters/semesters.component'
 import {UsersComponent} from './admin/users/users.component'
+import {SchdMatTableResponsiveModule} from './structure/directives/mat-table-responsive/schd-mat-table-responsive.module'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -81,7 +82,8 @@ FullCalendarModule.registerPlugins([
     ScheduleMaterialModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    FullCalendarModule
+    FullCalendarModule,
+    SchdMatTableResponsiveModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: BackendUrlInterceptorInterceptor, multi: true}],
   bootstrap: [AppComponent]

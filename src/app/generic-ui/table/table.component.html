@@ -3,7 +3,7 @@
 </mat-form-field>
 
 <div class="mat-elevation-z2">
-    <table mat-table [dataSource]="dataSource" matSort>
+    <table mat-table schdMatTableResponsive [dataSource]="dataSource" matSort>
 
         <ng-container *ngFor="let column of columns" [matColumnDef]="column.attr">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>{{column.title}}</th>
