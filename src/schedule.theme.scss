@@ -3,6 +3,7 @@
 @import "~@angular/material/theming";
 @import "schedule.theme.config";
 
+
 @include mat-core();
 
 @mixin schd-core-theme($theme) {
@@ -258,36 +259,6 @@
 
 @mixin schd-table-theme($theme) {
   @include mat-table-theme(map-get($theme, main));
-
-
-  table {
-    width: 100%;
-    margin-bottom: $high-spacing;
-    border-collapse: initial;
-
-    td.mat-cell,
-    th.mat-cell,
-    td.mat-header-cell,
-    th.mat-header-cell {
-      padding: $low-spacing $med-spacing;
-      min-width: 60px;
-      word-wrap: initial;
-    }
-
-    td.mat-cell,
-    th.mat-cell {
-      vertical-align: text-top;
-      padding: $low-spacing $med-spacing;
-      min-width: 60px;
-      word-wrap: initial;
-    }
-  }
-
-  .mat-row:hover {
-    background-color: $hover-color;
-    cursor: pointer;
-  }
-
 }
 
 @mixin schd-tabs-theme($theme) {
