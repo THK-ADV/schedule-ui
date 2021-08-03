@@ -5,5 +5,13 @@
         <div class='header-item magenta'></div>
     </div>
 
-    <schd-nav></schd-nav>
+    <div class="nav-box">
+        <a class='nav-item' routerLink="/schedule" routerLinkActive="active">Stundenplan</a>
+        <a class='nav-item'>Raumplan</a>
+        <a class='nav-item'>Prüfungsplan</a>
+        <a class='nav-item'>Modulhandbuch</a>
+        <a class='nav-item' (click)="login.login()">
+            <schd-login #login>Login</schd-login>
+        </a>
+    </div>
 </ng-container>

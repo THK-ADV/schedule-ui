@@ -16,6 +16,9 @@ export const describeUser: Describe<User> = u =>
 export const describeUserWithCampusId: Describe<User> = u =>
   `${describeUser(u)} (${u.username})`
 
+export const describeUserInitials: Describe<User> = u =>
+  `${u.firstname.charAt(0).toUpperCase()}.${u.lastname.charAt(0).toUpperCase()}`
+
 export const describeModule: Describe<Module> = m =>
   `${m.label} (${m.abbreviation})`
 

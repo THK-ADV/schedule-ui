@@ -20,7 +20,6 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import {LoginComponent} from './login/login/login.component'
-import {AdminMenuComponent} from './structure/admin-menu/admin-menu.component'
 import {StudyProgramsComponent} from './admin/study-programs/study-programs.component'
 import {TableComponent} from './generic-ui/table/table.component'
 import {ExaminationRegulationsComponent} from './admin/examination-regulations/examination-regulations.component'
@@ -56,7 +55,6 @@ FullCalendarModule.registerPlugins([
     ScheduleComponent,
     ScheduleViewComponent,
     LoginComponent,
-    AdminMenuComponent,
     StudyProgramsComponent,
     TableComponent,
     ExaminationRegulationsComponent,
