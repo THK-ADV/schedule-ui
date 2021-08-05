@@ -1,8 +1,12 @@
 import {Injectable} from '@angular/core'
 import {HttpService} from './http.service'
 import {Observable} from 'rxjs'
-import {atomicParams} from './http-filter'
+import {applyFilter, atomicParams, Filter} from './http-filter'
 import {ExaminationRegulationAtom} from '../models/examination-regulation'
+
+export interface ExaminationRegulationFilter extends Filter {
+  key: 'module'
+}
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +18,6 @@ export class ExaminationRegulationApiService {
   constructor(private readonly http: HttpService) {
   }
 
-  examinationRegulations = (): Observable<ExaminationRegulationAtom[]> =>
-    this.http.getAll(this.resource, atomicParams)
+  examinationRegulations = (filter?: ExaminationRegulationFilter[]): Observable<ExaminationRegulationAtom[]> =>
+    this.http.getAll(this.resource, applyFilter(atomicParams, filter))
 }

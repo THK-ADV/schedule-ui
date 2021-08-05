@@ -1,14 +1,15 @@
 <ng-container class="lwm-container" [class.lwm-is-mobile]="mobileQuery.matches">
-    <mat-toolbar *ngIf="userInfo" color="primary" class="lwm-toolbar">
-        <button mat-icon-button (click)="nav.toggle()">
+    <mat-toolbar color="primary" class="lwm-toolbar">
+        <button *ngIf="userInfo" mat-icon-button (click)="nav.toggle()">
             <mat-icon>menu</mat-icon>
         </button>
         <span class="example-spacer"></span>
+        <schd-header></schd-header>
     </mat-toolbar>
 
     <mat-sidenav-container class="lwm-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-        <mat-sidenav #nav mode='side'>
-            <div id=sidebar-meta routerLink="" *ngIf="userInfo as user">
+        <mat-sidenav #nav mode='side' *ngIf="userInfo as user">
+            <div id=sidebar-meta routerLink="">
                 <div id="sidebar-bubble">
                     <h4>{{user.initials}}</h4>
                 </div>
@@ -22,29 +23,26 @@
                         <mat-icon>account_balance</mat-icon>
                         <span>Dozent</span>
                     </h3>
-                    <a mat-list-item
-                       routerLinkActive="list-item-active">
-                        <mat-icon></mat-icon>
-                        <span>Module</span>
-                    </a>
-                    <a mat-list-item
-                       routerLinkActive="list-item-active">
-                        <mat-icon></mat-icon>
-                        <span>Stundenplanung</span>
+                    <a *ngFor="let link of lecturerLinks"
+                       mat-list-item
+                       routerLinkActive="list-item-active"
+                       [routerLink]="routerLink(link, user.user)">
+                        <mat-icon>{{link.icon}}</mat-icon>
+                        <span>{{link.label}}</span>
                     </a>
                 </div>
 
-                <div *ngIf="isAdmin && menus as menus">
+                <div *ngIf="isAdmin">
                     <h3 mat-subheader class="sidebarHeader configHeader">
                         <mat-icon>build</mat-icon>
                         <span>Konfiguration</span>
                     </h3>
-                    <a *ngFor="let menu of menus"
+                    <a *ngFor="let link of adminLinks"
                        mat-list-item
                        routerLinkActive="list-item-active"
-                       [routerLink]="menu.routerLink">
-                        <mat-icon>{{menu.icon}}</mat-icon>
-                        <span>{{menu.label}}</span>
+                       [routerLink]="link.routerLink">
+                        <mat-icon>{{link.icon}}</mat-icon>
+                        <span>{{link.label}}</span>
                     </a>
                 </div>
 

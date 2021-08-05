@@ -4,20 +4,22 @@ import {describeUser, describeUserInitials} from '../../utils/describe'
 import {LoginService} from '../../login/login.service'
 import {Subscription} from 'rxjs'
 import {MatSidenav} from '@angular/material/sidenav/sidenav'
+import {User} from '../../models/user'
 
 interface UserInfo {
-  initials?: string
-  username?: string
-  name?: string
+  initials: string
+  username: string
+  name: string
+  user: User
 }
 
-interface AdminMenu {
+interface LinkItem {
   label: string
   icon: string,
   routerLink: string
 }
 
-const adminMenus = (): AdminMenu[] => [
+const adminLinks = (): LinkItem[] => [
   {label: 'Studiengänge', icon: 'school', routerLink: 'studyPaths'},
   {label: 'Prüfungsordnungen', icon: 'approval', routerLink: 'examinationRegulations'},
   {label: 'Module in PO', icon: 'approval', routerLink: 'moduleExaminationRegulations'},
@@ -25,6 +27,11 @@ const adminMenus = (): AdminMenu[] => [
   {label: 'Submodule', icon: 'class', routerLink: 'submodules'},
   {label: 'Semester', icon: 'date_range', routerLink: 'semesters'},
   {label: 'Benutzer', icon: 'people', routerLink: 'users'},
+]
+
+const lecturerLinks = (): LinkItem[] => [
+  {label: 'Module', icon: 'class', routerLink: 'modules'},
+  {label: 'Stundenplanung', icon: 'schedule', routerLink: 'scheduling'},
 ]
 
 @Component({
@@ -35,8 +42,9 @@ const adminMenus = (): AdminMenu[] => [
 export class NavComponent implements OnInit, OnDestroy {
 
   userInfo?: UserInfo
-  menus?: AdminMenu[]
-  isAdmin: boolean = false
+  adminLinks?: LinkItem[]
+  lecturerLinks?: LinkItem[]
+  isAdmin = false
 
   @ViewChild('nav') nav!: MatSidenav
 
@@ -54,13 +62,15 @@ export class NavComponent implements OnInit, OnDestroy {
         this.userInfo = {
           username: `@${user.username}`,
           name: describeUser(user),
-          initials: describeUserInitials(user)
+          initials: describeUserInitials(user),
+          user
         }
-        this.menus = adminMenus()
+        this.adminLinks = adminLinks()
+        this.lecturerLinks = lecturerLinks()
         this.isAdmin = true
       } else {
         this.userInfo = undefined
-        this.menus = undefined
+        this.adminLinks = undefined
         this.isAdmin = false
         this.nav.close()
       }
@@ -80,4 +90,7 @@ export class NavComponent implements OnInit, OnDestroy {
 
   logout = () =>
     this.loginService.logout()
+
+  routerLink = (item: LinkItem, user: User) =>
+    `lecturer/${user.id}/${item.routerLink}`
 }

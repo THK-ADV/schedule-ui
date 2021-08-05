@@ -3,6 +3,10 @@
 $menuBorderRadius: 5px;
 $sidebarColor: #262429;
 
+.example-spacer {
+  flex: 1 1 auto;
+}
+
 .lwm-container {
   display: flex;
   flex-direction: column;

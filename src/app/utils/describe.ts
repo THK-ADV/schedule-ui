@@ -28,6 +28,9 @@ export const describeModuleAtom: Describe<ModuleAtom> = m =>
 export const describeExamReg: Describe<ExaminationRegulationAtom> = er =>
   `${er.studyProgram.label} (${er.studyProgram.graduation.abbreviation} ${er.number})`
 
+export const describeExamRegShort: Describe<ExaminationRegulationAtom> = er =>
+  `${er.studyProgram.abbreviation} (${er.number})`
+
 export const describeStudyProgramAtom: Describe<StudyProgramAtom> = sp =>
   `${sp.label} (${sp.abbreviation} ${sp.graduation.abbreviation})`
 

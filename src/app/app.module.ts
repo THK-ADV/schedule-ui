@@ -38,6 +38,7 @@ import {InputBooleanComponent} from './generic-ui/create-dialog/input-boolean/in
 import {SemestersComponent} from './admin/semesters/semesters.component'
 import {UsersComponent} from './admin/users/users.component'
 import {SchdMatTableResponsiveModule} from './structure/directives/mat-table-responsive/schd-mat-table-responsive.module'
+import {LecturerModulesComponent} from './lecturer-modules/lecturer-modules.component'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -71,7 +72,8 @@ FullCalendarModule.registerPlugins([
     ModuleExaminationRegulationsComponent,
     InputBooleanComponent,
     SemestersComponent,
-    UsersComponent
+    UsersComponent,
+    LecturerModulesComponent
   ],
   imports: [
     BrowserModule,
