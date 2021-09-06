@@ -1,22 +1,31 @@
-import {Component, OnInit} from '@angular/core'
+import {Component, OnDestroy} from '@angular/core'
+import {LoginService} from '../login.service'
+import {User} from '../../models/user'
+import {Subscription} from 'rxjs'
 
 @Component({
   selector: 'schd-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnDestroy {
 
-  loggedIn = false
+  loggedInUser?: User
+  sub: Subscription
 
-  constructor() {
+  constructor(
+    private readonly service: LoginService
+  ) {
+    this.sub = service.user$()
+      .subscribe(u => this.loggedInUser = u)
   }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+    this.sub.unsubscribe()
   }
 
-  login = () => {
-    this.loggedIn = true
-  }
-
+  login = () =>
+    this.loggedInUser
+      ? this.service.logout()
+      : this.service.login()
 }

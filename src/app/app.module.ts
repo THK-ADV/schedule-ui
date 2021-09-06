@@ -20,7 +20,6 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import {LoginComponent} from './login/login/login.component'
-import {AdminMenuComponent} from './structure/admin-menu/admin-menu.component'
 import {StudyProgramsComponent} from './admin/study-programs/study-programs.component'
 import {TableComponent} from './generic-ui/table/table.component'
 import {ExaminationRegulationsComponent} from './admin/examination-regulations/examination-regulations.component'
@@ -39,6 +38,7 @@ import {InputBooleanComponent} from './generic-ui/create-dialog/input-boolean/in
 import {SemestersComponent} from './admin/semesters/semesters.component'
 import {UsersComponent} from './admin/users/users.component'
 import {SchdMatTableResponsiveModule} from './structure/directives/mat-table-responsive/schd-mat-table-responsive.module'
+import {LecturerModulesComponent} from './lecturer-modules/lecturer-modules.component'
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -56,7 +56,6 @@ FullCalendarModule.registerPlugins([
     ScheduleComponent,
     ScheduleViewComponent,
     LoginComponent,
-    AdminMenuComponent,
     StudyProgramsComponent,
     TableComponent,
     ExaminationRegulationsComponent,
@@ -73,7 +72,8 @@ FullCalendarModule.registerPlugins([
     ModuleExaminationRegulationsComponent,
     InputBooleanComponent,
     SemestersComponent,
-    UsersComponent
+    UsersComponent,
+    LecturerModulesComponent
   ],
   imports: [
     BrowserModule,

@@ -1,19 +1,164 @@
 @import "../../../schedule.vars.scss";
 
-.nav-box {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-evenly;
-    align-items: center;
-    align-content: center;
+$menuBorderRadius: 5px;
+$sidebarColor: #262429;
 
-    background-color: $ivory;
-    height: 60px;
+.example-spacer {
+  flex: 1 1 auto;
+}
 
-    .nav-item {
-        font-size: medium;
-        color: $schedule-font-color;
+.lwm-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  mat-sidenav {
+    width: 300px;
+    background-color: $sidebarColor;
+    border: 0;
+    margin-bottom: 0;
+
+    mat-icon {
+      margin-right: 7px;
+      margin-left: 5px;
     }
-    border-bottom: 1px solid $ivory-border;
+
+    #sidebar-meta {
+      text-align: center;
+
+      #sidebar-user {
+        margin: 0 0 20px 0 !important;
+        color: #f8f8f8;
+      }
+
+      #sidebar-nickname {
+        color: lighten($sidebarColor, 20);
+        font-style: italic;
+        font-size: 11px;
+      }
+
+      #sidebar-bubble h4 {
+        margin: 20px 0 5px 0 !important;
+        display: inline-block;
+        width: 60px;
+        height: 60px;
+        background-color: lighten($sidebarColor, 20);
+        color: $sidebarColor;
+        border-radius: 30px;
+        line-height: 60px !important;
+      }
+    }
+
+
+    mat-nav-list.navListContainer {
+      width: 100%;
+      list-style-type: none;
+      padding: 0px;
+      margin: 0px;
+      max-height: 100%;
+      overflow: hidden;
+
+      -webkit-transition: max-height 0.5s;
+      -moz-transition: max-height 0.5s;
+      -ms-transition: max-height 0.5s;
+      -o-transition: max-height 0.5s;
+      transition: max-height 0.5s;
+
+      .sidebarHeader {
+        background: darken(#262429, 1);
+        padding: 10px;
+        display: flex;
+        width: 100%;
+        cursor: pointer;
+
+        justify-content: flex-start;
+        align-items: center;
+        color: #ABABAB;
+        font-weight: 700;
+      }
+
+      .moduleHeader {
+        mat-icon {
+          color: $th-magenta;
+        }
+      }
+
+      .configHeader {
+        mat-icon {
+          color: $th-orange;
+        }
+      }
+
+      .logoutHeader {
+        mat-icon {
+          color: $th-red;
+        }
+      }
+
+      .mat-list-item {
+        width: 100%;
+        cursor: pointer;
+        color: #ABABAB;
+        border-left: 4px solid #333037;
+        margin-left: 25px;
+        height: 40px;
+
+
+      }
+
+      a.list-item-active {
+        color: #F8F8F8;
+        background: lighten(#262429, 20);
+      }
+
+    }
+
+  }
+
+  .mat-toolbar {
+    button {
+      margin-top: -4px;
+      margin-left: -10px;
+    }
+  }
+
+}
+
+.lwm-is-mobile .lwm-toolbar {
+  position: fixed;
+  /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+  z-index: 2;
+}
+
+h1.lwm-app-name {
+  margin-left: 8px;
+}
+
+.lwm-sidenav-container {
+  /* When the sidenav hasStatus not fixed, stretch the sidenav container to fill the available space. This
+     causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+  flex: 1;
+}
+
+.lwm-is-mobile .lwm-sidenav-container {
+  /* When the sidenav hasStatus fixed, don't constrain the height of the sidenav container. This allows the
+     `<body>` to be our scrolling element for mobile layouts. */
+  flex: 1 0 auto;
+}
+
+.mat-toolbar {
+  background-color: darken($sidebarColor, 10);
+
+  a.lwm-app-name, a.lwm-app-name:hover, a.lwm-app-name:active, a.lwm-app-name:visited, a.lwm-app-name:link {
+    color: #ABABAB;
+    text-decoration: none;
+  }
+}
+
+.mat-sidenav-content {
+  padding: 10px;
 }

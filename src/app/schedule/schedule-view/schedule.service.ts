@@ -3,7 +3,7 @@ import {ScheduleApiService} from '../../http/schedule-api.service'
 import {ScheduleFilterSections} from '../filter/filter.component'
 import {Observable} from 'rxjs'
 import {ScheduleAtom} from '../../models/schedule'
-import {applyFilter, atomicParams, ParamFilter} from '../../http/http-filter'
+import {applyFilter, atomicParams, Filter} from '../../http/http-filter'
 import {inspect} from '../../utils/inspect'
 
 @Injectable({
@@ -15,32 +15,32 @@ export class ScheduleService {
   }
 
   schedules = (selection: ScheduleFilterSections): Observable<ScheduleAtom[]> =>
-    this.http.schedules(applyFilter(this.paramsFrom(selection), atomicParams))
+    this.http.schedules(applyFilter(atomicParams, this.paramsFrom(selection)))
 
-  private paramsFrom = (selection: ScheduleFilterSections): ParamFilter[] => {
+  private paramsFrom = (selection: ScheduleFilterSections): Filter[] => {
     const {course, teachingUnit, examReg, semesterIndex, lecturer} = selection
-    const filter: ParamFilter[] = []
+    const filter: Filter[] = []
 
-    filter.push({attribute: 'semester', value: 'ee7d4f03-e767-4713-97d3-15a3b86eede8'})
+    filter.push({key: 'semester', value: 'ee7d4f03-e767-4713-97d3-15a3b86eede8'})
 
     if (course) {
-      filter.push({attribute: 'subModule', value: course.course.subModule.id})
+      filter.push({key: 'subModule', value: course.course.subModule.id})
     }
 
     if (lecturer) {
-      filter.push({attribute: 'lecturer', value: lecturer.id})
+      filter.push({key: 'lecturer', value: lecturer.id})
     }
 
     if (teachingUnit) {
-      filter.push({attribute: 'studyProgram_teachingUnit', value: teachingUnit.id})
+      filter.push({key: 'studyProgram_teachingUnit', value: teachingUnit.id})
     }
 
     if (examReg) {
-      filter.push({attribute: 'exams', value: examReg.id})
+      filter.push({key: 'exams', value: examReg.id})
     }
 
     if (semesterIndex) {
-      filter.push({attribute: 'subModule_recommendedSemester', value: semesterIndex.toString()})
+      filter.push({key: 'subModule_recommendedSemester', value: semesterIndex.toString()})
     }
 
     return inspect(filter)

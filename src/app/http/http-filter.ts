@@ -1,13 +1,12 @@
 import {HttpParams} from '@angular/common/http'
 
-export interface ParamFilter {
-  attribute: string
+export interface Filter {
+  key: string
   value: string
 }
 
-export const applyFilter = (filter: ParamFilter[], start: HttpParams = new HttpParams()): HttpParams => {
-  return filter.reduce((acc, f) => acc.set(f.attribute, f.value), start)
-}
+export const applyFilter = (start: HttpParams, filter: Filter[] | undefined): HttpParams =>
+  filter?.reduce((acc, f) => acc.set(f.key, f.value), start) ?? start
 
 export const nonAtomicParams = new HttpParams().set('atomic', 'false')
 
