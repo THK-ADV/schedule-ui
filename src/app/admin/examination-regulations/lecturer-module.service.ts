@@ -28,9 +28,9 @@ export class LecturerModuleService {
   }
 
   lecturerModules = (id: string): Observable<LecturerModule[]> => {
-    const submodules$ = this.submoduleHttp.submodules([{key: 'lecturer', value: id}])
+    const submodules$ = this.submoduleHttp.submodules([{key: 'lecturer', value: id}]) // TODO add backend support
     const group = (xs: SubmoduleAtom[]) => groupBy(xs, x => x.module.id)
-    const exams$ = (mid: string) => this.examHttp.examinationRegulations([{key: 'module', value: mid}])
+    const exams$ = (mid: string) => this.examHttp.examinationRegulations([{key: 'module', value: mid}]) // TODO add backend support
     const makeLecturerModule = (
       submodules: SubmoduleAtom[],
       module: Module
@@ -85,7 +85,7 @@ export class LecturerModuleService {
       case 'descriptionUrl':
         return submodule.descriptionUrl
       case 'moduleExam':
-        return lm.exams.splice(0, 3).map(describeExamRegShort).join(',')
+        return lm.exams.map(describeExamRegShort).join(',')
       default:
         return '???'
     }
