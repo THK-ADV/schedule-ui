@@ -4,3 +4,15 @@
   flex-wrap: nowrap;
   justify-content: space-between;
 }
+
+@media (max-width: 949px) {
+  .schedule-header {
+    margin-bottom: 40px;
+  }
+
+  .schedule-view {
+    margin-top: 40px;
+  }
+}
+
+
