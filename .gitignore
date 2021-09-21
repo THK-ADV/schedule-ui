@@ -66,3 +66,6 @@ tools/gulp-tasks/cldr/cldr-data/
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+/src/environments/environment.prod.ts
+/src/environments/environment.ts
+/src/favicon.ico

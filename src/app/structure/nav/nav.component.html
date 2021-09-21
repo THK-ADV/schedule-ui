@@ -1,59 +1,62 @@
-<ng-container class="lwm-container" [class.lwm-is-mobile]="mobileQuery.matches">
-    <mat-toolbar color="primary" class="lwm-toolbar">
-        <button *ngIf="userInfo" mat-icon-button (click)="nav.toggle()">
-            <mat-icon>menu</mat-icon>
-        </button>
-        <span class="example-spacer"></span>
-        <schd-header></schd-header>
-    </mat-toolbar>
+<ng-container [class.schedule-is-mobile]="mobileQuery.matches">
 
-    <mat-sidenav-container class="lwm-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-        <mat-sidenav #nav mode='side' *ngIf="userInfo as user">
-            <div id=sidebar-meta routerLink="">
-                <div id="sidebar-bubble">
-                    <h4>{{user.initials}}</h4>
+    <div class="schedule-container">
+        <mat-toolbar class="schedule-toolbar">
+            <button *ngIf="userInfo" mat-icon-button (click)="nav.toggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span *ngIf="userInfo"  class="example-spacer"></span>
+            <schd-header></schd-header>
+        </mat-toolbar>
+
+        <mat-sidenav-container class="schedule-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+            <mat-sidenav #nav mode='side' *ngIf="userInfo as user">
+                <div id=sidebar-meta routerLink="">
+                    <div id="sidebar-bubble">
+                        <h4>{{user.initials}}</h4>
+                    </div>
+                    <div id="sidebar-nickname"><span>{{user.username}}</span></div>
+                    <div id="sidebar-user">{{user.name}}</div>
                 </div>
-                <div id="sidebar-nickname"><span>{{user.username}}</span></div>
-                <div id="sidebar-user">{{user.name}}</div>
-            </div>
 
-            <mat-nav-list class="navListContainer">
-                <div>
-                    <h3 mat-subheader class="sidebarHeader moduleHeader">
-                        <mat-icon>account_balance</mat-icon>
-                        <span>Dozent</span>
+                <mat-nav-list class="navListContainer">
+                    <div>
+                        <h3 mat-subheader class="sidebarHeader moduleHeader">
+                            <mat-icon>account_balance</mat-icon>
+                            <span>Dozent</span>
+                        </h3>
+                        <a *ngFor="let link of lecturerLinks"
+                           mat-list-item
+                           routerLinkActive="list-item-active"
+                           [routerLink]="routerLink(link, user.user)">
+                            <mat-icon>{{link.icon}}</mat-icon>
+                            <span>{{link.label}}</span>
+                        </a>
+                    </div>
+
+                    <div *ngIf="isAdmin">
+                        <h3 mat-subheader class="sidebarHeader configHeader">
+                            <mat-icon>build</mat-icon>
+                            <span>Konfiguration</span>
+                        </h3>
+                        <a *ngFor="let link of adminLinks"
+                           mat-list-item
+                           routerLinkActive="list-item-active"
+                           [routerLink]="link.routerLink">
+                            <mat-icon>{{link.icon}}</mat-icon>
+                            <span>{{link.label}}</span>
+                        </a>
+                    </div>
+
+                    <h3 mat-subheader class="sidebarHeader logoutHeader" (click)="logout()">
+                        <mat-icon>power_settings_new</mat-icon>
+                        <span>Ausloggen</span>
                     </h3>
-                    <a *ngFor="let link of lecturerLinks"
-                       mat-list-item
-                       routerLinkActive="list-item-active"
-                       [routerLink]="routerLink(link, user.user)">
-                        <mat-icon>{{link.icon}}</mat-icon>
-                        <span>{{link.label}}</span>
-                    </a>
-                </div>
-
-                <div *ngIf="isAdmin">
-                    <h3 mat-subheader class="sidebarHeader configHeader">
-                        <mat-icon>build</mat-icon>
-                        <span>Konfiguration</span>
-                    </h3>
-                    <a *ngFor="let link of adminLinks"
-                       mat-list-item
-                       routerLinkActive="list-item-active"
-                       [routerLink]="link.routerLink">
-                        <mat-icon>{{link.icon}}</mat-icon>
-                        <span>{{link.label}}</span>
-                    </a>
-                </div>
-
-                <h3 mat-subheader class="sidebarHeader logoutHeader" (click)="logout()">
-                    <mat-icon>power_settings_new</mat-icon>
-                    <span>Ausloggen</span>
-                </h3>
-            </mat-nav-list>
-        </mat-sidenav>
-        <mat-sidenav-content>
-            <ng-content></ng-content>
-        </mat-sidenav-content>
-    </mat-sidenav-container>
+                </mat-nav-list>
+            </mat-sidenav>
+            <mat-sidenav-content>
+                <ng-content></ng-content>
+            </mat-sidenav-content>
+        </mat-sidenav-container>
+    </div>
 </ng-container>

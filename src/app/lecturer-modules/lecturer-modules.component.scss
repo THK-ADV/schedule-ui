@@ -1,4 +1,4 @@
-@media (max-width: 768px) {
+@media (max-width: 840px) {
   .mat-table[schdMatTableResponsive] {
     .mat-header-row {
       display: flex;
@@ -72,5 +72,11 @@
     .mat-table[schdMatTableResponsive] {
       border: 0.5rem solid #fafafa;
     }
+  }
+}
+
+@media (min-width: 841px) {
+  table.mat-table {
+    display:table; width: 100%;
   }
 }

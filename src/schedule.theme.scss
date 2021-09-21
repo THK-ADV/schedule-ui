@@ -267,6 +267,14 @@
 
 @mixin schd-toolbar-theme($theme) {
   @include mat-toolbar-theme(map-get($theme, main));
+
+  .mat-toolbar {
+    background-color: $sidebarBGColor;//darken($sidebarColor, 10);
+
+    mat-icon {
+      color: $sidebarFontColor;
+    }
+  }
 }
 
 @mixin schd-tooltip-theme($theme) {
