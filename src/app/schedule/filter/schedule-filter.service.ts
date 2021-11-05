@@ -119,7 +119,7 @@ export class ScheduleFilterService {
     if (filters.length === 0) {
       return src
     } else {
-      return src.filter(filters.reduce((a, b) => ss => a(ss) && b(ss)))
+      return src.filter(filters.reduce((a, b) => (ss) => a(ss) && b(ss)))
     }
   }
 
