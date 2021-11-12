@@ -12,6 +12,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete/autoc
 export class FilterOptionComponent<T> implements OnInit {
 
   @Input() title = ''
+
   @Input() display: (value: T) => string = (_ => '')
   options: T[] = []
 

@@ -1,11 +1,5 @@
-export type Language =
-  'de' |
-  'en' |
-  'de_en' |
-  'unknown'
+const LANGUAGES = ['de', 'en', 'de_en'] as const
 
-export const allLanguages = (): Language[] => [
-  'de',
-  'en',
-  'de_en',
-]
+export type Language = (typeof LANGUAGES)[number] | 'undefined'
+
+export const allLanguages = (): Language[] => [...LANGUAGES]

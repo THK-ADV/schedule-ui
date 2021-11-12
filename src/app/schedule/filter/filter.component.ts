@@ -5,15 +5,17 @@ import {Subscription} from 'rxjs'
 import {TeachingUnit} from '../../models/teaching-unit'
 import {ExaminationRegulationAtom} from '../../models/examination-regulation'
 import {Lecturer} from '../../models/user'
-import {describeExamReg, describeLecturer} from '../../utils/describe'
+import {describeExamReg, describeLanguage, describeLecturer} from '../../utils/describe'
 import {SemesterIndex} from '../../models/semester-index'
+import {Language} from '../../models/language'
 
-export interface ScheduleFilterSections {
+export interface ScheduleFilterSelections {
   teachingUnit?: TeachingUnit
   examReg?: ExaminationRegulationAtom
   semesterIndex?: SemesterIndex
   course?: Course
   lecturer?: Lecturer
+  language?: Language
 }
 
 @Component({
@@ -28,7 +30,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   @ViewChildren(FilterOptionComponent) filterComponents!: QueryList<FilterOptionComponent<any>>
 
-  @Input() selections!: ScheduleFilterSections
+  @Input() selections!: ScheduleFilterSelections
   @Output() onSearch = new EventEmitter()
   @Output() onReset = new EventEmitter()
 
@@ -37,6 +39,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   currentCourses: Course[] = []
   currentLecturer: Lecturer[] = []
   currentStudyProgramWithExam: ExaminationRegulationAtom[] = []
+  currentLanguages: Language[] = []
 
   private sub?: Subscription
 
@@ -44,13 +47,16 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   displayER = describeExamReg
 
+  displayLang = describeLanguage
+
   ngOnInit(): void {
-    this.sub = this.service.allFilters().subscribe(f => {
+    this.sub = this.service.getFilterState().subscribe(f => {
       this.semesterIndices = f.semesterIndices
       this.currentTeachingUnits = f.teachingUnits
       this.currentCourses = f.courses
       this.currentStudyProgramWithExam = f.studyProgramsWithExam
-      this.currentLecturer = f.lecturer
+      this.currentLecturer = f.lecturers
+      this.currentLanguages = f.languages
     })
   }
 
@@ -69,42 +75,39 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   selectedTU = (tu?: TeachingUnit) => {
     this.selections.teachingUnit = tu
-    this.updateAll()
+    this.service.updateFilters(this.selections)
   }
 
   selectedER = (er?: ExaminationRegulationAtom) => {
     this.selections.examReg = er
-    this.updateAll()
+    this.service.updateFilters(this.selections)
   }
 
   selectedSI = (si?: SemesterIndex) => {
     this.selections.semesterIndex = si
-    this.updateAll()
+    this.service.updateFilters(this.selections)
   }
 
   selectedC = (c?: Course) => {
     this.selections.course = c
-    this.updateAll()
+    this.service.updateFilters(this.selections)
   }
 
   selectedL = (l?: Lecturer) => {
     this.selections.lecturer = l
-    this.updateAll()
+    this.service.updateFilters(this.selections)
   }
 
-  private updateAll = () => {
-    const {course, semesterIndex, examReg, lecturer, teachingUnit} = this.selections
-    this.currentStudyProgramWithExam = this.service.updateStudyProgramsWithExam(teachingUnit, lecturer, course)
-    this.currentCourses = this.service.updateCourses(teachingUnit, lecturer, semesterIndex, examReg)
-    this.currentLecturer = this.service.updateLecturer(examReg, teachingUnit, course)
-    this.currentTeachingUnits = this.service.updateTeachingUnits(examReg, lecturer, course)
+  selectedLang = (lang?: Language) => {
+    this.selections.language = lang
+    this.service.updateFilters(this.selections)
   }
 
   search = () =>
     this.onSearch.emit()
 
   reset = () => {
-    this.updateAll()
+    this.service.updateFilters(this.selections)
     this.filterComponents.forEach(a => a.reset())
     this.onReset.emit()
   }

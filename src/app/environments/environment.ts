@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'http://lwivs49.gm.fh-koeln.de:9000'
+  backendUrl: 'http://lwivs49.gm.fh-koeln.de:9000',
+  semesterId: '3b77af27-5aec-45d4-aaf5-e97c5fcbec24'
 }
 
 /*
