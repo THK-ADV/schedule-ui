@@ -40,13 +40,13 @@ export const describeBoolean: Describe<boolean> = b =>
 export const describeLanguage: Describe<Language> = l => {
   switch (l) {
     case 'de':
-      return 'deutsch'
+      return 'Deutsch'
     case 'en':
-      return 'englisch'
+      return 'Englisch'
     case 'de_en':
-      return 'deutsch und englisch'
-    case 'unknown':
-      return 'unbekannt'
+      return 'Deutsch und Englisch'
+    default:
+      return 'Unbekannt'
   }
 }
 
