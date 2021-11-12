@@ -50,7 +50,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   displayLang = describeLanguage
 
   ngOnInit(): void {
-    this.sub = this.service.filterState.subscribe(f => {
+    this.sub = this.service.getFilterState().subscribe(f => {
       this.semesterIndices = f.semesterIndices
       this.currentTeachingUnits = f.teachingUnits
       this.currentCourses = f.courses
