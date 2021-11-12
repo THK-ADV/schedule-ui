@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core'
 import {ScheduleApiService} from '../../http/schedule-api.service'
-import {ScheduleFilterSections} from '../filter/filter.component'
+import {ScheduleFilterSelections} from '../filter/filter.component'
 import {Observable} from 'rxjs'
 import {ScheduleAtom} from '../../models/schedule'
 import {applyFilter, atomicParams, Filter} from '../../http/http-filter'
@@ -15,11 +15,11 @@ export class ScheduleService {
   constructor(private readonly http: ScheduleApiService) {
   }
 
-  schedules = (selection: ScheduleFilterSections): Observable<ScheduleAtom[]> =>
+  schedules = (selection: ScheduleFilterSelections): Observable<ScheduleAtom[]> =>
     this.http.schedules(applyFilter(atomicParams, this.paramsFrom(selection)))
 
-  private paramsFrom = (selection: ScheduleFilterSections): Filter[] => {
-    const {course, teachingUnit, examReg, semesterIndex, lecturer} = selection
+  private paramsFrom = (selection: ScheduleFilterSelections): Filter[] => {
+    const {course, teachingUnit, examReg, semesterIndex, lecturer, language} = selection
     const filter: Filter[] = []
 
     filter.push({key: 'semester', value: environment.semesterId})
@@ -42,6 +42,10 @@ export class ScheduleService {
 
     if (semesterIndex) {
       filter.push({key: 'subModule_recommendedSemester', value: semesterIndex.toString()})
+    }
+
+    if (language) {
+      filter.push({key: 'subModule_language', value: language})
     }
 
     return inspect(filter)

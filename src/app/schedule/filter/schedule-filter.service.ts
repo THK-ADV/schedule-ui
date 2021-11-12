@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core'
 import {TeachingUnitApiService} from '../../http/teaching-unit-api.service'
 import {TeachingUnit} from '../../models/teaching-unit'
-import {forkJoin, Observable, of} from 'rxjs'
-import {map} from 'rxjs/operators'
+import {forkJoin, Observable, Subject} from 'rxjs'
 import {CourseApiService} from '../../http/course-api.service'
 import {CourseAtom} from '../../models/course'
 import {ModuleExaminationRegulationApiService} from '../../http/module-examination-regulation-api.service'
@@ -10,11 +9,13 @@ import {ModuleExaminationRegulationAtom} from '../../models/module-examination-r
 import {Lecturer} from '../../models/user'
 import {UserApiService} from '../../http/user-api.service'
 import {ExaminationRegulationAtom} from '../../models/examination-regulation'
-import {distinctBy} from '../../utils/array-ops'
+import {distinctBy, distinctMap} from '../../utils/array-ops'
 import {Module} from '../../models/module'
 import {groupBy, mapGroup} from '../../utils/group-by'
 import {ordinal} from '../../models/course-type'
 import {allSemesterIndices, SemesterIndex} from '../../models/semester-index'
+import {allLanguages, Language} from '../../models/language'
+import {ScheduleFilterSelections} from './filter.component'
 
 export interface Course {
   course: Omit<CourseAtom, 'lecturer'>
@@ -26,7 +27,8 @@ export interface ScheduleFilterOptions {
   semesterIndices: SemesterIndex[]
   courses: Course[]
   studyProgramsWithExam: ExaminationRegulationAtom[]
-  lecturer: Lecturer[]
+  lecturers: Lecturer[]
+  languages: Language[]
 }
 
 @Injectable({
@@ -39,6 +41,10 @@ export class ScheduleFilterService {
   private allLecturer: Lecturer[] = []
   private allModuleExams: ModuleExaminationRegulationAtom[] = []
   private allStudyProgramsWithExam: ExaminationRegulationAtom[] = []
+  private allLanguages: Language[] = allLanguages()
+  private allSemesterIndices: SemesterIndex[] = []
+  private filterState$: Subject<ScheduleFilterOptions> = new Subject<ScheduleFilterOptions>()
+  filterState: Observable<ScheduleFilterOptions>
 
   constructor(
     private readonly teachingUnitApi: TeachingUnitApiService,
@@ -46,25 +52,26 @@ export class ScheduleFilterService {
     private readonly moduleExamsApi: ModuleExaminationRegulationApiService,
     private readonly userApi: UserApiService,
   ) {
+    this.allSemesterIndices = allSemesterIndices().sort(this.sortSemesterIndices)
+    this.filterState = this.filterState$.asObservable()
+    this.fetchData()
   }
 
-  allFilters = (): Observable<ScheduleFilterOptions> => {
+  private fetchData = () => {
     const observables = forkJoin({
       tu: this.teachingUnitApi.teachingUnits(),
       c: this.courseApi.coursesForCurrentSemester(),
       me: this.moduleExamsApi.moduleExams(),
       lec: this.userApi.lecturer(),
-      si: of(allSemesterIndices())
     })
 
-    return observables.pipe(map(a => {
+    observables.subscribe((a) => {
       const moduleExams = a.me
       const studyProgramsWithExam = distinctBy(moduleExams.map(_ => _.examinationRegulation), e => e.id)
         .sort(this.sortExams)
       const courses = this.distinctCourses(a.c).sort(this.sortCourses)
       const lecturer = a.lec.sort(this.sortLecturer)
       const teachingUnits = a.tu.sort(this.sortTeachingUnits)
-      const semesterIndices = a.si.sort(this.sortSemesterIndices)
 
       this.allTeachingUnits = teachingUnits
       this.allCourses = courses
@@ -72,14 +79,15 @@ export class ScheduleFilterService {
       this.allModuleExams = moduleExams
       this.allStudyProgramsWithExam = studyProgramsWithExam
 
-      return {
+      this.filterState$.next({
         teachingUnits,
-        semesterIndices,
-        lecturer,
+        semesterIndices: this.allSemesterIndices,
+        lecturers: lecturer,
         courses,
-        studyProgramsWithExam
-      }
-    }))
+        studyProgramsWithExam,
+        languages: this.allLanguages
+      })
+    })
   }
 
   private distinctCourses = (cs: CourseAtom[]): Course[] =>
@@ -126,7 +134,7 @@ export class ScheduleFilterService {
   updateStudyProgramsWithExam = (
     tu?: TeachingUnit,
     l?: Lecturer,
-    c?: Course
+    c?: Course,
   ): ExaminationRegulationAtom[] =>
     this.filter(this.allStudyProgramsWithExam, (filters) => {
       if (tu) {
@@ -227,6 +235,28 @@ export class ScheduleFilterService {
         })
       }
     })
+
+  private getLanguages = (courses: Course[]): Language[] =>
+    distinctMap(courses, ({ course }) => course.subModule.language)
+
+  updateFilters = (filterSelections: ScheduleFilterSelections): void => {
+    const {course, semesterIndex, examReg, lecturer, teachingUnit} = filterSelections
+
+    const studyProgramsWithExam = this.updateStudyProgramsWithExam(teachingUnit, lecturer, course)
+    const courses = this.updateCourses(teachingUnit, lecturer, semesterIndex, examReg)
+    const lecturers = this.updateLecturer(examReg, teachingUnit, course)
+    const teachingUnits = this.updateTeachingUnits(examReg, lecturer, course)
+    const languages = this.getLanguages(courses)
+
+    this.filterState$.next({
+      studyProgramsWithExam,
+      courses,
+      languages,
+      lecturers,
+      teachingUnits,
+      semesterIndices: this.allSemesterIndices
+    })
+  }
 
   private examsByTeachingUnit = (tu: TeachingUnit): ExaminationRegulationAtom[] =>
     this.allStudyProgramsWithExam.filter(e => e.studyProgram.teachingUnit.id === tu.id)
