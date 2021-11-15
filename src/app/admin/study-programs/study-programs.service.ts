@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core'
 import {StudyProgramApiService} from '../../http/study-program-api.service'
-import {EMPTY, Observable, of} from 'rxjs'
+import {EMPTY, Observable} from 'rxjs'
 import {StudyProgram, StudyProgramAtom} from '../../models/study-program'
 import {TableHeaderColumn} from '../../generic-ui/table/table.component'
 import {Create, Delete, Update} from '../../generic-ui/crud-table/crud-table.component'
@@ -15,7 +15,7 @@ import {parseGraduation, parseTeachingUnit} from '../../utils/parser'
 import {FormInput} from '../../generic-ui/create-dialog/form-input'
 import {TextInput} from '../../generic-ui/create-dialog/input-text/input-text.component'
 
-interface StudyProgramProtocol {
+export interface StudyProgramProtocol {
   label: string
   abbreviation: string
   teachingUnit: string
@@ -80,12 +80,12 @@ export class StudyProgramsService {
 
   deleteAction = (): Delete<StudyProgramAtom> => ({
     labelForDialog: (sp) => sp.label,
-    delete: this.delete
+    delete: a => this.http.delete(a.id)
   })
 
   createAction = (): [Create<StudyProgram>, CreateDialogData] => [
     {
-      create: attrs => mapOpt(this.parseProtocol(attrs), this.create) ?? EMPTY,
+      create: attrs => mapOpt(this.parseProtocol(attrs), this.http.create) ?? EMPTY,
       show: a => JSON.stringify(a)
     },
     {
@@ -99,7 +99,7 @@ export class StudyProgramsService {
       update: (sp, attrs) =>
         mapOpt(
           this.createProtocol(sp, attrs),
-          p => this.update(p, sp.id)
+          p => this.http.update(p, sp.id)
         ) ?? EMPTY,
       show: a => JSON.stringify(a)
     },
@@ -119,21 +119,12 @@ export class StudyProgramsService {
   private updateInputs = (sp: StudyProgramAtom): FormInput[] => [
     {...this.label, initialValue: sp.label},
     {...this.abbreviation, initialValue: sp.abbreviation},
-    {...this.teachingUnit, disabled: true, initialValue: (tus: TeachingUnit[]) => tus.find(tu => tu.id === sp.teachingUnit.id)},
-    {...this.graduation, disabled: true, initialValue: (gs: Graduation[]) => gs.find(g => g.id === sp.graduation.id)},
+    {...this.teachingUnit, initialValue: (tus: TeachingUnit[]) => tus.find(tu => tu.id === sp.teachingUnit.id)},
+    {...this.graduation, initialValue: (gs: Graduation[]) => gs.find(g => g.id === sp.graduation.id)},
   ]
 
   studyPrograms = (): Observable<StudyProgramAtom[]> =>
     this.http.studyProgramsAtomic()
-
-  private delete = (sp: StudyProgramAtom): Observable<StudyProgramAtom> =>
-    of(sp)
-
-  private create = (p: StudyProgramProtocol): Observable<StudyProgram> =>
-    of({...p, id: 'random uuid'})
-
-  private update = (p: StudyProgramProtocol, id: string): Observable<StudyProgram> =>
-    of({...p, id})
 
   private parseProtocol = (attrs: { [p: string]: string }): StudyProgramProtocol | undefined =>
     mapOpt(
@@ -152,7 +143,7 @@ export class StudyProgramsService {
   private createProtocol = (sp: StudyProgramAtom, attrs: { [p: string]: string }): StudyProgramProtocol | undefined =>
     this.parseProtocol({
       ...attrs,
-      teachingUnit: JSON.parse(JSON.stringify(sp.teachingUnit)),
-      graduation: JSON.parse(JSON.stringify(sp.graduation))
+      teachingUnit: JSON.parse(JSON.stringify(attrs.teachingUnit)),
+      graduation: JSON.parse(JSON.stringify(attrs.graduation))
     })
 }

@@ -9,7 +9,7 @@ import {CreateDialogComponent, CreateDialogData} from '../create-dialog/create-d
 
 export interface Delete<A> {
   labelForDialog: (a: A) => string
-  delete: (a: A) => Observable<A>
+  delete: (a: A) => Observable<any>
 }
 
 export interface Create<A0> {

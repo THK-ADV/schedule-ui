@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'http://lwivs49.gm.fh-koeln.de:9000',
+  backendUrl: 'http://localhost:9000',
 }
 
 /*

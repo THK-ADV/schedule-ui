@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core'
 import {ExaminationRegulationApiService} from '../../http/examination-regulation-api.service'
-import {EMPTY, Observable, of} from 'rxjs'
+import {EMPTY} from 'rxjs'
 import {ExaminationRegulation, ExaminationRegulationAtom} from '../../models/examination-regulation'
 import {TableHeaderColumn} from '../../generic-ui/table/table.component'
 import {Create, Delete, Update} from '../../generic-ui/crud-table/crud-table.component'
@@ -14,13 +14,13 @@ import {describeStudyProgramAtom} from '../../utils/describe'
 import {NumberInput} from '../../generic-ui/create-dialog/input-text/input-text.component'
 import {DateInput} from '../../generic-ui/create-dialog/input-date/input-date.component'
 import {FormInput} from '../../generic-ui/create-dialog/form-input'
-import {inspect} from '../../utils/inspect'
+import {formatDate} from '../../utils/date-format'
 
-interface ExaminationRegulationProtocol {
+export interface ExaminationRegulationProtocol {
   studyProgram: string
   number: number
-  start: Date
-  end: Date | undefined
+  start: string
+  end: string | undefined
 }
 
 @Injectable({
@@ -82,12 +82,12 @@ export class ExaminationRegulationsService {
 
   deleteAction = (): Delete<ExaminationRegulationAtom> => ({
     labelForDialog: a => describeStudyProgramAtom(a.studyProgram),
-    delete: this.delete
+    delete: a => this.http.delete(a.id)
   })
 
   createAction = (): [Create<ExaminationRegulation>, CreateDialogData] => [
     {
-      create: attrs => mapOpt(this.parseProtocol(attrs), this.create) ?? EMPTY,
+      create: attrs => mapOpt(this.parseProtocol(attrs), this.http.create) ?? EMPTY,
       show: a => JSON.stringify(a)
     },
     {
@@ -101,7 +101,7 @@ export class ExaminationRegulationsService {
       update: (m, attrs) =>
         mapOpt(
           this.createProtocol(m, attrs),
-          p => this.update(p, m.id)
+          p => this.http.update(p, m.id)
         ) ?? EMPTY,
       show: a => JSON.stringify(a)
     },
@@ -119,23 +119,14 @@ export class ExaminationRegulationsService {
   ]
 
   private updateInputs = (e: ExaminationRegulationAtom): FormInput[] => [
-    {...this.studyProgram, disabled: true, initialValue: (sps: StudyProgramAtom[]) => sps.find(_ => _.id === e.studyProgram.id)},
-    {...this.po, disabled: true, initialValue: e.number},
+    {...this.studyProgram, initialValue: (sps: StudyProgramAtom[]) => sps.find(_ => _.id === e.studyProgram.id)},
+    {...this.po, initialValue: e.number},
     {...this.start, initialValue: e.start},
     {...this.end, initialValue: e.end},
   ]
 
-  private delete = (e: ExaminationRegulationAtom): Observable<ExaminationRegulationAtom> =>
-    of(e)
-
-  private create = (e: ExaminationRegulationProtocol): Observable<ExaminationRegulation> =>
-    of({...e, id: 'random uuid'})
-
-  private update = (e: ExaminationRegulationProtocol, id: string): Observable<ExaminationRegulation> =>
-    of({...e, id})
-
   private parseProtocol = (attrs: { [p: string]: string }): ExaminationRegulationProtocol | undefined =>
-    inspect(mapOpt(
+    mapOpt(
       zip3(
         parseStudyProgramAtom(attrs.studyProgram),
         parseIntNumber(attrs.po),
@@ -144,15 +135,11 @@ export class ExaminationRegulationsService {
       ([sp, po, d]) => ({
         studyProgram: sp.id,
         number: po,
-        start: d,
-        end: parseDate(attrs.end)
+        start: formatDate(d, 'yyyy-MM-dd'),
+        end: mapOpt(parseDate(attrs.end), a => formatDate(a, 'yyyy-MM-dd'))
       })
-    ))
+    )
 
   private createProtocol = (e: ExaminationRegulationAtom, attrs: { [p: string]: string }): ExaminationRegulationProtocol | undefined =>
-    this.parseProtocol({
-      ...attrs,
-      studyProgram: JSON.parse(JSON.stringify(e.studyProgram)),
-      po: e.number.toString()
-    })
+    this.parseProtocol({...attrs})
 }
