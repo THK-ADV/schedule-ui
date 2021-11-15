@@ -1,11 +1,16 @@
-<h1 class="space-between"><span>Stundenplan</span><span>Sommersemester 2021</span></h1>
+<div class="schedule-header">
+    <h1 class="space-between"><span>Stundenplan</span><span>Sommersemester 2021</span></h1>
+</div>
 
-<schd-filter
-        [selections]="filterSelection"
-        (onSearch)="searchSchedule()"
-        (onReset)="resetSchedule()">
-</schd-filter>
-
-<schd-schedule-view
-        [scheduleEntries]="scheduleEntries">
-</schd-schedule-view>
+<div>
+    <schd-filter
+            [selections]="filterSelection"
+            (onSearch)="searchSchedule()"
+            (onReset)="resetSchedule()">
+    </schd-filter>
+</div>
+<div class="schedule-view">
+    <schd-schedule-view
+            [scheduleEntries]="scheduleEntries">
+    </schd-schedule-view>
+</div>

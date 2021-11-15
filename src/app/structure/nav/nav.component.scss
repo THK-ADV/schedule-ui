@@ -1,13 +1,12 @@
 @import "../../../schedule.vars.scss";
 
 $menuBorderRadius: 5px;
-$sidebarColor: #262429;
 
 .example-spacer {
   flex: 1 1 auto;
 }
 
-.lwm-container {
+.schedule-container {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -16,9 +15,25 @@ $sidebarColor: #262429;
   left: 0;
   right: 0;
 
+  mat-toolbar {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    button {
+      margin-top: -4px;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    schd-header {
+      width: 100%;
+    }
+  }
+
   mat-sidenav {
     width: 300px;
-    background-color: $sidebarColor;
+    background-color: $sidebarBGColor !important;
     border: 0;
     margin-bottom: 0;
 
@@ -32,11 +47,11 @@ $sidebarColor: #262429;
 
       #sidebar-user {
         margin: 0 0 20px 0 !important;
-        color: #f8f8f8;
+        color: $sidebarFontColor;
       }
 
       #sidebar-nickname {
-        color: lighten($sidebarColor, 20);
+        color: $sidebarFontColor;
         font-style: italic;
         font-size: 11px;
       }
@@ -46,8 +61,10 @@ $sidebarColor: #262429;
         display: inline-block;
         width: 60px;
         height: 60px;
-        background-color: lighten($sidebarColor, 20);
-        color: $sidebarColor;
+        background-color: darken($sidebarBGColor,20);
+
+        //color: $sidebarBGColor;
+        color: $sidebarFontColor;
         border-radius: 30px;
         line-height: 60px !important;
       }
@@ -69,15 +86,16 @@ $sidebarColor: #262429;
       transition: max-height 0.5s;
 
       .sidebarHeader {
-        background: darken(#262429, 1);
+        background: darken($sidebarBGColor, 20);
         padding: 10px;
         display: flex;
         width: 100%;
         cursor: pointer;
+        margin: 10px 0 0 0;
 
         justify-content: flex-start;
         align-items: center;
-        color: #ABABAB;
+        color: $sidebarFontColor;
         font-weight: 700;
       }
 
@@ -102,8 +120,8 @@ $sidebarColor: #262429;
       .mat-list-item {
         width: 100%;
         cursor: pointer;
-        color: #ABABAB;
-        border-left: 4px solid #333037;
+        color: $sidebarFontColor;
+        border-left: 4px solid darken($sidebarBGColor, 20);
         margin-left: 25px;
         height: 40px;
 
@@ -111,53 +129,41 @@ $sidebarColor: #262429;
       }
 
       a.list-item-active {
-        color: #F8F8F8;
-        background: lighten(#262429, 20);
+        color: $sidebarFontColor;
+        background: darken($sidebarBGColor, 10);
       }
 
     }
 
   }
 
-  .mat-toolbar {
-    button {
-      margin-top: -4px;
-      margin-left: -10px;
-    }
-  }
+
 
 }
 
-.lwm-is-mobile .lwm-toolbar {
+.schedule-is-mobile .schedule-toolbar {
   position: fixed;
   /* Make sure the toolbar will stay on top of the content as it scrolls past. */
   z-index: 2;
 }
 
-h1.lwm-app-name {
+h1.schedule-app-name {
   margin-left: 8px;
 }
 
-.lwm-sidenav-container {
+.schedule-sidenav-container {
   /* When the sidenav hasStatus not fixed, stretch the sidenav container to fill the available space. This
      causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
   flex: 1;
 }
 
-.lwm-is-mobile .lwm-sidenav-container {
+.schedule-is-mobile .schedule-sidenav-container {
   /* When the sidenav hasStatus fixed, don't constrain the height of the sidenav container. This allows the
      `<body>` to be our scrolling element for mobile layouts. */
   flex: 1 0 auto;
 }
 
-.mat-toolbar {
-  background-color: darken($sidebarColor, 10);
 
-  a.lwm-app-name, a.lwm-app-name:hover, a.lwm-app-name:active, a.lwm-app-name:visited, a.lwm-app-name:link {
-    color: #ABABAB;
-    text-decoration: none;
-  }
-}
 
 .mat-sidenav-content {
   padding: 10px;
