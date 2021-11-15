@@ -8,6 +8,7 @@ import {Lecturer} from '../../models/user'
 import {describeExamReg, describeLanguage, describeLecturer} from '../../utils/describe'
 import {SemesterIndex} from '../../models/semester-index'
 import {Language} from '../../models/language'
+import {Semester} from '../../models/semester'
 
 export interface ScheduleFilterSelections {
   teachingUnit?: TeachingUnit
@@ -30,6 +31,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   @ViewChildren(FilterOptionComponent) filterComponents!: QueryList<FilterOptionComponent<any>>
 
+  @Input() semester!: Semester
   @Input() selections!: ScheduleFilterSelections
   @Output() onSearch = new EventEmitter()
   @Output() onReset = new EventEmitter()
@@ -50,7 +52,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   displayLang = describeLanguage
 
   ngOnInit(): void {
-    this.sub = this.service.getFilterState().subscribe(f => {
+    this.sub = this.service.fetchData(this.semester.id).subscribe(f => {
       this.semesterIndices = f.semesterIndices
       this.currentTeachingUnits = f.teachingUnits
       this.currentCourses = f.courses

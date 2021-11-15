@@ -54,15 +54,12 @@ export class ScheduleFilterService {
     private readonly userApi: UserApiService,
   ) {
     this.allSemesterIndices = allSemesterIndices().sort(this.sortSemesterIndices)
-    this.fetchData()
   }
 
-  getFilterState = (): Observable<ScheduleFilterOptions> => this.filterState.asObservable()
-
-  private fetchData = () =>
+  fetchData = (semesterId: string): Observable<ScheduleFilterOptions> => {
     forkJoin({
       tu: this.teachingUnitApi.teachingUnits(),
-      c: this.courseApi.coursesForCurrentSemester(),
+      c: this.courseApi.coursesForCurrentSemester(semesterId),
       me: this.moduleExamsApi.moduleExams(),
       lec: this.userApi.lecturer(),
     }).subscribe((a) => {
@@ -88,6 +85,9 @@ export class ScheduleFilterService {
         languages: this.allLanguages
       })
     })
+
+    return this.filterState.asObservable()
+  }
 
   private distinctCourses = (cs: CourseAtom[]): Course[] =>
     mapGroup(

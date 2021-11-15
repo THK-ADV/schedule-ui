@@ -5,7 +5,6 @@ import {Observable} from 'rxjs'
 import {ScheduleAtom} from '../../models/schedule'
 import {applyFilter, atomicParams, Filter} from '../../http/http-filter'
 import {inspect} from '../../utils/inspect'
-import {environment} from '../../environments/environment'
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +14,14 @@ export class ScheduleService {
   constructor(private readonly http: ScheduleApiService) {
   }
 
-  schedules = (selection: ScheduleFilterSelections): Observable<ScheduleAtom[]> =>
-    this.http.schedules(applyFilter(atomicParams, this.paramsFrom(selection)))
+  schedules = (selection: ScheduleFilterSelections, semesterId: string): Observable<ScheduleAtom[]> =>
+    this.http.schedules(applyFilter(atomicParams, this.paramsFrom(selection, semesterId)))
 
-  private paramsFrom = (selection: ScheduleFilterSelections): Filter[] => {
+  private paramsFrom = (selection: ScheduleFilterSelections, semesterId: string): Filter[] => {
     const {course, teachingUnit, examReg, semesterIndex, lecturer, language} = selection
     const filter: Filter[] = []
 
-    filter.push({key: 'semester', value: environment.semesterId})
+    filter.push({key: 'semester', value: semesterId})
 
     if (course) {
       filter.push({key: 'subModule', value: course.course.subModule.id})

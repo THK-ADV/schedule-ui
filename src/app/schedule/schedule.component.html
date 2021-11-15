@@ -1,16 +1,21 @@
-<div class="schedule-header">
-    <h1 class="space-between"><span>Stundenplan</span><span>Sommersemester 2021</span></h1>
-</div>
-
-<div>
-    <schd-filter
-            [selections]="filterSelection"
-            (onSearch)="searchSchedule()"
-            (onReset)="resetSchedule()">
-    </schd-filter>
-</div>
-<div class="schedule-view">
-    <schd-schedule-view
-            [scheduleEntries]="scheduleEntries">
-    </schd-schedule-view>
-</div>
+<ng-container *ngIf="semester as semester">
+    <div class="schedule-header">
+        <h1 class="space-between">
+            <span>Stundenplan</span>
+            <span>{{semester.label}}</span>
+        </h1>
+    </div>
+    <div>
+        <schd-filter
+                [selections]="filterSelection"
+                [semester]="semester"
+                (onSearch)="searchSchedule(semester)"
+                (onReset)="resetSchedule()">
+        </schd-filter>
+    </div>
+    <div class="schedule-view">1
+        <schd-schedule-view
+                [scheduleEntries]="scheduleEntries">
+        </schd-schedule-view>
+    </div>
+</ng-container>

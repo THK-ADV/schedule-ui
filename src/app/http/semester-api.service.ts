@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core'
 import {HttpService} from './http.service'
 import {Observable} from 'rxjs'
-import {nonAtomicParams} from './http-filter'
+import {applyFilter, nonAtomicParams} from './http-filter'
 import {Semester} from '../models/semester'
 import {map} from 'rxjs/operators'
+
 
 interface SemesterJSON {
   label: string
@@ -26,9 +27,14 @@ export class SemesterApiService {
   }
 
   semesters = (): Observable<Semester[]> =>
-    this.http.getAll<SemesterJSON>(this.resource, nonAtomicParams).pipe(
-      map(this.parseSemesterJSON)
-    )
+    this.http.getAll<SemesterJSON>(this.resource, nonAtomicParams)
+      .pipe(map(this.parseSemesterJSON))
+
+  currentSemester = (): Observable<Semester | undefined> =>
+    this.http.getAll<SemesterJSON>(
+      this.resource,
+      applyFilter(nonAtomicParams, [{key: 'current', value: 'true'}])
+    ).pipe(map(xs => this.parseSemesterJSON(xs).shift()))
 
   private parseSemesterJSON = (ss: SemesterJSON[]): Semester[] =>
     ss.map(s => ({
