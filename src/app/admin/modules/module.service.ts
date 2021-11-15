@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core'
 import {ModuleApiService} from '../../http/module-api.service'
-import {EMPTY, Observable, of} from 'rxjs'
+import {EMPTY, Observable} from 'rxjs'
 import {Module, ModuleAtom} from '../../models/module'
 import {mapOpt, zip} from '../../utils/optional'
 import {parseFloatNumber, parseLecturer} from '../../utils/parser'
@@ -14,7 +14,7 @@ import {TableHeaderColumn} from '../../generic-ui/table/table.component'
 import {Create, Delete, Update} from '../../generic-ui/crud-table/crud-table.component'
 import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
 
-interface ModuleProtocol {
+export interface ModuleProtocol {
   courseManager: string
   label: string
   abbreviation: string
@@ -89,12 +89,12 @@ export class ModuleService {
 
   deleteAction = (): Delete<ModuleAtom> => ({
     labelForDialog: a => a.label,
-    delete: this.delete
+    delete: a => this.http.delete(a.id)
   })
 
   createAction = (): [Create<Module>, CreateDialogData] => [
     {
-      create: attrs => mapOpt(this.parseProtocol(attrs), this.create) ?? EMPTY,
+      create: attrs => mapOpt(this.parseProtocol(attrs), this.http.create) ?? EMPTY,
       show: a => JSON.stringify(a)
     },
     {
@@ -108,7 +108,7 @@ export class ModuleService {
       update: (m, attrs) =>
         mapOpt(
           this.createProtocol(m, attrs),
-          p => this.update(p, m.id)
+          p => this.http.update(p, m.id)
         ) ?? EMPTY,
       show: a => JSON.stringify(a)
     },
@@ -117,15 +117,6 @@ export class ModuleService {
       inputs: this.updateInputs(m)
     })
   ]
-
-  private delete = (m: ModuleAtom): Observable<ModuleAtom> =>
-    of(m)
-
-  private create = (p: ModuleProtocol): Observable<Module> =>
-    of({...p, id: 'random uuid'})
-
-  private update = (p: ModuleProtocol, id: string): Observable<Module> =>
-    of({...p, id})
 
   private createInputs = (): FormInput[] => [
     this.label,
@@ -139,7 +130,7 @@ export class ModuleService {
     {...this.label, initialValue: m.label},
     {...this.abbreviation, initialValue: m.abbreviation},
     {...this.user, initialValue: (users: Lecturer[]) => users.find(_ => _.id === m.courseManager.id)},
-    {...this.credits, disabled: true, initialValue: m.credits},
+    {...this.credits, initialValue: m.credits},
     {...this.descriptionUrl, initialValue: m.descriptionUrl}
   ]
 
@@ -159,6 +150,6 @@ export class ModuleService {
     )
 
   private createProtocol = (m: ModuleAtom, attrs: { [p: string]: string }): ModuleProtocol | undefined =>
-    this.parseProtocol({...attrs, credits: m.credits.toString()})
+    this.parseProtocol({...attrs})
 }
 
