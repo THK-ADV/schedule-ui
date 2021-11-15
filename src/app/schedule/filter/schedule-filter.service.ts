@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core'
 import {TeachingUnitApiService} from '../../http/teaching-unit-api.service'
 import {TeachingUnit} from '../../models/teaching-unit'
-import {forkJoin, Observable, of} from 'rxjs'
-import {map} from 'rxjs/operators'
+import {forkJoin, Observable, Subject} from 'rxjs'
 import {CourseApiService} from '../../http/course-api.service'
 import {CourseAtom} from '../../models/course'
 import {ModuleExaminationRegulationApiService} from '../../http/module-examination-regulation-api.service'
@@ -10,11 +9,13 @@ import {ModuleExaminationRegulationAtom} from '../../models/module-examination-r
 import {Lecturer} from '../../models/user'
 import {UserApiService} from '../../http/user-api.service'
 import {ExaminationRegulationAtom} from '../../models/examination-regulation'
-import {distinctBy} from '../../utils/array-ops'
+import {distinctBy, distinctMap} from '../../utils/array-ops'
 import {Module} from '../../models/module'
 import {groupBy, mapGroup} from '../../utils/group-by'
 import {ordinal} from '../../models/course-type'
 import {allSemesterIndices, SemesterIndex} from '../../models/semester-index'
+import {allLanguages, Language} from '../../models/language'
+import {ScheduleFilterSelections} from './filter.component'
 
 export interface Course {
   course: Omit<CourseAtom, 'lecturer'>
@@ -26,8 +27,11 @@ export interface ScheduleFilterOptions {
   semesterIndices: SemesterIndex[]
   courses: Course[]
   studyProgramsWithExam: ExaminationRegulationAtom[]
-  lecturer: Lecturer[]
+  lecturers: Lecturer[]
+  languages: Language[]
 }
+
+type Predicate<A> = (a: A) => boolean
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +43,9 @@ export class ScheduleFilterService {
   private allLecturer: Lecturer[] = []
   private allModuleExams: ModuleExaminationRegulationAtom[] = []
   private allStudyProgramsWithExam: ExaminationRegulationAtom[] = []
+  private allLanguages: Language[] = allLanguages()
+  private readonly allSemesterIndices: SemesterIndex[] = []
+  private filterState: Subject<ScheduleFilterOptions> = new Subject<ScheduleFilterOptions>()
 
   constructor(
     private readonly teachingUnitApi: TeachingUnitApiService,
@@ -46,25 +53,25 @@ export class ScheduleFilterService {
     private readonly moduleExamsApi: ModuleExaminationRegulationApiService,
     private readonly userApi: UserApiService,
   ) {
+    this.allSemesterIndices = allSemesterIndices().sort(this.sortSemesterIndices)
+    this.fetchData()
   }
 
-  allFilters = (): Observable<ScheduleFilterOptions> => {
-    const observables = forkJoin({
+  getFilterState = (): Observable<ScheduleFilterOptions> => this.filterState.asObservable()
+
+  private fetchData = () =>
+    forkJoin({
       tu: this.teachingUnitApi.teachingUnits(),
       c: this.courseApi.coursesForCurrentSemester(),
       me: this.moduleExamsApi.moduleExams(),
       lec: this.userApi.lecturer(),
-      si: of(allSemesterIndices())
-    })
-
-    return observables.pipe(map(a => {
+    }).subscribe((a) => {
       const moduleExams = a.me
       const studyProgramsWithExam = distinctBy(moduleExams.map(_ => _.examinationRegulation), e => e.id)
         .sort(this.sortExams)
       const courses = this.distinctCourses(a.c).sort(this.sortCourses)
       const lecturer = a.lec.sort(this.sortLecturer)
       const teachingUnits = a.tu.sort(this.sortTeachingUnits)
-      const semesterIndices = a.si.sort(this.sortSemesterIndices)
 
       this.allTeachingUnits = teachingUnits
       this.allCourses = courses
@@ -72,15 +79,15 @@ export class ScheduleFilterService {
       this.allModuleExams = moduleExams
       this.allStudyProgramsWithExam = studyProgramsWithExam
 
-      return {
+      this.filterState.next({
         teachingUnits,
-        semesterIndices,
-        lecturer,
+        semesterIndices: this.allSemesterIndices,
+        lecturers: lecturer,
         courses,
-        studyProgramsWithExam
-      }
-    }))
-  }
+        studyProgramsWithExam,
+        languages: this.allLanguages
+      })
+    })
 
   private distinctCourses = (cs: CourseAtom[]): Course[] =>
     mapGroup(
@@ -112,121 +119,143 @@ export class ScheduleFilterService {
   private sortSemesterIndices = (lhs: SemesterIndex, rhs: SemesterIndex) =>
     lhs - rhs
 
-  private filter = <A>(src: A[], f: (filters: ((a: A) => boolean)[]) => void): A[] => {
-    const filters: ((a: A) => boolean)[] = []
+  private filter = <A>(src: A[], f: (filters: Predicate<A>[]) => void): A[] => {
+    const filters: Predicate<A>[] = []
     f(filters)
 
-    if (filters.length === 0) {
-      return src
-    } else {
-      return src.filter(filters.reduce((a, b) => ss => a(ss) && b(ss)))
-    }
+    return filters.length === 0
+      ? src
+      : src.filter(filters.reduce((a, b) => (ss) => a(ss) && b(ss)))
   }
 
   updateStudyProgramsWithExam = (
-    tu?: TeachingUnit,
-    l?: Lecturer,
-    c?: Course
-  ): ExaminationRegulationAtom[] =>
+    {
+      teachingUnit,
+      lecturer,
+      course
+    }: ScheduleFilterSelections): ExaminationRegulationAtom[] =>
     this.filter(this.allStudyProgramsWithExam, (filters) => {
-      if (tu) {
-        filters.push(e => e.studyProgram.teachingUnit.id === tu.id)
+      if (teachingUnit) {
+        filters.push(e => e.studyProgram.teachingUnit.id === teachingUnit.id)
       }
 
-      if (l) {
+      if (lecturer) {
         filters.push(e => {
           const ms = this.modulesByStudyProgramWithExam(e)
           const cs = this.coursesByModules(ms)
           const ls = this.lecturerByCourses(cs)
-          return ls.some(_ => _.id === l.id)
+          return ls.some(_ => _.id === lecturer.id)
         })
       }
 
-      if (c) {
+      if (course) {
         filters.push(e => {
           const ms = this.modulesByStudyProgramWithExam(e)
           const cs = this.coursesByModules(ms)
-          return cs.some(_ => _.course.id === c.course.id)
+          return cs.some(_ => _.course.id === course.course.id)
         })
       }
     })
 
-  updateCourses = (tu?: TeachingUnit, l?: Lecturer, si?: SemesterIndex, er?: ExaminationRegulationAtom) =>
+  updateCourses = ({teachingUnit, semesterIndex, examReg, lecturer}: ScheduleFilterSelections) =>
     this.filter(this.allCourses, (filters) => {
-      if (tu) {
+      if (teachingUnit) {
         filters.push(c => {
           const exams = this.examsByCourse(c)
-          return exams.some(e => e.studyProgram.teachingUnit.id === tu.id)
+          return exams.some(e => e.studyProgram.teachingUnit.id === teachingUnit.id)
         })
       }
 
-      if (si) {
-        filters.push(c => c.course.subModule.recommendedSemester === si)
+      if (semesterIndex) {
+        filters.push(c => c.course.subModule.recommendedSemester === semesterIndex)
       }
 
-      if (er) {
+      if (examReg) {
         filters.push(c => {
           const exams = this.examsByCourse(c)
-          return exams.some(e => e.id === er.id)
+          return exams.some(e => e.id === examReg.id)
         })
       }
 
-      if (l) {
-        filters.push(c => c.lecturer.some(_ => _.id === l.id))
+      if (lecturer) {
+        filters.push(c => c.lecturer.some(_ => _.id === lecturer.id))
       }
     })
 
-  updateLecturer = (er?: ExaminationRegulationAtom, tu?: TeachingUnit, c?: Course): Lecturer[] =>
+  updateLecturer = ({examReg, teachingUnit, course}: ScheduleFilterSelections): Lecturer[] =>
     this.filter(this.allLecturer, (filters) => {
-      if (tu) {
+      if (teachingUnit) {
         filters.push(l => {
           const cs = this.coursesByLecturer(l)
           const exams = this.examsByCourses(cs)
-          return exams.some(e => e.studyProgram.teachingUnit.id === tu.id)
+          return exams.some(e => e.studyProgram.teachingUnit.id === teachingUnit.id)
         })
       }
 
-      if (er) {
+      if (examReg) {
         filters.push(l => {
           const cs = this.coursesByLecturer(l)
           const exams = this.examsByCourses(cs)
-          return exams.some(e => e.id === er.id)
+          return exams.some(e => e.id === examReg.id)
         })
       }
 
-      if (c) {
+      if (course) {
         filters.push(l => {
           const cs = this.coursesByLecturer(l)
-          return cs.some(_ => _.course.id === c.course.id)
+          return cs.some(_ => _.course.id === course.course.id)
         })
       }
     })
 
-  updateTeachingUnits = (er?: ExaminationRegulationAtom, l?: Lecturer, c?: Course) =>
+  updateTeachingUnits = ({examReg, lecturer, course}: ScheduleFilterSelections) =>
     this.filter(this.allTeachingUnits, (filters) => {
-      if (er) {
+      if (examReg) {
         filters.push(tu => {
           const exams = this.examsByTeachingUnit(tu)
-          return exams.some(_ => _.id === er.id)
+          return exams.some(_ => _.id === examReg.id)
         })
       }
 
-      if (c) {
+      if (course) {
         filters.push(tu => {
           const ms = this.modulesByTeachingUnit(tu)
           const cs = this.coursesByModules(ms)
-          return cs.some(_ => _.course.id === c.course.id)
+          return cs.some(_ => _.course.id === course.course.id)
         })
       }
 
-      if (l) {
+      if (lecturer) {
         filters.push(tu => {
           const ms = this.modulesByTeachingUnit(tu)
           const cs = this.coursesByModules(ms)
-          return cs.some(c0 => c0.lecturer.some(_ => _.id === l.id))
+          return cs.some(c0 => c0.lecturer.some(_ => _.id === lecturer.id))
         })
       }
     })
+
+  updateFilters = (selections: ScheduleFilterSelections): void => {
+    const studyProgramsWithExam = selections.examReg
+      ? [selections.examReg]
+      : this.updateStudyProgramsWithExam(selections)
+    const courses = selections.course ? [selections.course] : this.updateCourses(selections)
+    const lecturers = selections.lecturer ? [selections.lecturer] : this.updateLecturer(selections)
+    const teachingUnits = selections.teachingUnit ? [selections.teachingUnit] : this.updateTeachingUnits(selections)
+    const languages = selections.language ? [selections.language] : this.languagesByCourses(courses)
+    const semesterIndices = this.allSemesterIndices
+
+    this.filterState.next({
+      studyProgramsWithExam,
+      courses,
+      languages,
+      lecturers,
+      teachingUnits,
+      semesterIndices
+    })
+  }
+
+  private languagesByCourses = (courses: Course[]): Language[] =>
+    distinctMap(courses, ({course}) => course.subModule.language)
 
   private examsByTeachingUnit = (tu: TeachingUnit): ExaminationRegulationAtom[] =>
     this.allStudyProgramsWithExam.filter(e => e.studyProgram.teachingUnit.id === tu.id)

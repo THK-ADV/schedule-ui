@@ -1,17 +1,42 @@
 <div>
     <div>
         <form>
-            <schd-filter-option [title]="'Lehreinheit'" [display]="displayTU" [values]="currentTeachingUnits"
-                                (onSelect)="selectedTU($event)"></schd-filter-option>
-            <schd-filter-option [title]="'Studiengang (mit PO)'" [display]="displayER"
+            <schd-filter-option 
+                                [title]="'Lehreinheit'" 
+                                [display]="displayTU" 
+                                [values]="currentTeachingUnits"
+                                (onSelect)="selectedTU($event)">
+            </schd-filter-option>
+            <schd-filter-option 
+                                [title]="'Studiengang (mit PO)'" 
+                                [display]="displayER"
                                 [values]="currentStudyProgramWithExam"
-                                (onSelect)="selectedER($event)"></schd-filter-option>
-            <schd-filter-option [title]="'Fachsemester'" [display]="displaySI" [values]="semesterIndices"
-                                (onSelect)="selectedSI($event)"></schd-filter-option>
-            <schd-filter-option [title]="'Veranstaltung'" [display]="displayC" [values]="currentCourses"
-                                (onSelect)="selectedC($event)"></schd-filter-option>
-            <schd-filter-option [title]="'Dozent'" [display]="displayL" [values]="currentLecturer"
-                                (onSelect)="selectedL($event)"></schd-filter-option>
+                                (onSelect)="selectedER($event)">
+            </schd-filter-option>
+            <schd-filter-option 
+                                [title]="'Fachsemester'" 
+                                [display]="displaySI" 
+                                [values]="semesterIndices"
+                                (onSelect)="selectedSI($event)">
+            </schd-filter-option>
+            <schd-filter-option 
+                                [title]="'Veranstaltung'" 
+                                [display]="displayC" 
+                                [values]="currentCourses"
+                                (onSelect)="selectedC($event)">
+            </schd-filter-option>
+            <schd-filter-option 
+                                [title]="'Dozent'" 
+                                [display]="displayL" 
+                                [values]="currentLecturer"
+                                (onSelect)="selectedL($event)">
+            </schd-filter-option>
+            <schd-filter-option 
+                                [title]="'Sprache'" 
+                                [display]="displayLang" 
+                                [values]="currentLanguages"
+                                (onSelect)="selectedLang($event)">
+            </schd-filter-option>
         </form>
     </div>
 

@@ -1,10 +1,10 @@
 import {Component, OnDestroy} from '@angular/core'
-import {ScheduleFilterSections} from './filter/filter.component'
+import {ScheduleFilterSelections} from './filter/filter.component'
 import {Subscription} from 'rxjs'
 import {ScheduleAtom} from '../models/schedule'
 import {ScheduleService} from './schedule-view/schedule.service'
 
-const emptySelection = (): ScheduleFilterSections => ({
+const emptySelection = (): ScheduleFilterSelections => ({
   teachingUnit: undefined,
   examReg: undefined,
   semesterIndex: undefined,
@@ -23,7 +23,7 @@ export class ScheduleComponent implements OnDestroy {
 
   scheduleEntries: ScheduleAtom[] = []
 
-  filterSelection: ScheduleFilterSections = emptySelection()
+  filterSelection: ScheduleFilterSelections = emptySelection()
 
   constructor(private readonly service: ScheduleService) {
   }
