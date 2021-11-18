@@ -14,7 +14,7 @@ import {Module} from '../../models/module'
 import {groupBy, mapGroup} from '../../utils/group-by'
 import {ordinal} from '../../models/course-type'
 import {allSemesterIndices, SemesterIndex} from '../../models/semester-index'
-import {allLanguages, Language} from '../../models/language'
+import {Language} from '../../models/language'
 import {ScheduleFilterSelections} from './filter.component'
 
 export interface Course {
@@ -43,7 +43,6 @@ export class ScheduleFilterService {
   private allLecturer: Lecturer[] = []
   private allModuleExams: ModuleExaminationRegulationAtom[] = []
   private allStudyProgramsWithExam: ExaminationRegulationAtom[] = []
-  private allLanguages: Language[] = allLanguages()
   private readonly allSemesterIndices: SemesterIndex[] = []
   private filterState: Subject<ScheduleFilterOptions> = new Subject<ScheduleFilterOptions>()
 
@@ -82,7 +81,7 @@ export class ScheduleFilterService {
         lecturers: lecturer,
         courses,
         studyProgramsWithExam,
-        languages: this.allLanguages
+        languages: this.languagesByCourses(courses)
       })
     })
 
@@ -132,7 +131,8 @@ export class ScheduleFilterService {
     {
       teachingUnit,
       lecturer,
-      course
+      course,
+      language
     }: ScheduleFilterSelections): ExaminationRegulationAtom[] =>
     this.filter(this.allStudyProgramsWithExam, (filters) => {
       if (teachingUnit) {
@@ -155,9 +155,17 @@ export class ScheduleFilterService {
           return cs.some(_ => _.course.id === course.course.id)
         })
       }
+
+      if (language) {
+        filters.push(e => {
+          const ms = this.modulesByStudyProgramWithExam(e)
+          const cs = this.coursesByModules(ms)
+          return this.languagesByCourses(cs).some(lang => lang === language)
+        })
+      }
     })
 
-  updateCourses = ({teachingUnit, semesterIndex, examReg, lecturer}: ScheduleFilterSelections) =>
+  updateCourses = ({teachingUnit, semesterIndex, examReg, lecturer, language}: ScheduleFilterSelections) =>
     this.filter(this.allCourses, (filters) => {
       if (teachingUnit) {
         filters.push(c => {
@@ -180,9 +188,13 @@ export class ScheduleFilterService {
       if (lecturer) {
         filters.push(c => c.lecturer.some(_ => _.id === lecturer.id))
       }
+
+      if (language) {
+        filters.push(c => c.course.subModule.language === language)
+      }
     })
 
-  updateLecturer = ({examReg, teachingUnit, course}: ScheduleFilterSelections): Lecturer[] =>
+  updateLecturer = ({examReg, teachingUnit, course, language}: ScheduleFilterSelections): Lecturer[] =>
     this.filter(this.allLecturer, (filters) => {
       if (teachingUnit) {
         filters.push(l => {
@@ -206,9 +218,16 @@ export class ScheduleFilterService {
           return cs.some(_ => _.course.id === course.course.id)
         })
       }
+
+      if (language) {
+        filters.push(l => {
+          const cs = this.coursesByLecturer(l)
+          return cs.some(_ => _.course.subModule.language === language)
+        })
+      }
     })
 
-  updateTeachingUnits = ({examReg, lecturer, course}: ScheduleFilterSelections) =>
+  updateTeachingUnits = ({examReg, lecturer, course, language}: ScheduleFilterSelections) =>
     this.filter(this.allTeachingUnits, (filters) => {
       if (examReg) {
         filters.push(tu => {
@@ -230,6 +249,15 @@ export class ScheduleFilterService {
           const ms = this.modulesByTeachingUnit(tu)
           const cs = this.coursesByModules(ms)
           return cs.some(c0 => c0.lecturer.some(_ => _.id === lecturer.id))
+        })
+      }
+
+      if (language) {
+        filters.push(tu => {
+          const ms = this.modulesByTeachingUnit(tu)
+          const cs = this.coursesByModules(ms)
+          const las = this.languagesByCourses(cs)
+          return las.some(lang => lang === language)
         })
       }
     })
