@@ -34,10 +34,11 @@ export class FilterComponent implements OnInit, OnDestroy {
   @ViewChildren(FilterOptionComponent) filterComponents!: QueryList<FilterOptionComponent<any>>
 
   @Input() semester!: Semester
-  @Input() selections!: ScheduleFilterSelections
-  @Output() onSearch = new EventEmitter()
+  // @Input() selections!: ScheduleFilterSelections
+  @Output() onSearch = new EventEmitter<Course[]>()
   @Output() onReset = new EventEmitter()
 
+  selections: ScheduleFilterSelections = {}
   semesterIndices: SemesterIndex[] = []
   currentTeachingUnits: TeachingUnit[] = []
   currentCourses: Course[] = []
@@ -65,6 +66,8 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.currentLecturer = f.lecturers
       this.currentLanguages = f.languages
       this.currentCourseTypes = f.courseTypes
+
+      this.onSearch.emit(f.courses)
     })
   }
 
@@ -117,7 +120,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   search = () =>
-    this.onSearch.emit()
+    this.onSearch.emit(this.currentCourses)
 
   reset = () => {
     this.filterComponents.forEach(a => a.reset())
