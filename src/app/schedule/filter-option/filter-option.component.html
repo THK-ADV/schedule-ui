@@ -6,6 +6,15 @@
            matInput
            [formControl]="formControl"
            [matAutocomplete]="auto">
+    <button
+      *ngIf="formControl.value"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="reset()"
+    >
+        <mat-icon>close</mat-icon>
+    </button>
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn"
                       (optionSelected)="onSelected($event)" (closed)="onClosed()" panelWidth="auto">
         <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
