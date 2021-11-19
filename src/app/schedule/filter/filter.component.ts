@@ -9,6 +9,7 @@ import {describeExamReg, describeLanguage, describeLecturer} from '../../utils/d
 import {SemesterIndex} from '../../models/semester-index'
 import {Language} from '../../models/language'
 import {Semester} from '../../models/semester'
+import {CourseType, formatLong as describeCourse} from '../../models/course-type'
 
 export interface ScheduleFilterSelections {
   teachingUnit?: TeachingUnit
@@ -17,6 +18,7 @@ export interface ScheduleFilterSelections {
   course?: Course
   lecturer?: Lecturer
   language?: Language
+  courseType?: CourseType
 }
 
 @Component({
@@ -32,16 +34,18 @@ export class FilterComponent implements OnInit, OnDestroy {
   @ViewChildren(FilterOptionComponent) filterComponents!: QueryList<FilterOptionComponent<any>>
 
   @Input() semester!: Semester
-  @Input() selections!: ScheduleFilterSelections
-  @Output() onSearch = new EventEmitter()
+  // @Input() selections!: ScheduleFilterSelections
+  @Output() onSearch = new EventEmitter<Course[]>()
   @Output() onReset = new EventEmitter()
 
+  selections: ScheduleFilterSelections = {}
   semesterIndices: SemesterIndex[] = []
   currentTeachingUnits: TeachingUnit[] = []
   currentCourses: Course[] = []
   currentLecturer: Lecturer[] = []
   currentStudyProgramWithExam: ExaminationRegulationAtom[] = []
   currentLanguages: Language[] = []
+  currentCourseTypes: CourseType[] = []
 
   private sub?: Subscription
 
@@ -51,6 +55,8 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   displayLang = describeLanguage
 
+  displayCourseType = describeCourse
+
   ngOnInit(): void {
     this.sub = this.service.fetchData(this.semester.id).subscribe(f => {
       this.semesterIndices = f.semesterIndices
@@ -59,6 +65,9 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.currentStudyProgramWithExam = f.studyProgramsWithExam
       this.currentLecturer = f.lecturers
       this.currentLanguages = f.languages
+      this.currentCourseTypes = f.courseTypes
+
+      this.onSearch.emit(f.courses)
     })
   }
 
@@ -105,12 +114,17 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.service.updateFilters(this.selections)
   }
 
+  selectedCourseType = (ct?: CourseType) => {
+    this.selections.courseType = ct
+    this.service.updateFilters(this.selections)
+  }
+
   search = () =>
-    this.onSearch.emit()
+    this.onSearch.emit(this.currentCourses)
 
   reset = () => {
-    this.service.updateFilters(this.selections)
     this.filterComponents.forEach(a => a.reset())
+    this.service.updateFilters({})
     this.onReset.emit()
   }
 }
