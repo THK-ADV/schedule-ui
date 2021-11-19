@@ -9,6 +9,7 @@ import {describeExamReg, describeLanguage, describeLecturer} from '../../utils/d
 import {SemesterIndex} from '../../models/semester-index'
 import {Language} from '../../models/language'
 import {Semester} from '../../models/semester'
+import {CourseType, formatLong as describeCourse} from '../../models/course-type'
 
 export interface ScheduleFilterSelections {
   teachingUnit?: TeachingUnit
@@ -17,6 +18,7 @@ export interface ScheduleFilterSelections {
   course?: Course
   lecturer?: Lecturer
   language?: Language
+  courseType?: CourseType
 }
 
 @Component({
@@ -42,6 +44,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   currentLecturer: Lecturer[] = []
   currentStudyProgramWithExam: ExaminationRegulationAtom[] = []
   currentLanguages: Language[] = []
+  currentCourseTypes: CourseType[] = []
 
   private sub?: Subscription
 
@@ -51,6 +54,8 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   displayLang = describeLanguage
 
+  displayCourseType = describeCourse
+
   ngOnInit(): void {
     this.sub = this.service.fetchData(this.semester.id).subscribe(f => {
       this.semesterIndices = f.semesterIndices
@@ -59,6 +64,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.currentStudyProgramWithExam = f.studyProgramsWithExam
       this.currentLecturer = f.lecturers
       this.currentLanguages = f.languages
+      this.currentCourseTypes = f.courseTypes
     })
   }
 
@@ -105,12 +111,17 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.service.updateFilters(this.selections)
   }
 
+  selectedCourseType = (ct?: CourseType) => {
+    this.selections.courseType = ct
+    this.service.updateFilters(this.selections)
+  }
+
   search = () =>
     this.onSearch.emit()
 
   reset = () => {
-    this.service.updateFilters(this.selections)
     this.filterComponents.forEach(a => a.reset())
+    this.service.updateFilters({})
     this.onReset.emit()
   }
 }

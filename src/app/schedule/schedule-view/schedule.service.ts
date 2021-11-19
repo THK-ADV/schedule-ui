@@ -18,7 +18,7 @@ export class ScheduleService {
     this.http.schedules(applyFilter(atomicParams, this.paramsFrom(selection, semesterId)))
 
   private paramsFrom = (selection: ScheduleFilterSelections, semesterId: string): Filter[] => {
-    const {course, teachingUnit, examReg, semesterIndex, lecturer, language} = selection
+    const {course, teachingUnit, examReg, semesterIndex, lecturer, language, courseType} = selection
     const filter: Filter[] = []
 
     filter.push({key: 'semester', value: semesterId})
@@ -45,6 +45,10 @@ export class ScheduleService {
 
     if (language) {
       filter.push({key: 'subModule_language', value: language})
+    }
+
+    if (courseType) {
+      filter.push({key: 'course_type', value: courseType})
     }
 
     return inspect(filter)

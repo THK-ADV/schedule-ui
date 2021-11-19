@@ -20,6 +20,12 @@
                     (onSelect)="selectedSI($event)">
             </schd-filter-option>
             <schd-filter-option
+              [title]="'Veranstaltungstyp'"
+              [display]="displayCourseType"
+              [values]="currentCourseTypes"
+              (onSelect)="selectedCourseType($event)">
+            </schd-filter-option>
+            <schd-filter-option
                     [title]="'Veranstaltung'"
                     [display]="displayC"
                     [values]="currentCourses"
