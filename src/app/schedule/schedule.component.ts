@@ -1,18 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core'
-import {ScheduleFilterSelections} from './filter/filter.component'
 import {Subscription} from 'rxjs'
 import {ScheduleAtom} from '../models/schedule'
 import {ScheduleService} from './schedule-view/schedule.service'
 import {SemesterApiService} from '../http/semester-api.service'
 import {Semester} from '../models/semester'
-
-const emptySelection = (): ScheduleFilterSelections => ({
-  teachingUnit: undefined,
-  examReg: undefined,
-  semesterIndex: undefined,
-  course: undefined,
-  lecturer: undefined
-})
+import { Course } from './filter/schedule-filter.service'
 
 @Component({
   selector: 'schd-schedule',
@@ -26,8 +18,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
 
   scheduleEntries: ScheduleAtom[] = []
   semester?: Semester
-
-  filterSelection: ScheduleFilterSelections = emptySelection()
 
   constructor(
     private readonly service: ScheduleService,
@@ -46,15 +36,17 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     this.searchSub?.unsubscribe()
   }
 
-  searchSchedule = (semester: Semester) => {
+  searchSchedules = (courses: Course[]) => {
     this.searchSub?.unsubscribe()
-    this.searchSub = this.service.schedules(this.filterSelection, semester.id)
-      .subscribe(xs => this.scheduleEntries = xs)
+    this.searchSub = this.service.schedules(courses)
+      .subscribe(xs => {
+        console.log(xs)
+        this.scheduleEntries = xs
+        this.searchSub?.unsubscribe()
+      })
   }
 
-  resetSchedule = () => {
+  resetSchedules = () => {
     this.searchSub?.unsubscribe()
-    this.filterSelection = emptySelection()
-    this.scheduleEntries = []
   }
 }
