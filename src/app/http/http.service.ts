@@ -49,4 +49,12 @@ export class HttpService {
   delete = <A>(url: string): Observable<A> =>
     this.http.delete<A>(url)
       .pipe(catchError(this.handleError))
+
+  create = <I, O>(url: string, body: I): Observable<O> =>
+    this.http.post<O>(url, body)
+      .pipe(catchError(this.handleError))
+
+  put = <I, O>(url: string, body: I): Observable<O> =>
+    this.http.put<O>(url, body)
+      .pipe(catchError(this.handleError))
 }

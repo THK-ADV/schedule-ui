@@ -179,7 +179,7 @@ export class ScheduleFilterService {
           return cs.some(c => c.course.courseType === courseType)
         })
       }
-
+    
       if (semesterIndex) {
         filters.push(e => {
           const ms = this.modulesByStudyProgramWithExam(e)
@@ -360,6 +360,8 @@ export class ScheduleFilterService {
     const semesterIndices = selections.semesterIndex
       ? [selections.semesterIndex]
       : this.semesterIndicesByCourses(courses)
+
+    console.log(selections.courseType, courseTypes)
 
     this.filterState.next({
       studyProgramsWithExam,
