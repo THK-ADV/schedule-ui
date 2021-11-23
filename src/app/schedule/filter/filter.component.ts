@@ -34,7 +34,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   @ViewChildren(FilterOptionComponent) filterComponents!: QueryList<FilterOptionComponent<any>>
 
   @Input() semester!: Semester
-  // @Input() selections!: ScheduleFilterSelections
   @Output() onSearch = new EventEmitter<Course[]>()
   @Output() onReset = new EventEmitter()
 

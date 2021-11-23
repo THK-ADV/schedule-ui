@@ -13,7 +13,7 @@ import {distinctBy, distinctMap} from '../../utils/array-ops'
 import {Module} from '../../models/module'
 import {groupBy, mapGroup} from '../../utils/group-by'
 import {CourseType, ordinal} from '../../models/course-type'
-import {allSemesterIndices, SemesterIndex} from '../../models/semester-index'
+import {SemesterIndex} from '../../models/semester-index'
 import {Language} from '../../models/language'
 import {ScheduleFilterSelections} from './filter.component'
 
@@ -44,7 +44,6 @@ export class ScheduleFilterService {
   private allLecturer: Lecturer[] = []
   private allModuleExams: ModuleExaminationRegulationAtom[] = []
   private allStudyProgramsWithExam: ExaminationRegulationAtom[] = []
-  private readonly allSemesterIndices: SemesterIndex[] = []
   private filterState: Subject<ScheduleFilterOptions> = new Subject<ScheduleFilterOptions>()
 
   constructor(
@@ -53,7 +52,6 @@ export class ScheduleFilterService {
     private readonly moduleExamsApi: ModuleExaminationRegulationApiService,
     private readonly userApi: UserApiService,
   ) {
-    this.allSemesterIndices = allSemesterIndices().sort(this.sortSemesterIndices)
   }
 
   fetchData = (semesterId: string): Observable<ScheduleFilterOptions> => {
@@ -78,12 +76,12 @@ export class ScheduleFilterService {
 
       this.filterState.next({
         teachingUnits,
-        semesterIndices: this.allSemesterIndices,
+        semesterIndices: this.semesterIndicesByCourses(courses).sort(this.sortSemesterIndices),
         lecturers: lecturer,
         courses,
         studyProgramsWithExam,
-        languages: this.languagesByCourses(courses),
-        courseTypes: this.courseTypesByCourses(courses)
+        languages: this.languagesByCourses(courses).sort(this.sortLanguages),
+        courseTypes: this.courseTypesByCourses(courses).sort(this.sortCourseTypes)
       })
     })
 
@@ -120,6 +118,12 @@ export class ScheduleFilterService {
   private sortSemesterIndices = (lhs: SemesterIndex, rhs: SemesterIndex) =>
     lhs - rhs
 
+  private sortLanguages = (lhs: Language, rhs: Language) =>
+    lhs.localeCompare(rhs)
+
+  private sortCourseTypes = (lhs: CourseType, rhs: CourseType) =>
+    lhs.localeCompare(rhs)
+
   private filter = <A>(src: A[], f: (filters: Predicate<A>[]) => void): A[] => {
     const filters: Predicate<A>[] = []
     f(filters)
@@ -135,6 +139,7 @@ export class ScheduleFilterService {
       course,
       language,
       courseType,
+      semesterIndex,
     }: ScheduleFilterSelections): ExaminationRegulationAtom[] =>
     this.filter(this.allStudyProgramsWithExam, (filters) => {
       if (teachingUnit) {
@@ -172,6 +177,14 @@ export class ScheduleFilterService {
           const ms = this.modulesByStudyProgramWithExam(e)
           const cs = this.coursesByModules(ms)
           return cs.some(c => c.course.courseType === courseType)
+        })
+      }
+
+      if (semesterIndex) {
+        filters.push(e => {
+          const ms = this.modulesByStudyProgramWithExam(e)
+          const cs = this.coursesByModules(ms)
+          return cs.some(c => c.course.subModule.recommendedSemester === semesterIndex)
         })
       }
     })
@@ -217,7 +230,15 @@ export class ScheduleFilterService {
       }
     })
 
-  updateLecturer = ({examReg, teachingUnit, course, language, courseType}: ScheduleFilterSelections): Lecturer[] =>
+  updateLecturer = (
+    {
+      examReg,
+      teachingUnit,
+      course,
+      language,
+      courseType,
+      semesterIndex,
+    }: ScheduleFilterSelections): Lecturer[] =>
     this.filter(this.allLecturer, (filters) => {
       if (teachingUnit) {
         filters.push(l => {
@@ -255,9 +276,24 @@ export class ScheduleFilterService {
           return cs.some(_ => _.course.courseType === courseType)
         })
       }
+
+      if (semesterIndex) {
+        filters.push(l => {
+          const cs = this.coursesByLecturer(l)
+          return cs.some(_ => _.course.subModule.recommendedSemester === semesterIndex)
+        })
+      }
     })
 
-  updateTeachingUnits = ({examReg, lecturer, course, language, courseType}: ScheduleFilterSelections) =>
+  updateTeachingUnits = (
+    {
+      examReg,
+      lecturer,
+      course,
+      language,
+      courseType,
+      semesterIndex,
+    }: ScheduleFilterSelections) =>
     this.filter(this.allTeachingUnits, (filters) => {
       if (examReg) {
         filters.push(tu => {
@@ -298,6 +334,14 @@ export class ScheduleFilterService {
           return cs.some(c => c.course.courseType === courseType)
         })
       }
+
+      if (semesterIndex) {
+        filters.push(tu => {
+          const ms = this.modulesByTeachingUnit(tu)
+          const cs = this.coursesByModules(ms)
+          return cs.some(c => c.course.subModule.recommendedSemester === semesterIndex)
+        })
+      }
     })
 
   updateFilters = (selections: ScheduleFilterSelections): void => {
@@ -307,11 +351,15 @@ export class ScheduleFilterService {
     const courses = selections.course ? [selections.course] : this.updateCourses(selections)
     const lecturers = selections.lecturer ? [selections.lecturer] : this.updateLecturer(selections)
     const teachingUnits = selections.teachingUnit ? [selections.teachingUnit] : this.updateTeachingUnits(selections)
-    const languages = selections.language ? [selections.language] : this.languagesByCourses(courses)
-    const courseTypes = selections.courseType ? [selections.courseType] : this.courseTypesByCourses(courses)
-    const semesterIndices = this.allSemesterIndices
-
-    console.log(selections.courseType, courseTypes)
+    const languages = selections.language
+      ? [selections.language]
+      : this.languagesByCourses(courses).sort(this.sortLanguages)
+    const courseTypes = selections.courseType
+      ? [selections.courseType]
+      : this.courseTypesByCourses(courses).sort(this.sortCourseTypes)
+    const semesterIndices = selections.semesterIndex
+      ? [selections.semesterIndex]
+      : this.semesterIndicesByCourses(courses)
 
     this.filterState.next({
       studyProgramsWithExam,
@@ -329,6 +377,10 @@ export class ScheduleFilterService {
 
   private courseTypesByCourses = (courses: Course[]): CourseType[] =>
     distinctMap(courses, ({course}) => course.courseType)
+
+  private semesterIndicesByCourses = (courses: Course[]): SemesterIndex[] =>
+    distinctMap(courses, ({course}) => course.subModule.recommendedSemester)
+      .sort(this.sortSemesterIndices)
 
   private examsByTeachingUnit = (tu: TeachingUnit): ExaminationRegulationAtom[] =>
     this.allStudyProgramsWithExam.filter(e => e.studyProgram.teachingUnit.id === tu.id)

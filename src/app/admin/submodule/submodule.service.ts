@@ -10,7 +10,7 @@ import {parseFloatNumber, parseLanguage, parseModule, parseSeason, parseSemester
 import {Submodule, SubmoduleAtom} from '../../models/submodule'
 import {Module} from '../../models/module'
 import {ModuleApiService} from '../../http/module-api.service'
-import {allSemesterIndices} from '../../models/semester-index'
+import {allSemesterIndices, SemesterIndex} from '../../models/semester-index'
 import {allLanguages, Language} from '../../models/language'
 import {allSeasons, Season} from '../../models/season'
 import {TableHeaderColumn} from '../../generic-ui/table/table.component'
@@ -22,7 +22,7 @@ interface SubmoduleProtocol {
   module: string
   label: string
   abbreviation: string
-  recommendedSemester: number
+  recommendedSemester: SemesterIndex
   credits: number
   descriptionUrl: string
   language: Language
