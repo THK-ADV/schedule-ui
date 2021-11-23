@@ -10,6 +10,17 @@ form {
   height: 60px;
 }
 
+.buttonRow {
+  margin: 30px 0 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: start;
+  align-items: flex-start;
+  align-content: center;
+  height: 60px;
+}
+
 @media (max-width: 949px) {
   form {
     display: flex;
