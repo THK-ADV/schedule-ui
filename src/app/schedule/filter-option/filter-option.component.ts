@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core'
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core'
 import {FormControl} from '@angular/forms'
 import {EMPTY, Observable} from 'rxjs'
 import {map, startWith} from 'rxjs/operators'
@@ -10,6 +10,8 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete/autoc
   styleUrls: ['./filter-option.component.scss']
 })
 export class FilterOptionComponent<T> implements OnInit {
+
+  @ViewChild('search') search: ElementRef | undefined
 
   @Input() title = ''
 
@@ -52,6 +54,7 @@ export class FilterOptionComponent<T> implements OnInit {
   onSelected = (e: MatAutocompleteSelectedEvent) => {
     this.hasSelection = true
     this.onSelect.emit(e.option.value)
+    this.deselect()
   }
 
   onClosed = () => {
@@ -59,10 +62,24 @@ export class FilterOptionComponent<T> implements OnInit {
       this.onSelect.emit(undefined)
     }
     this.hasSelection = false
+    this.deselect()
+  }
+
+  onClear = (event: Event) => {
+    event.stopPropagation()
+    this.onSelect.emit(undefined)
+    this.reset()
   }
 
   reset = () => {
     this.formControl.reset(undefined, {emitEvent: false})
     this.initFilterOptions()
+    this.deselect()
+  }
+
+  deselect = () => {
+    if (this.search) {
+      this.search.nativeElement.blur()
+    }
   }
 }

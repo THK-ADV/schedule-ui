@@ -1,17 +1,17 @@
 <mat-form-field class="example-full-width">
     <mat-label>{{title}}</mat-label>
-    <input type="text"
+    <input type='text'
+           #search
            [placeholder]='title'
            aria-label="teachingUnit"
            matInput
            [formControl]="formControl"
            [matAutocomplete]="auto">
-    <button
-      *ngIf="formControl.value"
-      matSuffix
-      mat-icon-button
-      aria-label="Clear"
-      (click)="reset()"
+    <button *ngIf="formControl.value"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="onClear($event)"
     >
         <mat-icon>close</mat-icon>
     </button>
