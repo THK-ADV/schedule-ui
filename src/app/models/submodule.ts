@@ -1,12 +1,13 @@
 import {Module} from './module'
 import {Language} from './language'
 import {Season} from './season'
+import {SemesterIndex} from './semester-index'
 
 export interface Submodule {
   label: string
   abbreviation: string
   module: string
-  recommendedSemester: number
+  recommendedSemester: SemesterIndex
   credits: number
   language: Language
   season: Season
