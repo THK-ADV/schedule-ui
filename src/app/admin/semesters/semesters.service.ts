@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core'
 import {SemesterApiService} from '../../http/semester-api.service'
-import {EMPTY, Observable, of} from 'rxjs'
+import {EMPTY, Observable} from 'rxjs'
 import {Semester} from '../../models/semester'
 import {TableHeaderColumn} from '../../generic-ui/table/table.component'
 import {TextInput} from '../../generic-ui/create-dialog/input-text/input-text.component'
@@ -89,12 +89,12 @@ export class SemestersService {
 
   deleteAction = (): Delete<Semester> => ({
     labelForDialog: a => a.label,
-    delete: this.delete
+    delete: a => this.http.delete(a.id)
   })
 
   createAction = (): [Create<Semester>, CreateDialogData] => [
     {
-      create: attrs => mapOpt(this.parseProtocol(attrs), a => this.create(a)) ?? EMPTY, // TODO change A0 to A
+      create: attrs => mapOpt(this.parseProtocol(attrs), this.http.create) ?? EMPTY,
       show: a => JSON.stringify(a)
     },
     {
@@ -108,7 +108,7 @@ export class SemestersService {
       update: (m, attrs) =>
         mapOpt(
           this.createProtocol(m, attrs),
-          p => this.update(p, m.id)
+          p => this.http.update(p, m.id)
         ) ?? EMPTY
       ,
       show: a => JSON.stringify(a)
@@ -121,29 +121,6 @@ export class SemestersService {
 
   semesters = (): Observable<Semester[]> =>
     this.http.semesters()
-
-  private delete = (s: Semester): Observable<Semester> =>
-    of(s)
-
-  private create = (p: SemesterProtocol): Observable<Semester> =>
-    of({
-      ...p,
-      start: new Date(p.start),
-      end: new Date(p.end),
-      lectureStart: new Date(p.lectureStart),
-      lectureEnd: new Date(p.lectureEnd),
-      id: 'random uuid'
-    })
-
-  private update = (p: SemesterProtocol, id: string): Observable<Semester> =>
-    of({
-      ...p,
-      start: new Date(p.start),
-      end: new Date(p.end),
-      lectureStart: new Date(p.lectureStart),
-      lectureEnd: new Date(p.lectureEnd),
-      id
-    })
 
   private createInputs = (): FormInput[] => [
     this.label,

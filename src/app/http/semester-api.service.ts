@@ -5,6 +5,7 @@ import {applyFilter, nonAtomicParams} from './http-filter'
 import {Semester} from '../models/semester'
 import {map} from 'rxjs/operators'
 
+export type SemesterProtocol = Omit<SemesterJSON, 'id'>
 
 interface SemesterJSON {
   label: string
@@ -35,6 +36,15 @@ export class SemesterApiService {
       this.resource,
       applyFilter(nonAtomicParams, [{key: 'current', value: 'true'}])
     ).pipe(map(xs => this.parseSemesterJSON(xs).shift()))
+
+  delete = (id: string): Observable<Semester> =>
+    this.http.delete(`${this.resource}/${id}`)
+
+  create = (p: SemesterProtocol): Observable<Semester> =>
+    this.http.create(this.resource, p)
+
+  update = (p: SemesterProtocol, id: string): Observable<Semester> =>
+    this.http.put(`${this.resource}/${id}`, p)
 
   private parseSemesterJSON = (ss: SemesterJSON[]): Semester[] =>
     ss.map(s => ({
