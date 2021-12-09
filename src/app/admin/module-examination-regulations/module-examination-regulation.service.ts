@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core'
 import {ModuleExaminationRegulationApiService} from '../../http/module-examination-regulation-api.service'
-import {EMPTY, Observable, of} from 'rxjs'
+import {EMPTY, Observable} from 'rxjs'
 import {ModuleExaminationRegulation, ModuleExaminationRegulationAtom} from '../../models/module-examination-regulation'
 import {FormInput} from '../../generic-ui/create-dialog/form-input'
 import {AutoCompleteInput} from '../../generic-ui/create-dialog/input-auto-complete/input-auto-complete.component'
@@ -16,7 +16,7 @@ import {Create, Delete} from '../../generic-ui/crud-table/crud-table.component'
 import {CreateDialogData} from '../../generic-ui/create-dialog/create-dialog.component'
 import {TableHeaderColumn} from '../../generic-ui/table/table.component'
 
-interface ModuleExaminationRegulationProtocol {
+export interface ModuleExaminationRegulationProtocol {
   module: string
   examinationRegulation: string
   mandatory: boolean
@@ -74,12 +74,12 @@ export class ModuleExaminationRegulationService {
 
   deleteAction = (): Delete<ModuleExaminationRegulationAtom> => ({
     labelForDialog: a => `${describeModule(a.module)} für ${describeExamReg(a.examinationRegulation)}`,
-    delete: this.delete
+    delete: a => this.http.delete(a.id)
   })
 
   createAction = (): [Create<ModuleExaminationRegulation>, CreateDialogData] => [
     {
-      create: attrs => mapOpt(this.parseProtocol(attrs), this.create) ?? EMPTY,
+      create: attrs => mapOpt(this.parseProtocol(attrs), this.http.create) ?? EMPTY,
       show: a => JSON.stringify(a)
     },
     {
@@ -87,15 +87,6 @@ export class ModuleExaminationRegulationService {
       inputs: this.createInputs()
     }
   ]
-
-  private delete = (me: ModuleExaminationRegulationAtom): Observable<ModuleExaminationRegulationAtom> =>
-    of(me)
-
-  private create = (p: ModuleExaminationRegulationProtocol): Observable<ModuleExaminationRegulation> =>
-    of({...p, id: 'random uuid'})
-
-  private update = (p: ModuleExaminationRegulationProtocol, id: string): Observable<ModuleExaminationRegulation> =>
-    of({...p, id})
 
   private createInputs = (): FormInput[] => [
     this.module,
