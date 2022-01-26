@@ -52,6 +52,10 @@ export class HttpService {
     this.http.get<A[]>(url, {params})
       .pipe(catchError(this.handleError))
 
+  get = <A>(url: string, params: HttpParams): Observable<A> =>
+    this.http.get<A>(url, {params})
+      .pipe(catchError(this.handleError))
+
   post = <A>(url: string, body: unknown, params?: HttpParams): Observable<A[]> =>
     this.http.post<A[]>(url, body, {params})
       .pipe(catchError(this.handleError))

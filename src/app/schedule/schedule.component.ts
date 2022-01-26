@@ -4,7 +4,7 @@ import {ScheduleAtom} from '../models/schedule'
 import {ScheduleService} from './schedule-view/schedule.service'
 import {SemesterApiService} from '../http/semester-api.service'
 import {Semester} from '../models/semester'
-import { Course } from './filter/schedule-filter.service'
+import {Course} from './filter/schedule-filter.service'
 
 @Component({
   selector: 'schd-schedule',
@@ -40,7 +40,6 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     this.searchSub?.unsubscribe()
     this.searchSub = this.service.schedules(courses)
       .subscribe(xs => {
-        console.log(xs)
         this.scheduleEntries = xs
         this.searchSub?.unsubscribe()
       })

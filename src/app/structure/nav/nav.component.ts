@@ -57,7 +57,7 @@ export class NavComponent implements OnInit, OnDestroy {
     private readonly media: MediaMatcher,
     private readonly loginService: LoginService
   ) {
-    this.sub = this.loginService.user$().subscribe(user => {
+    this.sub = this.loginService.user$.subscribe(user => {
       if (user !== undefined) {
         this.userInfo = {
           username: `@${user.username}`,

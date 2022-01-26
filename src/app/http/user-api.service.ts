@@ -3,6 +3,7 @@ import {HttpService} from './http.service'
 import {Observable} from 'rxjs'
 import {Lecturer, User} from '../models/user'
 import {nonAtomicParams} from './http-filter'
+import {map} from 'rxjs/operators'
 
 @Injectable({
   providedIn: 'root'
@@ -22,4 +23,8 @@ export class UserApiService {
   users = (): Observable<User[]> => {
     return this.http.getAll(this.path, nonAtomicParams)
   }
+
+  currentUser = (username: string): Observable<User | undefined> =>
+    this.http.getAll<User>(`users?username=${username}`, nonAtomicParams)
+      .pipe(map(xs => xs.shift()))
 }

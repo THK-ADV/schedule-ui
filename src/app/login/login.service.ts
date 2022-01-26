@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core'
+import {Observable, Subject} from 'rxjs'
+import {KeycloakService} from 'keycloak-angular'
+import {UserApiService} from '../http/user-api.service'
 import {User} from '../models/user'
-import {Subject} from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
@@ -8,19 +10,25 @@ import {Subject} from 'rxjs'
 export class LoginService {
 
   private user = new Subject<User>()
+  user$: Observable<User>
 
-  user$ = () =>
-    this.user.asObservable()
+  constructor(
+    private readonly keycloak: KeycloakService,
+    private readonly userApiService: UserApiService
+  ) {
+    this.user$ = this.user.asObservable()
+  }
 
-  login = () =>
-    this.user.next({
-      firstname: 'Alexander',
-      lastname: 'Dobrynin',
-      username: 'adobryni',
-      email: 'alexander.dobrynin@th-koeln.de',
-      id: 'random-uuid'
-    })
+  loadUser = async () =>
+    this.keycloak.isLoggedIn()
+      .then(b => b ? this.keycloak.loadUserProfile() : undefined)
+      .then(p => p && p.username ? this.userApiService.currentUser(p.username).toPromise() : undefined)
+      .then(u => this.user.next(u))
 
-  logout = () =>
-    this.user.next(undefined)
+  logout = async () =>
+    this.keycloak.logout()
+      .then(_ => this.user.next(undefined))
+
+  login = async () =>
+    this.keycloak.login()
 }

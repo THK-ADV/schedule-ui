@@ -9,13 +9,11 @@ import {ModuleExaminationRegulationsComponent} from './admin/module-examination-
 import {SemestersComponent} from './admin/semesters/semesters.component'
 import {UsersComponent} from './admin/users/users.component'
 import {LecturerModulesComponent} from './lecturer-modules/lecturer-modules.component'
-import {AuthGuard} from './guard/auth.guard'
 
 const routes: Routes = [
   {
     path: 'schedule',
-    component: ScheduleComponent,
-    canActivate: [AuthGuard]
+    component: ScheduleComponent
   },
   {
     path: 'studyPaths',
