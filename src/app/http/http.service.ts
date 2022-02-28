@@ -9,7 +9,6 @@ export const parseDateStartEndFromJSON = <A>(a: any): A => {
   const date = new Date(a.date)
   const start = timeFromString(a.start, date)
   const end = timeFromString(a.end, date)
-
   return {...a, date, start, end}
 }
 

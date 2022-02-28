@@ -2,10 +2,10 @@
 
     <div class="schedule-container">
         <mat-toolbar class="schedule-toolbar">
-            <button *ngIf="userInfo" mat-icon-button (click)="nav.toggle()">
+            <button *ngIf="userInfo" mat-icon-button (click)="onHamburgerMenuClick()">
                 <mat-icon>menu</mat-icon>
             </button>
-            <span *ngIf="userInfo"  class="example-spacer"></span>
+            <span *ngIf="userInfo" class="example-spacer"></span>
             <schd-header></schd-header>
         </mat-toolbar>
 
@@ -28,7 +28,7 @@
                         <a *ngFor="let link of lecturerLinks"
                            mat-list-item
                            routerLinkActive="list-item-active"
-                           [routerLink]="routerLink(link, user.user)">
+                           [routerLink]="link.routerLink">
                             <mat-icon>{{link.icon}}</mat-icon>
                             <span>{{link.label}}</span>
                         </a>

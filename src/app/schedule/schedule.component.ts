@@ -1,5 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core'
-import {Subscription} from 'rxjs'
+import {Component, Input, OnDestroy, OnInit} from '@angular/core'
+import {Observable, Subscription} from 'rxjs'
 import {ScheduleAtom} from '../models/schedule'
 import {ScheduleService} from './schedule-view/schedule.service'
 import {SemesterApiService} from '../http/semester-api.service'
@@ -13,11 +13,13 @@ import {Course} from './filter/schedule-filter.service'
 })
 export class ScheduleComponent implements OnInit, OnDestroy {
 
+  @Input() title = 'Stundenplan'
+  @Input() draftOnly = false
+  @Input() semester?: Observable<Semester | undefined>
+
   private searchSub?: Subscription
-  private semesterSub?: Subscription
 
   scheduleEntries: ScheduleAtom[] = []
-  semester?: Semester
 
   constructor(
     private readonly service: ScheduleService,
@@ -26,26 +28,25 @@ export class ScheduleComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.semesterSub?.unsubscribe()
-    this.semesterSub = this.semesterService.currentSemester()
-      .subscribe(s => this.semester = s)
+    if (!this.semester) {
+      this.semester = this.semesterService.currentSemester()
+    }
   }
 
   ngOnDestroy(): void {
-    this.semesterSub?.unsubscribe()
     this.searchSub?.unsubscribe()
   }
 
   searchSchedules = (courses: Course[]) => {
     this.searchSub?.unsubscribe()
-    this.searchSub = this.service.schedules(courses)
+    const status = this.draftOnly ? 'draft' : 'active'
+    this.searchSub = this.service.schedules(courses, status)
       .subscribe(xs => {
         this.scheduleEntries = xs
         this.searchSub?.unsubscribe()
       })
   }
 
-  resetSchedules = () => {
+  resetSchedules = () =>
     this.searchSub?.unsubscribe()
-  }
 }

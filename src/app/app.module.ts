@@ -41,6 +41,7 @@ import {SchdMatTableResponsiveModule} from './structure/directives/mat-table-res
 import {LecturerModulesComponent} from './lecturer-modules/lecturer-modules.component'
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular'
 import {environment} from '../environments/environment'
+import {ScheduleVerificationComponent} from './schedule/schedule-verification/schedule-verification.component'
 
 function initializeKeycloak(keycloak: KeycloakService): () => Promise<boolean> {
   return () =>
@@ -82,7 +83,8 @@ FullCalendarModule.registerPlugins([
     InputBooleanComponent,
     SemestersComponent,
     UsersComponent,
-    LecturerModulesComponent
+    LecturerModulesComponent,
+    ScheduleVerificationComponent
   ],
   imports: [
     BrowserModule,
