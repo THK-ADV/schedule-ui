@@ -1,7 +1,7 @@
-<ng-container *ngIf="semester as semester">
+<ng-container *ngIf="semester | async as semester">
     <div class="schedule-header">
         <h1 class="space-between">
-            <span>Stundenplan</span>
+            <span>{{title}}</span>
             <span>{{semester.label}}</span>
         </h1>
     </div>
@@ -18,3 +18,7 @@
         </schd-schedule-view>
     </div>
 </ng-container>
+
+<ng-template #noSemester>
+    <h1>Kein Stundenplan zur Prüfung vorhanden</h1>
+</ng-template>

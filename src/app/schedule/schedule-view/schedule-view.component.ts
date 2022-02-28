@@ -1,10 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core'
+import {Component, Input, OnInit, ViewChild} from '@angular/core'
 import {ScheduleAtom} from '../../models/schedule'
-import {CalendarOptions, EventClickArg, EventContentArg} from '@fullcalendar/angular'
+import {CalendarOptions, EventClickArg, EventContentArg, FullCalendarComponent} from '@fullcalendar/angular'
 import {groupBy, mapGroup} from '../../utils/group-by'
 import {ExaminationRegulationAtom} from '../../models/examination-regulation'
 import {CourseType, formatShort} from '../../models/course-type'
 import {formatTime} from '../../utils/date-format'
+import {Ordering} from '../../utils/ordering'
 
 interface Event<A> {
   title: string
@@ -24,6 +25,8 @@ type PartialEvent<A> = Pick<Event<A>, 'start' | 'end' | 'extendedProps'>
   styleUrls: ['./schedule-view.component.scss']
 })
 export class ScheduleViewComponent implements OnInit {
+
+  @ViewChild('cal') calendar?: FullCalendarComponent
 
   calendarOptions: CalendarOptions = {
     initialView: 'timeGridWeek',
@@ -51,6 +54,12 @@ export class ScheduleViewComponent implements OnInit {
 
   @Input() set scheduleEntries(xs: ScheduleAtom[]) {
     this.calendarOptions.events = this.makeEvents(xs)
+    const minDate = Ordering
+      .min(xs, Ordering.contraMap(Ordering.dateOrd, a => a.date))
+      ?.date
+    if (minDate) {
+      this.calendar?.getApi()?.gotoDate(minDate) // TODO remove if needed
+    }
   }
 
   ngOnInit(): void {
@@ -60,7 +69,7 @@ export class ScheduleViewComponent implements OnInit {
   }
 
   onEventClick = (arg: EventClickArg): void =>
-    console.log('date click! ' + arg.event.title)
+    console.log(Object.create(arg.event.extendedProps.value))
 
   /*
   eventContent: function(arg) {

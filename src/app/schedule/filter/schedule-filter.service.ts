@@ -361,8 +361,6 @@ export class ScheduleFilterService {
       ? [selections.semesterIndex]
       : this.semesterIndicesByCourses(courses)
 
-    console.log(selections.courseType, courseTypes)
-
     this.filterState.next({
       studyProgramsWithExam,
       courses,

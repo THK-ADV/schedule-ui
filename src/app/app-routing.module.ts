@@ -9,6 +9,7 @@ import {ModuleExaminationRegulationsComponent} from './admin/module-examination-
 import {SemestersComponent} from './admin/semesters/semesters.component'
 import {UsersComponent} from './admin/users/users.component'
 import {LecturerModulesComponent} from './lecturer-modules/lecturer-modules.component'
+import {ScheduleVerificationComponent} from './schedule/schedule-verification/schedule-verification.component'
 
 const routes: Routes = [
   {
@@ -42,6 +43,10 @@ const routes: Routes = [
   {
     path: 'users',
     component: UsersComponent
+  },
+  {
+    path: 'scheduleVerification',
+    component: ScheduleVerificationComponent
   },
   {
     path: 'lecturer/:id/modules',

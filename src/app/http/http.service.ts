@@ -9,7 +9,6 @@ export const parseDateStartEndFromJSON = <A>(a: any): A => {
   const date = new Date(a.date)
   const start = timeFromString(a.start, date)
   const end = timeFromString(a.end, date)
-
   return {...a, date, start, end}
 }
 
@@ -50,6 +49,10 @@ export class HttpService {
 
   getAll = <A>(url: string, params: HttpParams): Observable<A[]> =>
     this.http.get<A[]>(url, {params})
+      .pipe(catchError(this.handleError))
+
+  get = <A>(url: string, params: HttpParams): Observable<A> =>
+    this.http.get<A>(url, {params})
       .pipe(catchError(this.handleError))
 
   post = <A>(url: string, body: unknown, params?: HttpParams): Observable<A[]> =>

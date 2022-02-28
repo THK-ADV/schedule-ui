@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core'
+import {APP_INITIALIZER, NgModule} from '@angular/core'
 import {BrowserModule} from '@angular/platform-browser'
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap'
 
@@ -39,6 +39,16 @@ import {SemestersComponent} from './admin/semesters/semesters.component'
 import {UsersComponent} from './admin/users/users.component'
 import {SchdMatTableResponsiveModule} from './structure/directives/mat-table-responsive/schd-mat-table-responsive.module'
 import {LecturerModulesComponent} from './lecturer-modules/lecturer-modules.component'
+import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular'
+import {environment} from '../environments/environment'
+import {ScheduleVerificationComponent} from './schedule/schedule-verification/schedule-verification.component'
+
+function initializeKeycloak(keycloak: KeycloakService): () => Promise<boolean> {
+  return () =>
+    keycloak.init({
+      config: environment.keycloak
+    })
+}
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -73,7 +83,8 @@ FullCalendarModule.registerPlugins([
     InputBooleanComponent,
     SemestersComponent,
     UsersComponent,
-    LecturerModulesComponent
+    LecturerModulesComponent,
+    ScheduleVerificationComponent
   ],
   imports: [
     BrowserModule,
@@ -83,9 +94,22 @@ FullCalendarModule.registerPlugins([
     BrowserAnimationsModule,
     HttpClientModule,
     FullCalendarModule,
-    SchdMatTableResponsiveModule
+    SchdMatTableResponsiveModule,
+    KeycloakAngularModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: BackendUrlInterceptorInterceptor, multi: true}],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: BackendUrlInterceptorInterceptor,
+      multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService]
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

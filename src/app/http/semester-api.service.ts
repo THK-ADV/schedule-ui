@@ -4,6 +4,7 @@ import {Observable} from 'rxjs'
 import {applyFilter, nonAtomicParams} from './http-filter'
 import {Semester} from '../models/semester'
 import {map} from 'rxjs/operators'
+import {HttpParams} from '@angular/common/http'
 
 export type SemesterProtocol = Omit<SemesterJSON, 'id'>
 
@@ -32,10 +33,10 @@ export class SemesterApiService {
       .pipe(map(this.parseSemesterJSON))
 
   currentSemester = (): Observable<Semester | undefined> =>
-    this.http.getAll<SemesterJSON>(
-      this.resource,
-      applyFilter(nonAtomicParams, [{key: 'current', value: 'true'}])
-    ).pipe(map(xs => this.parseSemesterJSON(xs).shift()))
+    this.single(applyFilter(nonAtomicParams, [{key: 'select', value: 'current'}]))
+
+  draftSemester = (): Observable<Semester | undefined> =>
+    this.single(applyFilter(nonAtomicParams, [{key: 'select', value: 'draft'}]))
 
   delete = (id: string): Observable<Semester> =>
     this.http.delete(`${this.resource}/${id}`)
@@ -45,6 +46,10 @@ export class SemesterApiService {
 
   update = (p: SemesterProtocol, id: string): Observable<Semester> =>
     this.http.put(`${this.resource}/${id}`, p)
+
+  private single = (params: HttpParams) =>
+    this.http.getAll<SemesterJSON>(this.resource, params)
+      .pipe(map(xs => this.parseSemesterJSON(xs).shift()))
 
   private parseSemesterJSON = (ss: SemesterJSON[]): Semester[] =>
     ss.map(s => ({
