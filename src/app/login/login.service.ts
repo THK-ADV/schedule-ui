@@ -3,6 +3,7 @@ import {Observable, Subject} from 'rxjs'
 import {KeycloakService} from 'keycloak-angular'
 import {UserApiService} from '../http/user-api.service'
 import {User} from '../models/user'
+import {Router} from '@angular/router'
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class LoginService {
 
   constructor(
     private readonly keycloak: KeycloakService,
-    private readonly userApiService: UserApiService
+    private readonly userApiService: UserApiService,
+    private readonly router: Router
   ) {
     this.user$ = this.user.asObservable()
   }
@@ -26,7 +28,8 @@ export class LoginService {
       .then(u => this.user.next(u))
 
   logout = async () =>
-    this.keycloak.logout()
+    this.router.navigateByUrl('')
+      .then(_ => this.keycloak.logout())
       .then(_ => this.user.next(undefined))
 
   login = async () =>
