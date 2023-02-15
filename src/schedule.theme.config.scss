@@ -1,4 +1,5 @@
 @import "schedule.vars.scss";
+@import "@angular/material/core/theming/palette";
 
 $th-magenta-pal: palette-from($th-magenta);
 $th-orange-pal: palette-from($th-orange);
@@ -21,17 +22,17 @@ $th-red-pal: palette-from($th-red);
           A400: darken($color, 70%),
           A700: darken($color, 80%),
           contrast: (
-                  50: $black-87-opacity,
-                  100: $black-87-opacity,
-                  200: $black-87-opacity,
-                  300: $black-87-opacity,
-                  400: $black-87-opacity,
+                  50: $dark-primary-text,
+                  100: $dark-primary-text,
+                  200: $dark-primary-text,
+                  300: $dark-primary-text,
+                  400: $dark-primary-text,
                   500: white,
                   600: white,
                   700: white,
-                  800: $white-87-opacity,
-                  900: $white-87-opacity,
-                  A100: $black-87-opacity,
+                  800: $light-primary-text,
+                  900: $light-primary-text,
+                  A100: $dark-primary-text,
                   A200: white,
                   A400: white,
                   A700: white,
