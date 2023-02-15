@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const combine = fs => i => {\n  for (const f of fs) {\n    const res = f(i);\n    if (res) {\n      return res;\n    }\n  }\n  return undefined;\n};","map":null,"metadata":{},"sourceType":"module"}
