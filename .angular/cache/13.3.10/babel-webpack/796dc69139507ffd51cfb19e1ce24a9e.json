@@ -1,1 +1,0 @@
-{"ast":null,"code":"const keycloak = {\n  url: 'https://auth.gm.fh-koeln.de:8444/auth',\n  realm: 'schedule',\n  clientId: 'frontend-dev'\n};\nexport const environment = {\n  production: true,\n  backendUrl: 'api',\n  keycloak\n};","map":null,"metadata":{},"sourceType":"module"}

@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const isTeachingUnit = a => {\n  const tu = a;\n  return tu?.label !== undefined && tu?.abbreviation !== undefined && tu?.faculty !== undefined && tu?.number !== undefined && tu?.id !== undefined;\n};","map":null,"metadata":{},"sourceType":"module"}

@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core'
 import {FormInput, FormInputLike} from '../form-input'
-import {FormControl, Validators} from '@angular/forms'
+import {UntypedFormControl, Validators} from '@angular/forms'
 import {DefaultDateAdapter} from '../../default-date-adapter.service'
 
 export interface DateInput extends FormInputLike {
@@ -8,10 +8,10 @@ export interface DateInput extends FormInputLike {
   kind: 'date'
 }
 
-export const formControlForDateInput = (i: FormInput): FormControl | undefined => {
+export const formControlForDateInput = (i: FormInput): UntypedFormControl | undefined => {
   switch (i.kind) {
     case 'date':
-      return new FormControl(
+      return new UntypedFormControl(
         {value: i.initialValue, disabled: i.disabled},
         i.required ? Validators.required : undefined
       )
@@ -27,6 +27,6 @@ export const formControlForDateInput = (i: FormInput): FormControl | undefined =
   providers: DefaultDateAdapter.defaultProviders()
 })
 export class InputDateComponent {
-  @Input() formControl!: FormControl
+  @Input() formControl!: UntypedFormControl
   @Input() input!: DateInput
 }

@@ -98,7 +98,7 @@ export class TableComponent<A> implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource.sortingDataAccessor = this.sortingDataAccessor
     if (this.useTableContentForFiltering) {
       this.dataSource.filterPredicate = (obj, filter) =>
-        Object.keys(obj).some(k => this.tableContent(obj, k).toLowerCase().includes(filter))
+        Object.keys(obj as any).some(k => this.tableContent(obj, k).toLowerCase().includes(filter))
     }
   }
 

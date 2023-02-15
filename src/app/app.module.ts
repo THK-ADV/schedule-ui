@@ -16,9 +16,6 @@ import {BackendUrlInterceptorInterceptor} from './http/backend-url-interceptor.i
 import {ScheduleComponent} from './schedule/schedule.component'
 import {ScheduleViewComponent} from './schedule/schedule-view/schedule-view.component'
 import {FullCalendarModule} from '@fullcalendar/angular'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import timeGridPlugin from '@fullcalendar/timegrid'
 import {LoginComponent} from './login/login/login.component'
 import {StudyProgramsComponent} from './admin/study-programs/study-programs.component'
 import {TableComponent} from './generic-ui/table/table.component'
@@ -49,12 +46,6 @@ function initializeKeycloak(keycloak: KeycloakService): () => Promise<boolean> {
       config: environment.keycloak
     })
 }
-
-FullCalendarModule.registerPlugins([
-  dayGridPlugin,
-  interactionPlugin,
-  timeGridPlugin,
-])
 
 @NgModule({
   declarations: [

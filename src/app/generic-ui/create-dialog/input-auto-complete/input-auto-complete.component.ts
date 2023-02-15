@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core'
 import {EMPTY, Observable, Subscription} from 'rxjs'
-import {FormControl} from '@angular/forms'
+import {UntypedFormControl} from '@angular/forms'
 import {map, startWith} from 'rxjs/operators'
 import {FormInput, FormInputLike} from '../form-input'
 import {mandatoryOptionsValidator, optionalOptionsValidator} from '../form-input-validator'
@@ -12,10 +12,10 @@ export interface AutoCompleteInput<A> extends FormInputLike {
   initialValue?: (opts: A[]) => A | undefined
 }
 
-export const formControlForAutocompleteInput = (i: FormInput): FormControl | undefined => {
+export const formControlForAutocompleteInput = (i: FormInput): UntypedFormControl | undefined => {
   switch (i.kind) {
     case 'auto-complete':
-      return new FormControl(
+      return new UntypedFormControl(
         {value: undefined, disabled: i.disabled},
         i.required ? mandatoryOptionsValidator() : optionalOptionsValidator()
       )
@@ -33,7 +33,7 @@ export const formControlForAutocompleteInput = (i: FormInput): FormControl | und
 export class InputAutoCompleteComponent<A> implements OnInit, OnDestroy {
 
   @Input() input!: AutoCompleteInput<A>
-  @Input() formControl!: FormControl
+  @Input() formControl!: UntypedFormControl
 
   options: A[] = []
   filteredOptions: Observable<A[]> = EMPTY

@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core'
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog'
-import {FormControl, FormGroup} from '@angular/forms'
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms'
 import {formControlForTextInput, NumberInput, TextInput} from './input-text/input-text.component'
 import {AutoCompleteInput, formControlForAutocompleteInput} from './input-auto-complete/input-auto-complete.component'
 import {combine, FormInput} from './form-input'
@@ -27,7 +27,7 @@ export class CreateDialogComponent implements OnInit {
 
   title: string
   buttonTitle: string
-  formGroup: FormGroup = new FormGroup({})
+  formGroup: UntypedFormGroup = new UntypedFormGroup({})
 
   private formControlForInput = combine([
     formControlForTextInput,
@@ -80,7 +80,7 @@ export class CreateDialogComponent implements OnInit {
   }
 
   formControl = (attr: string) =>
-    this.formGroup.controls[attr] as FormControl
+    this.formGroup.controls[attr] as UntypedFormControl
 
   asAutocomplete = (i: FormInput) =>
     i as AutoCompleteInput<any>
