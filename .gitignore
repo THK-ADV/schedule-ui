@@ -71,3 +71,4 @@ tools/gulp-tasks/cldr/cldr-data/
 /src/favicon.ico
 
 package-lock.json
+.angular

@@ -1,11 +1,15 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core'
 import {ScheduleAtom} from '../../models/schedule'
-import {CalendarOptions, EventClickArg, EventContentArg, FullCalendarComponent} from '@fullcalendar/angular'
+import {FullCalendarComponent} from '@fullcalendar/angular'
 import {groupBy, mapGroup} from '../../utils/group-by'
 import {ExaminationRegulationAtom} from '../../models/examination-regulation'
 import {CourseType, formatShort} from '../../models/course-type'
 import {formatTime} from '../../utils/date-format'
 import {Ordering} from '../../utils/ordering'
+import {CalendarOptions, EventClickArg, EventContentArg} from '@fullcalendar/core'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import timeGridPlugin from '@fullcalendar/timegrid'
 
 interface Event<A> {
   title: string
@@ -29,6 +33,11 @@ export class ScheduleViewComponent implements OnInit {
   @ViewChild('cal') calendar?: FullCalendarComponent
 
   calendarOptions: CalendarOptions = {
+    plugins: [
+      dayGridPlugin,
+      interactionPlugin,
+      timeGridPlugin,
+    ],
     initialView: 'timeGridWeek',
     allDaySlot: false,
     editable: false,

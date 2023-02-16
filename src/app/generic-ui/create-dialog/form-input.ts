@@ -1,6 +1,6 @@
 import {NumberInput, TextInput, URLInput} from './input-text/input-text.component'
 import {AutoCompleteInput} from './input-auto-complete/input-auto-complete.component'
-import {FormControl} from '@angular/forms'
+import {UntypedFormControl} from '@angular/forms'
 import {DateInput} from './input-date/input-date.component'
 import {BooleanInput} from './input-boolean/input-boolean.component'
 
@@ -21,8 +21,8 @@ export type FormInput =
   DateInput
 
 export const combine = (
-  fs: Array<(i: FormInput) => FormControl | undefined>
-): (i: FormInput) => FormControl | undefined =>
+  fs: Array<(i: FormInput) => UntypedFormControl | undefined>
+): (i: FormInput) => UntypedFormControl | undefined =>
   i => {
     for (const f of fs) {
       const res = f(i)

@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core'
-import {FormControl, Validators} from '@angular/forms'
+import {UntypedFormControl, Validators} from '@angular/forms'
 import {FormInput, FormInputLike} from '../form-input'
 
 export interface TextInput extends FormInputLike {
@@ -19,10 +19,10 @@ export interface URLInput extends FormInputLike {
   kind: 'url'
 }
 
-export const formControlForTextInput = (i: FormInput): FormControl | undefined => {
+export const formControlForTextInput = (i: FormInput): UntypedFormControl | undefined => {
   switch (i.kind) {
     case 'text':
-      return new FormControl(
+      return new UntypedFormControl(
         {value: i.initialValue, disabled: i.disabled},
         i.required ? Validators.required : undefined
       )
@@ -34,10 +34,10 @@ export const formControlForTextInput = (i: FormInput): FormControl | undefined =
       if (i.max) {
         validators.push(Validators.max(i.max))
       }
-      return new FormControl({value: i.initialValue, disabled: i.disabled}, validators)
+      return new UntypedFormControl({value: i.initialValue, disabled: i.disabled}, validators)
     case 'url':
       const regex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'
-      return new FormControl(
+      return new UntypedFormControl(
         {value: i.initialValue, disabled: i.disabled},
         i.required ? Validators.pattern(regex) : undefined
       )
@@ -53,6 +53,6 @@ export const formControlForTextInput = (i: FormInput): FormControl | undefined =
   styleUrls: ['./input-text.component.scss']
 })
 export class InputTextComponent {
-  @Input() formControl!: FormControl
+  @Input() formControl!: UntypedFormControl
   @Input() input!: TextInput | NumberInput
 }

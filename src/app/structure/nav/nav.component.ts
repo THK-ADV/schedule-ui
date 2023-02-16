@@ -3,11 +3,11 @@ import {MediaMatcher} from '@angular/cdk/layout'
 import {describeUser, describeUserInitials} from '../../utils/describe'
 import {LoginService} from '../../login/login.service'
 import {Subscription} from 'rxjs'
-import {MatSidenav} from '@angular/material/sidenav/sidenav'
 import {User} from '../../models/user'
 import {LinkItem} from './link-item'
 import adminLinks = LinkItem.adminLinks
 import lectureLinks = LinkItem.lecturerLinks
+import {MatSidenav} from '@angular/material/sidenav'
 
 interface UserInfo {
   initials: string

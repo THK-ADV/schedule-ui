@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core'
-import {FormControl, Validators} from '@angular/forms'
+import {UntypedFormControl, Validators} from '@angular/forms'
 import {FormInput, FormInputLike} from '../form-input'
 
 export interface BooleanInput extends FormInputLike {
@@ -7,10 +7,10 @@ export interface BooleanInput extends FormInputLike {
   kind: 'boolean'
 }
 
-export const formControlForBooleanInput = (i: FormInput): FormControl | undefined => {
+export const formControlForBooleanInput = (i: FormInput): UntypedFormControl | undefined => {
   switch (i.kind) {
     case 'boolean':
-      return new FormControl(
+      return new UntypedFormControl(
         {value: i.initialValue ?? false, disabled: i.disabled},
         i.required ? Validators.required : undefined
       )
@@ -27,7 +27,7 @@ export const formControlForBooleanInput = (i: FormInput): FormControl | undefine
 export class InputBooleanComponent implements OnInit {
   value = false
 
-  @Input() formControl!: FormControl
+  @Input() formControl!: UntypedFormControl
   @Input() input!: BooleanInput
 
   ngOnInit(): void {
