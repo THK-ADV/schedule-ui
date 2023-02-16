@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const isGraduation = a => {\n  const g = a;\n  return g?.label !== undefined && g?.abbreviation !== undefined && g?.id !== undefined;\n};","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

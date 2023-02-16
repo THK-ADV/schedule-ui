@@ -1,0 +1,1 @@
+{"ast":null,"code":"const LANGUAGES = ['de', 'en', 'de_en'];\nexport const allLanguages = () => [...LANGUAGES];","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

@@ -4,7 +4,7 @@ import {LecturerModule, LecturerModuleService} from '../admin/examination-regula
 import {ActivatedRoute} from '@angular/router'
 import {switchMap} from 'rxjs/operators'
 import {TableHeaderColumn} from '../generic-ui/table/table.component'
-import {MatTableDataSource} from '@angular/material/table'
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table'
 
 @Component({
   selector: 'schd-lecturer-modules',

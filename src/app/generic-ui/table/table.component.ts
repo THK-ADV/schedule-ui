@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core'
 import {MatSort, Sort} from '@angular/material/sort'
-import {MatPaginator} from '@angular/material/paginator'
+import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator'
 import {Observable, Subscription} from 'rxjs'
-import {MatTableDataSource} from '@angular/material/table'
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table'
 
 export interface TableHeaderColumn {
   attr: string

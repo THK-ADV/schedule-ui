@@ -4,14 +4,23 @@
 @import "schedule.theme.config";
 
 
-@include mat.core();
+// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
+//  The following line adds:
+//    1. Default typography styles for all components
+//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
+//  If you specify typography styles for the components you use elsewhere, you should delete this line.
+//  If you don't need the default component typographies but still want the hierarchy styles,
+//  you can delete this line and instead use:
+//    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
+@include mat.all-legacy-component-typographies();
+@include mat.legacy-core();
 
 @mixin schd-core-theme($theme) {
-  @include mat.core-theme(map-get($theme, main));
+  @include mat.legacy-core-theme(map-get($theme, main));
 }
 
 @mixin schd-autocomplete-theme($theme) {
-  @include mat.autocomplete-theme(map-get($theme, main));
+  @include mat.legacy-autocomplete-theme(map-get($theme, main));
 }
 
 @mixin schd-badge-theme($theme) {
@@ -23,7 +32,7 @@
 }
 
 @mixin schd-button-theme($theme) {
-  @include mat.button-theme(map-get($theme, main));
+  @include mat.legacy-button-theme(map-get($theme, main));
 
   button.mat-stroked-button.mat-primary {
     border: 2px lighten($th-magenta, 40) solid;
@@ -95,15 +104,15 @@
 }
 
 @mixin schd-card-theme($theme) {
-  @include mat.card-theme(map-get($theme, main));
+  @include mat.legacy-card-theme(map-get($theme, main));
 }
 
 @mixin schd-checkbox-theme($theme) {
-  @include mat.checkbox-theme(map-get($theme, main));
+  @include mat.legacy-checkbox-theme(map-get($theme, main));
 }
 
 @mixin schd-chips-theme($theme) {
-  @include mat.chips-theme(map-get($theme, main));
+  @include mat.legacy-chips-theme(map-get($theme, main));
 }
 
 @mixin schd-datepicker-theme($theme) {
@@ -111,7 +120,7 @@
 }
 
 @mixin schd-dialog-theme($theme) {
-  @include mat.dialog-theme(map-get($theme, main));
+  @include mat.legacy-dialog-theme(map-get($theme, main));
 
   h1.mat-dialog-title {
     font-size: 2em;
@@ -164,7 +173,7 @@
 }
 
 @mixin schd-form-field-theme($theme) {
-  @include mat.form-field-theme(map-get($theme, main));
+  @include mat.legacy-form-field-theme(map-get($theme, main));
 }
 
 @mixin schd-grid-list-theme($theme) {
@@ -195,38 +204,38 @@
 }
 
 @mixin schd-input-theme($theme) {
-  @include mat.input-theme(map-get($theme, main));
+  @include mat.legacy-input-theme(map-get($theme, main));
 }
 
 @mixin schd-list-theme($theme) {
-  @include mat.list-theme(map-get($theme, main));
+  @include mat.legacy-list-theme(map-get($theme, main));
 }
 
 @mixin schd-menu-theme($theme) {
-  @include mat.menu-theme(map-get($theme, main));
+  @include mat.legacy-menu-theme(map-get($theme, main));
 }
 
 @mixin schd-paginator-theme($theme) {
-  @include mat.paginator-theme(map-get($theme, main));
+  @include mat.legacy-paginator-theme(map-get($theme, main));
   .mat-paginator {
     margin-bottom: $high-spacing;
   }
 }
 
 @mixin schd-progress-bar-theme($theme) {
-  @include mat.progress-bar-theme(map-get($theme, main));
+  @include mat.legacy-progress-bar-theme(map-get($theme, main));
 }
 
 @mixin schd-progress-spinner-theme($theme) {
-  @include mat.progress-spinner-theme(map-get($theme, main));
+  @include mat.legacy-progress-spinner-theme(map-get($theme, main));
 }
 
 @mixin schd-radio-theme($theme) {
-  @include mat.radio-theme(map-get($theme, main));
+  @include mat.legacy-radio-theme(map-get($theme, main));
 }
 
 @mixin schd-select-theme($theme) {
-  @include mat.select-theme(map-get($theme, main));
+  @include mat.legacy-select-theme(map-get($theme, main));
 }
 
 @mixin schd-sidenav-theme($theme) {
@@ -237,16 +246,16 @@
   .mat-drawer {
     background-color: mat.get-color-from-palette(map-get(map-get($theme, overlay), background), dialog);
     color: mat.get-color-from-palette(map-get(map-get($theme, overlay), foreground), text);
-    @include mat.all-component-themes(map-get($theme, overlay));
+    @include mat.all-legacy-component-themes(map-get($theme, overlay));
   }
 }
 
 @mixin schd-slide-toggle-theme($theme) {
-  @include mat.slide-toggle-theme(map-get($theme, main));
+  @include mat.legacy-slide-toggle-theme(map-get($theme, main));
 }
 
 @mixin schd-slider-theme($theme) {
-  @include mat.slider-theme(map-get($theme, main));
+  @include mat.legacy-slider-theme(map-get($theme, main));
 }
 
 @mixin schd-stepper-theme($theme) {
@@ -258,11 +267,11 @@
 }
 
 @mixin schd-table-theme($theme) {
-  @include mat.table-theme(map-get($theme, main));
+  @include mat.legacy-table-theme(map-get($theme, main));
 }
 
 @mixin schd-tabs-theme($theme) {
-  @include mat.tabs-theme(map-get($theme, main));
+  @include mat.legacy-tabs-theme(map-get($theme, main));
 }
 
 @mixin schd-toolbar-theme($theme) {
@@ -278,7 +287,7 @@
 }
 
 @mixin schd-tooltip-theme($theme) {
-  @include mat.tooltip-theme(map-get($theme, main));
+  @include mat.legacy-tooltip-theme(map-get($theme, main));
 }
 
 @mixin schd-tree-theme($theme) {
@@ -286,7 +295,7 @@
 }
 
 @mixin schd-snack-bar-theme($theme) {
-  @include mat.snack-bar-theme(map-get($theme, main));
+  @include mat.legacy-snack-bar-theme(map-get($theme, main));
 }
 
 @function schd-light-theme($primary, $accent, $warn, $foreground: (), $background: ()) {
@@ -316,7 +325,7 @@
   $button: mat.define-typography-level(14px, 14px, 500),
   $input: mat.define-typography-level(inherit, 1.125, 400)
 ) {
-  @return mat.define-typography-config(
+  @return mat.define-legacy-typography-config(
                   $font-family,
                   $display-4,
                   $display-3,
@@ -347,7 +356,16 @@
           app-bg-1: $app-bg-1,
           app-bg-2: $app-bg-2,
   );
-  @include mat.core($typography);
+  // TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
+//  The following line adds:
+//    1. Default typography styles for all components
+//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
+//  If you specify typography styles for the components you use elsewhere, you should delete this line.
+//  If you don't need the default component typographies but still want the hierarchy styles,
+//  you can delete this line and instead use:
+//    `@include mat.legacy-typography-hierarchy($typography);`
+@include mat.all-legacy-component-typographies($typography);
+@include mat.legacy-core();
 
   @include schd-core-theme($theme);
   @include schd-autocomplete-theme($theme);

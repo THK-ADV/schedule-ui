@@ -1,4 +1,4 @@
-import {MatDialog, MatDialogRef} from '@angular/material/dialog'
+import {MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog'
 import {EMPTY, Observable} from 'rxjs'
 import {switchMap} from 'rxjs/operators'
 import {DeleteDialogComponent, DeleteDialogData} from './delete-dialog/delete-dialog.component'

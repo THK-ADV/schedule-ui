@@ -1,1 +1,0 @@
-{"ast":null,"code":"import { isStudyProgramAtom } from './study-program';\nexport const isExaminationRegulationAtom = a => {\n  const er = a;\n  return isStudyProgramAtom(er?.studyProgram) && er?.number !== undefined && er?.start !== undefined && er?.id !== undefined;\n};","map":null,"metadata":{},"sourceType":"module"}

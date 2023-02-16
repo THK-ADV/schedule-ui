@@ -2,7 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} f
 import {UntypedFormControl} from '@angular/forms'
 import {EMPTY, Observable} from 'rxjs'
 import {map, startWith} from 'rxjs/operators'
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete'
+import {MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent} from '@angular/material/legacy-autocomplete'
 
 @Component({
   selector: 'schd-filter-option',

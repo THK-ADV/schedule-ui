@@ -1,21 +1,21 @@
 import {NgModule} from '@angular/core'
-import {MatAutocompleteModule} from '@angular/material/autocomplete'
-import {MatInputModule} from '@angular/material/input'
-import {MatFormFieldModule} from '@angular/material/form-field'
+import {MatLegacyAutocompleteModule as MatAutocompleteModule} from '@angular/material/legacy-autocomplete'
+import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input'
+import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/legacy-form-field'
 import {ReactiveFormsModule} from '@angular/forms'
-import {MatButtonModule} from '@angular/material/button'
-import {MatMenuModule} from '@angular/material/menu'
+import {MatLegacyButtonModule as MatButtonModule} from '@angular/material/legacy-button'
+import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu'
 import {MatIconModule} from '@angular/material/icon'
-import {MatTooltipModule} from '@angular/material/tooltip'
-import {MatTableModule} from '@angular/material/table'
+import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip'
+import {MatLegacyTableModule as MatTableModule} from '@angular/material/legacy-table'
 import {MatSortModule} from '@angular/material/sort'
-import {MatPaginatorModule} from '@angular/material/paginator'
-import {MatDialogModule} from '@angular/material/dialog'
+import {MatLegacyPaginatorModule as MatPaginatorModule} from '@angular/material/legacy-paginator'
+import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog'
 import {MatDatepickerModule} from '@angular/material/datepicker'
-import {MatSlideToggleModule} from '@angular/material/slide-toggle'
+import {MatLegacySlideToggleModule as MatSlideToggleModule} from '@angular/material/legacy-slide-toggle'
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatSidenavModule} from "@angular/material/sidenav";
-import {MatListModule} from "@angular/material/list";
+import {MatLegacyListModule as MatListModule} from "@angular/material/legacy-list";
 
 
 @NgModule({
