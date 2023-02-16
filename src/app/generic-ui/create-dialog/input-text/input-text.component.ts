@@ -27,6 +27,7 @@ export const formControlForTextInput = (i: FormInput): UntypedFormControl | unde
         i.required ? Validators.required : undefined
       )
     case 'number':
+      // eslint-disable-next-line no-case-declarations
       const validators = [Validators.min(i.min)]
       if (i.required) {
         validators.push(Validators.required)
@@ -36,6 +37,7 @@ export const formControlForTextInput = (i: FormInput): UntypedFormControl | unde
       }
       return new UntypedFormControl({value: i.initialValue, disabled: i.disabled}, validators)
     case 'url':
+      // eslint-disable-next-line no-case-declarations
       const regex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'
       return new UntypedFormControl(
         {value: i.initialValue, disabled: i.disabled},

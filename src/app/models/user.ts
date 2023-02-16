@@ -11,14 +11,14 @@ export interface Lecturer extends User {
   initials: string
 }
 
-export const isLecturer = (a: any): a is Lecturer => {
+export const isLecturer = (a: unknown): a is Lecturer => {
   const l = a as Lecturer
   return isUser(l) &&
     l?.title !== undefined &&
     l?.initials !== undefined
 }
 
-export const isUser = (a: any): a is User => {
+export const isUser = (a: unknown): a is User => {
   const u = a as User
   return u?.username !== undefined &&
     u?.firstname !== undefined &&

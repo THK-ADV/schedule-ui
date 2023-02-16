@@ -31,11 +31,11 @@ export class FilterComponent implements OnInit, OnDestroy {
   constructor(private readonly service: ScheduleFilterService) {
   }
 
-  @ViewChildren(FilterOptionComponent) filterComponents!: QueryList<FilterOptionComponent<any>>
+  @ViewChildren(FilterOptionComponent) filterComponents!: QueryList<FilterOptionComponent<unknown>>
 
   @Input() semester!: Semester
-  @Output() onSearch = new EventEmitter<Course[]>()
-  @Output() onReset = new EventEmitter()
+  @Output() searchEvent = new EventEmitter<Course[]>()
+  @Output() resetEvent = new EventEmitter()
 
   selections: ScheduleFilterSelections = {}
   semesterIndices: SemesterIndex[] = []
@@ -66,7 +66,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.currentLanguages = f.languages
       this.currentCourseTypes = f.courseTypes
 
-      this.onSearch.emit(f.courses)
+      this.searchEvent.emit(f.courses)
     })
   }
 
@@ -119,11 +119,11 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   search = () =>
-    this.onSearch.emit(this.currentCourses)
+    this.searchEvent.emit(this.currentCourses)
 
   reset = () => {
     this.filterComponents.forEach(a => a.reset())
     this.service.updateFilters({})
-    this.onReset.emit()
+    this.resetEvent.emit()
   }
 }

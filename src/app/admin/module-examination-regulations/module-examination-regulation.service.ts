@@ -89,8 +89,8 @@ export class ModuleExaminationRegulationService {
   ]
 
   private createInputs = (): FormInput[] => [
-    this.module,
-    this.exam,
+    <FormInput> this.module,
+    <FormInput> this.exam,
     this.mandatory
   ]
 

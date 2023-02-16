@@ -2,15 +2,7 @@ import {Injectable} from '@angular/core'
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http'
 import {EMPTY, Observable} from 'rxjs'
 import {catchError} from 'rxjs/operators'
-import {timeFromString} from '../models/time'
 import {Alert, AlertService} from '../structure/alert/alert.service'
-
-export const parseDateStartEndFromJSON = <A>(a: any): A => {
-  const date = new Date(a.date)
-  const start = timeFromString(a.start, date)
-  const end = timeFromString(a.end, date)
-  return {...a, date, start, end}
-}
 
 @Injectable({
   providedIn: 'root'

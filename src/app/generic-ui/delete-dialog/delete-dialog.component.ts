@@ -1,5 +1,9 @@
-import {Component, Inject, OnInit} from '@angular/core'
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog'
+import {Component, Inject} from '@angular/core'
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef
+} from '@angular/material/legacy-dialog'
 import {BinaryDialogResult} from '../dialog-opener'
 
 export interface DeleteDialogData {
@@ -11,7 +15,7 @@ export interface DeleteDialogData {
   templateUrl: './delete-dialog.component.html',
   styleUrls: ['./delete-dialog.component.scss']
 })
-export class DeleteDialogComponent implements OnInit {
+export class DeleteDialogComponent {
 
   content: string
 
@@ -28,9 +32,6 @@ export class DeleteDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DeleteDialogData
   ) {
     this.content = `Soll ${data.label} gelöscht werden?`
-  }
-
-  ngOnInit(): void {
   }
 
   cancel = () =>

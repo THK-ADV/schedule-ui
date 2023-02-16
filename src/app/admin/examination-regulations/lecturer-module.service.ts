@@ -91,8 +91,6 @@ export class LecturerModuleService {
     }
   }
 
-  sortingDataAccessor = (a: LecturerModule, attr: string): string => ''
-
   singleRow = (attr: string) =>
     attr === 'module'
 
@@ -106,5 +104,6 @@ export class LecturerModuleService {
   }
 
   createWPF = () => {
+    console.log('create wpf')
   }
 }

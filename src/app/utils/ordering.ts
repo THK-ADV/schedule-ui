@@ -12,19 +12,23 @@ export namespace Ordering {
   export const dateOrd: Ordering<Date> = contraMap(numberOrd, d => d.getTime())
 
   export const min = <A>(as: Readonly<A[]>, ord: Ordering<A>): A | undefined => {
+    function go(): A {
+      let res = as[0]
+      as.forEach(a => {
+        if (ord(a, res) < 0) {
+          res = a
+        }
+      })
+      return res
+    }
+
     switch (as.length) {
       case 0:
         return undefined
       case 1:
         return as[0]
       default:
-        let res = as[0]
-        as.forEach(a => {
-          if (ord(a, res) < 0) {
-            res = a
-          }
-        })
-        return res
+        return go()
     }
   }
 }

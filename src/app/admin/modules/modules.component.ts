@@ -42,6 +42,7 @@ export class ModulesComponent {
       case 'abbreviation':
         return module.abbreviation
       case 'courseManager':
+        // eslint-disable-next-line no-case-declarations
         const user = module.courseManager
         return isLecturer(user) ? describeLecturer(user) : describeUser(user)
       case 'credits':

@@ -6,9 +6,6 @@ import {environment} from '../../environments/environment'
 @Injectable()
 export class BackendUrlInterceptorInterceptor implements HttpInterceptor {
 
-  constructor() {
-  }
-
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     request = request.clone({
       url: `${environment.backendUrl}/${request.url}`

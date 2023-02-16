@@ -112,14 +112,14 @@ export class ExaminationRegulationsService {
   ]
 
   private createInputs = (): FormInput[] => [
-    this.studyProgram,
+    <FormInput> this.studyProgram,
     this.po,
     this.start,
     this.end
   ]
 
   private updateInputs = (e: ExaminationRegulationAtom): FormInput[] => [
-    {...this.studyProgram, initialValue: (sps: StudyProgramAtom[]) => sps.find(_ => _.id === e.studyProgram.id)},
+    <FormInput> {...this.studyProgram, initialValue: (sps: StudyProgramAtom[]) => sps.find(_ => _.id === e.studyProgram.id)},
     {...this.po, initialValue: e.number},
     {...this.start, initialValue: e.start},
     {...this.end, initialValue: e.end},

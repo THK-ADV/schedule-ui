@@ -2,10 +2,10 @@ import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms'
 
 export const invalidChoiceKey = 'invalidObject'
 
-export const isUserInput = (value: any): boolean =>
+export const isUserInput = (value: unknown): boolean =>
   typeof value === 'string'
 
-const isJSON = (value: any): boolean =>
+const isJSON = (value: unknown): boolean =>
   !isUserInput(value)
 
 export function mandatoryOptionsValidator(): ValidatorFn {

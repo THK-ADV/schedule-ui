@@ -1,16 +1,9 @@
-import {
-  AfterViewInit,
-  Directive,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  Renderer2
-} from '@angular/core'
-import {BehaviorSubject, combineLatest, EMPTY, Subject} from 'rxjs'
-import {map, mapTo, switchMap, takeUntil, tap} from 'rxjs/operators'
+import {AfterViewInit, Directive, ElementRef, OnDestroy, OnInit, Renderer2} from '@angular/core'
+import {BehaviorSubject, combineLatest, Subject} from 'rxjs'
+import {map, mapTo, takeUntil} from 'rxjs/operators'
 
 @Directive({
-  // tslint:disable-next-line:directive-selector
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[schdMatTableResponsive]'
 })
 export class SchdMatTableResponsiveDirective implements OnInit, AfterViewInit, OnDestroy {
@@ -29,7 +22,8 @@ export class SchdMatTableResponsiveDirective implements OnInit, AfterViewInit, O
     this.tbodyChanged$.next(true)
   )
 
-  constructor(private table: ElementRef, private renderer: Renderer2) { }
+  constructor(private table: ElementRef, private renderer: Renderer2) {
+  }
 
   ngOnInit(): void {
     this.thead = this.table.nativeElement.querySelector('thead')
@@ -51,11 +45,12 @@ export class SchdMatTableResponsiveDirective implements OnInit, AfterViewInit, O
       .pipe(
         mapTo({headRow: this.thead.rows.item(0), bodyRows: this.tbody.rows}),
         map(({headRow, bodyRows}) => ({
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          // tslint:disable-next-line:no-non-null-assertion
           columnNames: [...headRow.children].map(
             headerCell => headerCell.textContent
           ),
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           rows: [...bodyRows].map(row => [...row.children])
         })),

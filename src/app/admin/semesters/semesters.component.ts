@@ -53,16 +53,16 @@ export class SemestersComponent {
     }
   }
 
-  sortingDataAccessor = (s: Semester, attr: string): any => {
+  sortingDataAccessor = (s: Semester, attr: string): string | number => {
     switch (attr) {
       case 'start':
-        return new Date(s.start)
+        return new Date(s.start).toString()
       case 'end':
-        return new Date(s.end)
+        return new Date(s.end).toString()
       case 'lectureStart':
-        return new Date(s.lectureStart)
+        return new Date(s.lectureStart).toString()
       case 'lectureEnd':
-        return new Date(s.lectureEnd)
+        return new Date(s.lectureEnd).toString()
       default:
         return this.tableContent(s, attr)
     }

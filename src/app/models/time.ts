@@ -23,7 +23,7 @@ const splitToNumbers = (timeString: string): number[] =>
     .map(Number)
     .filter(isNumber)
 
-const isNumber = (value: any): value is number =>
+const isNumber = (value: unknown): value is number =>
   typeof value === 'number'
 
 const fromDate = (date: Date): Time => ({
@@ -32,9 +32,3 @@ const fromDate = (date: Date): Time => ({
   minute: date.getMinutes(),
   seconds: date.getSeconds()
 })
-
-
-const withNewDate = (date: Date, time: Time): Time => {
-  date = new Date(date.setHours(time.hour, time.minute, time.seconds))
-  return fromDate(date)
-}

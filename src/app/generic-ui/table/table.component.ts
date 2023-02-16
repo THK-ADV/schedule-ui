@@ -3,20 +3,12 @@ import {MatSort, Sort} from '@angular/material/sort'
 import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator'
 import {Observable, Subscription} from 'rxjs'
 import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table'
+import {asRecord} from '../../utils/record-ops'
 
 export interface TableHeaderColumn {
   attr: string
   title: string
 }
-
-export const nestedObjectPropertyAccessor = <A>(obj: A, prop: string): any =>
-  prop.split('.').reduce(
-    (o, p) => {
-      // @ts-ignore
-      return o && o[p]
-    },
-    obj
-  )
 
 @Component({
   selector: 'schd-table',
@@ -34,7 +26,7 @@ export class TableComponent<A> implements OnInit, AfterViewInit, OnDestroy {
   @Input() columns!: TableHeaderColumn[]
   @Input() pageSizeOptions!: number[]
   @Input() useTableContentForFiltering!: boolean
-  @Input() sortingDataAccessor!: (a: A, property: string) => any
+  @Input() sortingDataAccessor!: (a: A, property: string) => string | number
   @Input() tableContent!: (a: A, attr: string) => string
   @Input() edit?: (a: A) => void
   @Input() delete?: (a: A) => void
@@ -52,9 +44,6 @@ export class TableComponent<A> implements OnInit, AfterViewInit, OnDestroy {
 
   dataSource = new MatTableDataSource<A>()
   displayedColumns: string[] = []
-
-  constructor() {
-  }
 
   ngOnInit(): void {
     this.initDisplayedColumns()
@@ -97,9 +86,16 @@ export class TableComponent<A> implements OnInit, AfterViewInit, OnDestroy {
   private initDataSource = () => {
     this.dataSource.sortingDataAccessor = this.sortingDataAccessor
     if (this.useTableContentForFiltering) {
-      this.dataSource.filterPredicate = (obj, filter) =>
-        Object.keys(obj as any).some(k => this.tableContent(obj, k).toLowerCase().includes(filter))
+      this.dataSource.filterPredicate = this.filterPredicate
     }
+  }
+
+  private filterPredicate = (data: A, filter: string): boolean => {
+    const record = asRecord(data)
+    if (!record) {
+      return false
+    }
+    return Object.keys(record).some(k => this.tableContent(data, k).toLowerCase().includes(filter))
   }
 
   private initFilterHints = () => {

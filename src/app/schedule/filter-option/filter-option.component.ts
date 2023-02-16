@@ -15,7 +15,7 @@ export class FilterOptionComponent<T> implements OnInit {
 
   @Input() title = ''
 
-  @Input() display: (value: T) => string = (_ => '')
+  @Input() display: (value: T) => string = (() => '')
   options: T[] = []
 
   @Input() set values(ts: T[]) {
@@ -23,7 +23,7 @@ export class FilterOptionComponent<T> implements OnInit {
     this.initFilterOptions()
   }
 
-  @Output() onSelect = new EventEmitter<T>()
+  @Output() selectOption = new EventEmitter<T>()
 
   filteredOptions: Observable<T[]> = EMPTY
   formControl = new UntypedFormControl()
@@ -53,13 +53,13 @@ export class FilterOptionComponent<T> implements OnInit {
 
   onSelected = (e: MatAutocompleteSelectedEvent) => {
     this.hasSelection = true
-    this.onSelect.emit(e.option.value)
+    this.selectOption.emit(e.option.value)
     this.deselect()
   }
 
   onClosed = () => {
     if (!this.hasSelection && !this.formControl.value) {
-      this.onSelect.emit(undefined)
+      this.selectOption.emit(undefined)
     }
     this.hasSelection = false
     this.deselect()
@@ -67,7 +67,7 @@ export class FilterOptionComponent<T> implements OnInit {
 
   onClear = (event: Event) => {
     event.stopPropagation()
-    this.onSelect.emit(undefined)
+    this.selectOption.emit(undefined)
     this.reset()
   }
 

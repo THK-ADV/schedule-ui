@@ -1,5 +1,9 @@
-import {Component, Inject, OnInit} from '@angular/core'
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog'
+import {Component, Inject} from '@angular/core'
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef
+} from '@angular/material/legacy-dialog'
 import {UntypedFormControl, UntypedFormGroup} from '@angular/forms'
 import {formControlForTextInput, NumberInput, TextInput} from './input-text/input-text.component'
 import {AutoCompleteInput, formControlForAutocompleteInput} from './input-auto-complete/input-auto-complete.component'
@@ -23,7 +27,7 @@ type DialogType = 'create' | 'update'
   templateUrl: './create-dialog.component.html',
   styleUrls: ['./create-dialog.component.scss']
 })
-export class CreateDialogComponent implements OnInit {
+export class CreateDialogComponent {
 
   title: string
   buttonTitle: string
@@ -36,7 +40,7 @@ export class CreateDialogComponent implements OnInit {
     formControlForBooleanInput
   ])
 
-  static instance = <A>(
+  static instance = (
     dialog: MatDialog,
     data: CreateDialogData,
     kind: DialogType
@@ -63,9 +67,6 @@ export class CreateDialogComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
-  }
-
   data = (): CreateDialogData =>
     this.payload[0]
 
@@ -83,7 +84,7 @@ export class CreateDialogComponent implements OnInit {
     this.formGroup.controls[attr] as UntypedFormControl
 
   asAutocomplete = (i: FormInput) =>
-    i as AutoCompleteInput<any>
+    i as AutoCompleteInput<unknown>
 
   asTextInput = (i: FormInput): TextInput | NumberInput =>
     i as TextInput || i as NumberInput
