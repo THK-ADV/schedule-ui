@@ -29,8 +29,8 @@ export class LoginService {
 
   logout = async () =>
     this.router.navigateByUrl('')
-      .then(_ => this.keycloak.logout())
-      .then(_ => this.user.next(undefined))
+      .then(() => this.keycloak.logout())
+      .then(() => this.user.next(undefined))
 
   login = async () =>
     this.keycloak.login()

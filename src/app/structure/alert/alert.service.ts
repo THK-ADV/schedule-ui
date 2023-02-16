@@ -28,10 +28,8 @@ export interface Alert {
 })
 export class AlertService {
 
+  // TODO see mocogi-ui
   private alerts = new Subject<Alert>()
-
-  constructor() {
-  }
 
   alerts$ = () =>
     this.alerts.asObservable()

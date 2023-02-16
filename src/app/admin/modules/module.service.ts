@@ -121,7 +121,7 @@ export class ModuleService {
   private createInputs = (): FormInput[] => [
     this.label,
     this.abbreviation,
-    this.user,
+    <FormInput> this.user,
     this.credits,
     this.descriptionUrl
   ]
@@ -129,7 +129,7 @@ export class ModuleService {
   private updateInputs = (m: ModuleAtom): FormInput[] => [
     {...this.label, initialValue: m.label},
     {...this.abbreviation, initialValue: m.abbreviation},
-    {...this.user, initialValue: (users: Lecturer[]) => users.find(_ => _.id === m.courseManager.id)},
+    <FormInput> {...this.user, initialValue: (users: Lecturer[]) => users.find(_ => _.id === m.courseManager.id)},
     {...this.credits, initialValue: m.credits},
     {...this.descriptionUrl, initialValue: m.descriptionUrl}
   ]

@@ -19,13 +19,15 @@ export class DefaultDateAdapter extends NativeDateAdapter {
 
   getFirstDayOfWeek = (): number => 1
 
-  format = (date: Date, displayFormat: any): string => {
+  format = (date: Date, displayFormat: unknown): string => {
     switch (displayFormat) {
       case DATE_FORMATS.display.dateInput:
         return formatDate(date, 'dd.MM.yyyy')
       case DATE_FORMATS.display.monthYearLabel:
         return date.toLocaleDateString('de-DE', {month: 'short', year: 'numeric'})
       default:
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         return super.format(date, displayFormat)
     }
   }

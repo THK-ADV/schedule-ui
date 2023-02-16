@@ -1,15 +1,16 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core'
 import {EMPTY, Observable, of, Subscription} from 'rxjs'
 import {Sort} from '@angular/material/sort'
-import {nestedObjectPropertyAccessor, TableHeaderColumn} from '../table/table.component'
+import {TableHeaderColumn} from '../table/table.component'
 import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog'
 import {openDeleteDialog, openDialog} from '../dialog-opener'
 import {AlertService} from '../../structure/alert/alert.service'
 import {CreateDialogComponent, CreateDialogData} from '../create-dialog/create-dialog.component'
+import {nestedObjectPropertyAccessor} from '../../utils/record-ops'
 
 export interface Delete<A> {
   labelForDialog: (a: A) => string
-  delete: (a: A) => Observable<any>
+  delete: (a: A) => Observable<unknown>
 }
 
 export interface Create<A0> {
@@ -34,7 +35,7 @@ export class CrudTableComponent<A0, A, B> implements OnInit, OnDestroy {
   @Input() columns: TableHeaderColumn[] = []
   @Input() pageSizeOptions = [25, 50, 100]
   @Input() useTableContentForFiltering = false
-  @Input() sortingDataAccessor: (a: A, property: string) => any =
+  @Input() sortingDataAccessor: (a: A, property: string) => string | number =
     nestedObjectPropertyAccessor
   @Input() tableContent: (a: A, attr: string) => string =
     nestedObjectPropertyAccessor
@@ -81,7 +82,7 @@ export class CrudTableComponent<A0, A, B> implements OnInit, OnDestroy {
     this.onDelete = (a) => {
       const label = d.labelForDialog(a)
       const s = openDeleteDialog(this.dialog, {label}, () => d.delete(a))
-        .subscribe(_ => {
+        .subscribe(() => {
           this.data$ = this.fetchData()
           this.reportDeleted(label)
         })

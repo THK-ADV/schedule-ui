@@ -16,7 +16,7 @@ export interface ExaminationRegulationAtom {
   id: string
 }
 
-export const isExaminationRegulationAtom = (a: any): a is ExaminationRegulationAtom => {
+export const isExaminationRegulationAtom = (a: unknown): a is ExaminationRegulationAtom => {
   const er = a as ExaminationRegulationAtom
   return isStudyProgramAtom(er?.studyProgram) &&
     er?.number !== undefined &&

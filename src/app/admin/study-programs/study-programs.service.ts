@@ -112,15 +112,15 @@ export class StudyProgramsService {
   private createInputs = (): FormInput[] => [
     this.label,
     this.abbreviation,
-    this.teachingUnit,
-    this.graduation,
+    <FormInput> this.teachingUnit,
+    <FormInput> this.graduation,
   ]
 
   private updateInputs = (sp: StudyProgramAtom): FormInput[] => [
     {...this.label, initialValue: sp.label},
     {...this.abbreviation, initialValue: sp.abbreviation},
-    {...this.teachingUnit, initialValue: (tus: TeachingUnit[]) => tus.find(tu => tu.id === sp.teachingUnit.id)},
-    {...this.graduation, initialValue: (gs: Graduation[]) => gs.find(g => g.id === sp.graduation.id)},
+    <FormInput> {...this.teachingUnit, initialValue: (tus: TeachingUnit[]) => tus.find(tu => tu.id === sp.teachingUnit.id)},
+    <FormInput> {...this.graduation, initialValue: (gs: Graduation[]) => gs.find(g => g.id === sp.graduation.id)},
   ]
 
   studyPrograms = (): Observable<StudyProgramAtom[]> =>

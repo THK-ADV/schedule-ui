@@ -174,29 +174,29 @@ export class SubmoduleService {
   private createInputs = (): FormInput[] => [
     this.label,
     this.abbreviation,
-    this.module,
-    this.recommendedSemester,
+    <FormInput> this.module,
+    <FormInput> this.recommendedSemester,
     this.credits,
-    this.language,
-    this.season,
+    <FormInput> this.language,
+    <FormInput> this.season,
     this.descriptionUrl
   ]
 
   private updateInputs = (m: SubmoduleAtom): FormInput[] => [
     {...this.label, initialValue: m.label},
     {...this.abbreviation, initialValue: m.abbreviation},
-    {...this.module, initialValue: (ms: Module[]) => ms.find(_ => _.id === m.module.id), disabled: true},
-    {...this.recommendedSemester, initialValue: (rrs: number[]) => rrs.find(rs => rs === m.recommendedSemester)},
+    <FormInput> {...this.module, initialValue: (ms: Module[]) => ms.find(_ => _.id === m.module.id), disabled: true},
+    <FormInput> {...this.recommendedSemester, initialValue: (rrs: number[]) => rrs.find(rs => rs === m.recommendedSemester)},
     {...this.credits, initialValue: m.credits, disabled: true},
-    {...this.language, initialValue: (ls: Lang[]) => ls.find(l => l.value === m.language)},
-    {...this.season, initialValue: (ss: Seas[]) => ss.find(s => s.value === m.season)},
+    <FormInput> {...this.language, initialValue: (ls: Lang[]) => ls.find(l => l.value === m.language)},
+    <FormInput> {...this.season, initialValue: (ss: Seas[]) => ss.find(s => s.value === m.season)},
     {...this.descriptionUrl, initialValue: m.descriptionUrl}
   ]
 
-  private parseLang = (a: any): Language | undefined =>
+  private parseLang = (a: unknown): Language | undefined =>
     mapOpt((a as Lang)?.value, parseLanguage)
 
-  private parseSeas = (a: any): Season | undefined =>
+  private parseSeas = (a: unknown): Season | undefined =>
     mapOpt((a as Seas)?.value, parseSeason)
 
   private parseProtocol = (attrs: { [p: string]: string }): SubmoduleProtocol | undefined =>

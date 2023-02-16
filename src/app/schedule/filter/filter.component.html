@@ -5,43 +5,43 @@
                     [title]="'Lehreinheit'"
                     [display]="displayTU"
                     [values]="currentTeachingUnits"
-                    (onSelect)="selectedTU($event)">
+                    (selectOption)="selectedTU($event)">
             </schd-filter-option>
             <schd-filter-option
                     [title]="'Studiengang (mit PO)'"
                     [display]="displayER"
                     [values]="currentStudyProgramWithExam"
-                    (onSelect)="selectedER($event)">
+                    (selectOption)="selectedER($event)">
             </schd-filter-option>
             <schd-filter-option
                     [title]="'Fachsemester'"
                     [display]="displaySI"
                     [values]="semesterIndices"
-                    (onSelect)="selectedSI($event)">
+                    (selectOption)="selectedSI($event)">
             </schd-filter-option>
             <schd-filter-option
-              [title]="'Veranstaltungstyp'"
-              [display]="displayCourseType"
-              [values]="currentCourseTypes"
-              (onSelect)="selectedCourseType($event)">
+                    [title]="'Veranstaltungstyp'"
+                    [display]="displayCourseType"
+                    [values]="currentCourseTypes"
+                    (selectOption)="selectedCourseType($event)">
             </schd-filter-option>
             <schd-filter-option
                     [title]="'Veranstaltung'"
                     [display]="displayC"
                     [values]="currentCourses"
-                    (onSelect)="selectedC($event)">
+                    (selectOption)="selectedC($event)">
             </schd-filter-option>
             <schd-filter-option
                     [title]="'Dozent'"
                     [display]="displayL"
                     [values]="currentLecturer"
-                    (onSelect)="selectedL($event)">
+                    (selectOption)="selectedL($event)">
             </schd-filter-option>
             <schd-filter-option
                     [title]="'Sprache'"
                     [display]="displayLang"
                     [values]="currentLanguages"
-                    (onSelect)="selectedLang($event)">
+                    (selectOption)="selectedLang($event)">
             </schd-filter-option>
         </form>
     </div>

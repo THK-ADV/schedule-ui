@@ -16,7 +16,7 @@ export interface TeachingUnitAtom {
   id: string
 }
 
-export const isTeachingUnit = (a: any): a is TeachingUnit => {
+export const isTeachingUnit = (a: unknown): a is TeachingUnit => {
   const tu = a as TeachingUnit
   return tu?.label !== undefined &&
     tu?.abbreviation !== undefined &&

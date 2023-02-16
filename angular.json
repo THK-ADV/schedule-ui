@@ -1,7 +1,10 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   },
   "version": 1,
   "newProjectRoot": "projects",
@@ -23,6 +26,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "base64-js",
+              "js-sha256"
+            ],
             "outputPath": "dist/schedule-ui",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -105,15 +112,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
           }
         },

@@ -21,18 +21,23 @@ export const parseFloatNumber: Parser<number> = s => {
   return isNaN(float) ? undefined : float
 }
 
-export const parseBoolean = (a: any): boolean | undefined => {
-  switch (a) {
-    case true:
-    case 'true':
-      return true
-    case false:
-    case 'false':
-      return false
-    default:
-      return undefined
+export const parseBoolean = (value: unknown): boolean | undefined => {
+  if (typeof value === 'boolean') {
+    return value
   }
+  if (typeof value === 'string') {
+    switch (value) {
+      case 'true':
+        return true
+      case 'false':
+        return false
+      default:
+        return undefined
+    }
+  }
+  return undefined
 }
+
 export const parseDate: Parser<Date> = s => {
   const d = new Date(s)
   return isNaN(d.getTime()) ? undefined : d

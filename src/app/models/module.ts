@@ -18,7 +18,7 @@ export interface ModuleAtom {
   id: string
 }
 
-export const isModule = (a: any): a is Module => {
+export const isModule = (a: unknown): a is Module => {
   const m = (a as Module)
   return m?.courseManager !== undefined &&
     m?.label !== undefined &&
@@ -28,7 +28,7 @@ export const isModule = (a: any): a is Module => {
     m?.id !== undefined
 }
 
-export const isModuleAtom = (a: any): a is ModuleAtom => {
+export const isModuleAtom = (a: unknown): a is ModuleAtom => {
   const m = a as ModuleAtom
   return isUser(m?.courseManager) &&
     m?.label !== undefined &&

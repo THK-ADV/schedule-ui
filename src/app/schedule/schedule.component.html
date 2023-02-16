@@ -8,8 +8,8 @@
     <div>
         <schd-filter
                 [semester]="semester"
-                (onSearch)="searchSchedules($event)"
-                (onReset)="resetSchedules()">
+                (searchEvent)="searchSchedules($event)"
+                (resetEvent)="resetSchedules()">
         </schd-filter>
     </div>
     <div class="schedule-view">

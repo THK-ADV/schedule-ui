@@ -17,7 +17,7 @@ export interface StudyProgramAtom {
   id: string
 }
 
-export const isStudyProgramAtom = (a: any): a is StudyProgramAtom => {
+export const isStudyProgramAtom = (a: unknown): a is StudyProgramAtom => {
   const sp = a as StudyProgramAtom
   return sp?.label !== undefined &&
     sp?.abbreviation !== undefined &&

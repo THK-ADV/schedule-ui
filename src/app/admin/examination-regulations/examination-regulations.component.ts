@@ -53,12 +53,12 @@ export class ExaminationRegulationsComponent {
     }
   }
 
-  sortingDataAccessor = (exam: ExaminationRegulationAtom, attr: string): any => {
+  sortingDataAccessor = (exam: ExaminationRegulationAtom, attr: string): string | number => {
     switch (attr) {
       case 'start':
-        return new Date(exam.start)
+        return new Date(exam.start).toString()
       case 'end':
-        return exam.end ? new Date(exam.end) : '-'
+        return exam.end ? new Date(exam.end).toString() : '-'
       default:
         return this.tableContent(exam, attr)
     }

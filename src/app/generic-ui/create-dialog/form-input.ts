@@ -17,7 +17,7 @@ export type FormInput =
   NumberInput |
   BooleanInput |
   URLInput |
-  AutoCompleteInput<any> |
+  AutoCompleteInput<unknown> |
   DateInput
 
 export const combine = (
