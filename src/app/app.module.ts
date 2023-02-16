@@ -43,7 +43,10 @@ import {ScheduleVerificationComponent} from './schedule/schedule-verification/sc
 function initializeKeycloak(keycloak: KeycloakService): () => Promise<boolean> {
   return () =>
     keycloak.init({
-      config: environment.keycloak
+      config: environment.keycloak,
+      initOptions: {
+        checkLoginIframe: false
+      }
     })
 }
 
