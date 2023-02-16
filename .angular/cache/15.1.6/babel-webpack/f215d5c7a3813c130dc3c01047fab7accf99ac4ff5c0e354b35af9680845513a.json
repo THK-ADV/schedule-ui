@@ -1,1 +1,0 @@
-{"ast":null,"code":"export const allSeasons = () => ['SoSe', 'WiSe', 'SoSe_WiSe'];","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

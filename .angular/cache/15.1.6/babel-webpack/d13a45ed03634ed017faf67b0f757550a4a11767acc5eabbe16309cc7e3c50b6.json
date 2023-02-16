@@ -1,1 +1,0 @@
-{"ast":null,"code":"export const inspect = a => {\n  console.log(a);\n  return a;\n};","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
